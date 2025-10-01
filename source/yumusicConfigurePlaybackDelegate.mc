@@ -46,6 +46,8 @@ class yumusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
     function onSelect() as Boolean {
         var selectedIndex = _view.getSelectedIndex();
         
+        System.println("PlaybackDelegate: Selected index " + selectedIndex);
+        
         switch (selectedIndex) {
             case 0: // Random Songs
                 loadRandomSongs();
@@ -69,11 +71,20 @@ class yumusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
 
     // Load random songs from server
     private function loadRandomSongs() as Void {
+        System.println("PlaybackDelegate: Loading random songs...");
+        
+        if (!_settings.isConfigured()) {
+            System.println("PlaybackDelegate: ERROR - Not configured!");
+            return;
+        }
+        
         _api.getRandomSongs(50, method(:onRandomSongsResponse));
     }
 
     // Handle random songs response
     function onRandomSongsResponse(responseCode as Number, data as Dictionary or String or Null) as Void {
+        System.println("PlaybackDelegate: Received random songs response - HTTP " + responseCode);
+        
         if (responseCode == 200 && data != null) {
             var response = data as Dictionary;
             if (response.hasKey("subsonic-response")) {
@@ -93,11 +104,20 @@ class yumusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
 
     // Load playlists from server
     private function loadPlaylists() as Void {
+        System.println("PlaybackDelegate: Loading playlists...");
+        
+        if (!_settings.isConfigured()) {
+            System.println("PlaybackDelegate: ERROR - Not configured!");
+            return;
+        }
+        
         _api.getPlaylists(method(:onPlaylistsResponse));
     }
 
     // Handle playlists response
     function onPlaylistsResponse(responseCode as Number, data as Dictionary or String or Null) as Void {
+        System.println("PlaybackDelegate: Received playlists response - HTTP " + responseCode);
+        
         if (responseCode == 200 && data != null) {
             var response = data as Dictionary;
             if (response.hasKey("subsonic-response")) {
