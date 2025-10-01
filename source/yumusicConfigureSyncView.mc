@@ -5,25 +5,23 @@ import Toybox.Lang;
 // This is the View that is used to configure the server connection
 // and sync settings for downloading music from Navidrome/Subsonic
 class yumusicConfigureSyncView extends WatchUi.View {
-    private var _statusText as String;
+    private var _menuItems as Array<String>;
+    private var _selectedIndex as Number;
     private var _settings as SettingsManager;
+    private var _statusText as String;
     private const ORANGE = 0xFF6600;
     private const DARK_ORANGE = 0xCC5200;
 
     function initialize() {
         View.initialize();
         _settings = new SettingsManager();
-        
-        if (_settings.isConfigured()) {
-            var url = _settings.getServerUrl();
-            // Truncate URL for display if too long
-            if (url != null && url.length() > 30) {
-                url = url.substring(0, 27) + "...";
-            }
-            _statusText = "Connected\n" + url;
-        } else {
-            _statusText = "Not Configured";
-        }
+        _menuItems = [
+            "Browse Playlists",
+            "Test Connection",
+            "Settings Info"
+        ];
+        _selectedIndex = 0;
+        _statusText = "";
     }
 
     // Load your resources here
@@ -54,7 +52,7 @@ class yumusicConfigureSyncView extends WatchUi.View {
             centerX,
             height * 0.15,
             Graphics.FONT_TINY,
-            "SYNC SETTINGS",
+            "SYNC & BROWSE",
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         
@@ -88,7 +86,7 @@ class yumusicConfigureSyncView extends WatchUi.View {
                     centerX,
                     centerY + 20,
                     Graphics.FONT_XTINY,
-                    "Ready to sync",
+                    "Ready to browse",
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                 );
             } else if (_statusText.equals("failed")) {
@@ -109,42 +107,50 @@ class yumusicConfigureSyncView extends WatchUi.View {
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                 );
             } else {
-                // Draw status - configured (default)
+                // Show menu
                 dc.setColor(ORANGE, Graphics.COLOR_TRANSPARENT);
                 dc.drawText(
                     centerX,
-                    centerY - 30,
-                    Graphics.FONT_SMALL,
-                    "✓ Configured",
+                    centerY,
+                    Graphics.FONT_MEDIUM,
+                    _menuItems[_selectedIndex],
                     Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                 );
                 
-                // Draw server URL (truncated)
-                dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-                var url = _settings.getServerUrl();
-                if (url != null) {
-                    if (url.length() > 25) {
-                        url = url.substring(0, 22) + "...";
-                    }
+                // Draw previous item hint
+                if (_selectedIndex > 0) {
+                    dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
                     dc.drawText(
                         centerX,
-                        centerY + 10,
-                        Graphics.FONT_XTINY,
-                        url,
+                        centerY - (height * 0.15),
+                        Graphics.FONT_TINY,
+                        "↑ " + _menuItems[_selectedIndex - 1],
                         Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
                     );
                 }
+                
+                // Draw next item hint
+                if (_selectedIndex < _menuItems.size() - 1) {
+                    dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
+                    dc.drawText(
+                        centerX,
+                        centerY + (height * 0.15),
+                        Graphics.FONT_TINY,
+                        "↓ " + _menuItems[_selectedIndex + 1],
+                        Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                    );
+                }
+                
+                // Position indicator
+                dc.setColor(DARK_ORANGE, Graphics.COLOR_TRANSPARENT);
+                dc.drawText(
+                    centerX,
+                    height * 0.85,
+                    Graphics.FONT_XTINY,
+                    (_selectedIndex + 1) + " / " + _menuItems.size(),
+                    Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+                );
             }
-            
-            // Instructions at bottom
-            dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(
-                centerX,
-                height * 0.85,
-                Graphics.FONT_XTINY,
-                "SELECT to test connection",
-                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
-            );
         } else {
             // Draw status - not configured
             dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
@@ -201,5 +207,26 @@ class yumusicConfigureSyncView extends WatchUi.View {
     // Get status text for display
     function getStatusText() as String {
         return _statusText;
+    }
+    
+    // Move selection up
+    function moveUp() as Void {
+        if (_selectedIndex > 0) {
+            _selectedIndex--;
+            WatchUi.requestUpdate();
+        }
+    }
+
+    // Move selection down
+    function moveDown() as Void {
+        if (_selectedIndex < _menuItems.size() - 1) {
+            _selectedIndex++;
+            WatchUi.requestUpdate();
+        }
+    }
+
+    // Get selected index
+    function getSelectedIndex() as Number {
+        return _selectedIndex;
     }
 }

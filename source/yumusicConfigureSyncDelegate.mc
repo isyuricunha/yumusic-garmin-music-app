@@ -18,15 +18,70 @@ class yumusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
         _view = view;
     }
 
-    // Handle select button press - test connection
-    function onSelect() as Boolean {
-        if (_settings.isConfigured()) {
-            testConnection();
-            return true;
-        }
-        return false;
+    // Handle up button - move selection up
+    function onPreviousPage() as Boolean {
+        _view.moveUp();
+        return true;
     }
 
+    // Handle down button - move selection down
+    function onNextPage() as Boolean {
+        _view.moveDown();
+        return true;
+    }
+
+    // Handle select button press - execute selected option
+    function onSelect() as Boolean {
+        if (!_settings.isConfigured()) {
+            return false;
+        }
+        
+        var selectedIndex = _view.getSelectedIndex();
+        
+        switch (selectedIndex) {
+            case 0: // Browse Playlists
+                browsePlaylists();
+                break;
+            case 1: // Test Connection
+                testConnection();
+                break;
+            case 2: // Settings Info
+                showSettingsInfo();
+                break;
+        }
+        
+        return true;
+    }
+
+    // Browse playlists
+    private function browsePlaylists() as Void {
+        var playlistView = new yumusicPlaylistSelectionView();
+        var playlistDelegate = new yumusicPlaylistSelectionDelegate(playlistView);
+        WatchUi.switchToView(playlistView, playlistDelegate, WatchUi.SLIDE_LEFT);
+    }
+    
+    // Show settings info
+    private function showSettingsInfo() as Void {
+        var serverUrl = _settings.getServerUrl();
+        var username = _settings.getUsername();
+        
+        var info = "Server: ";
+        if (serverUrl != null) {
+            info += serverUrl;
+        } else {
+            info += "Not set";
+        }
+        
+        info += "\nUser: ";
+        if (username != null) {
+            info += username;
+        } else {
+            info += "Not set";
+        }
+        
+        _view.setStatusText(info);
+    }
+    
     // Test connection to server
     private function testConnection() as Void {
         var serverUrl = _settings.getServerUrl();
