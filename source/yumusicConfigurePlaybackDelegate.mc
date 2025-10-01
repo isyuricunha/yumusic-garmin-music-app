@@ -3,7 +3,7 @@ import Toybox.Lang;
 import Toybox.Communications;
 
 class yumusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
-    private var _view as yumusicConfigurePlaybackView;
+    private var _view as yumusicConfigurePlaybackView?;
     private var _api as SubsonicAPI;
     private var _settings as SettingsManager;
     private var _library as MusicLibrary;
@@ -128,8 +128,8 @@ class yumusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
                 if (subsonicResponse.hasKey("artists")) {
                     var artists = subsonicResponse["artists"];
                     if (artists.hasKey("index")) {
-                        var indexes = artists["index"] as Array;
                         // TODO: Process and display artists
+                        // var indexes = artists["index"] as Array;
                     }
                 }
             }

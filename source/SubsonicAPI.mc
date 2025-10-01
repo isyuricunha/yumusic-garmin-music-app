@@ -26,11 +26,25 @@ class SubsonicAPI {
 
     // Generate MD5 hash for authentication token
     private function generateMD5(input as String) as String {
-        var options = {
+        var hash = new Cryptography.Hash({
             :algorithm => Cryptography.HASH_MD5
-        };
-        var hash = Cryptography.hash(options, StringUtil.utf8ArrayToString(input.toUtf8Array()), {});
-        return StringUtil.convertEncodingString(hash, StringUtil.REPRESENTATION_BYTE_ARRAY, StringUtil.REPRESENTATION_STRING_HEX);
+        });
+        var inputBytes = input.toUtf8Array() as ByteArray;
+        hash.update(inputBytes);
+        var digest = hash.digest();
+        return bytesToHex(digest);
+    }
+
+    // Convert byte array to hex string
+    private function bytesToHex(bytes as ByteArray) as String {
+        var hex = "";
+        for (var i = 0; i < bytes.size(); i++) {
+            var byte = bytes[i];
+            var h = (byte >> 4) & 0x0F;
+            var l = byte & 0x0F;
+            hex += h.format("%x") + l.format("%x");
+        }
+        return hex;
     }
 
     // Generate authentication token (MD5 of password + salt)

@@ -1,6 +1,24 @@
 <strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
     <string id="AppName">yumusic</string>
 
-    <string id="configureSyncMessage">Configure\nSync</string>
-    <string id="configurePlaybackMessage">Configure\nPlayback</string>
+    <string id="configureSyncMessage">Configure Server\nNavidrome/Subsonic</string>
+    <string id="configurePlaybackMessage">Select Music</string>
+    
+    <!-- Menu items -->
+    <string id="randomSongs">Random Songs</string>
+    <string id="playlists">Playlists</string>
+    <string id="artists">Artists</string>
+    <string id="albums">Albums</string>
+    <string id="search">Search</string>
+    
+    <!-- Status messages -->
+    <string id="notConfigured">Not Configured</string>
+    <string id="connecting">Connecting...</string>
+    <string id="connected">Connected!</string>
+    <string id="connectionFailed">Connection Failed</string>
+    <string id="loading">Loading...</string>
+    <string id="noMusic">No Music Found</string>
+    
+    <!-- Instructions -->
+    <string id="useGarminConnect">Use Garmin Connect\nMobile App to\nConfigure Server</string>
 </strings>

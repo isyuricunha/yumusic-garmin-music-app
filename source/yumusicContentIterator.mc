@@ -107,35 +107,33 @@ class yumusicContentIterator extends Media.ContentIterator {
 
         var streamUrl = _api.getStreamUrl(songId as String);
         
-        var content = new Media.Content(streamUrl);
+        // Create ContentRef with the stream URL as ID
+        var contentRef = new Media.ContentRef(streamUrl, Media.CONTENT_TYPE_AUDIO);
         
-        // Set metadata
+        // Create metadata
+        var metadata = new Media.ContentMetadata();
+        
         if (song.hasKey("title")) {
-            content.setMetadata(new Media.ContentMetadata());
-            content.getMetadata().title = song["title"];
+            metadata.title = song["title"];
         }
         
         if (song.hasKey("artist")) {
-            if (content.getMetadata() == null) {
-                content.setMetadata(new Media.ContentMetadata());
-            }
-            content.getMetadata().artist = song["artist"];
+            metadata.artist = song["artist"];
         }
         
         if (song.hasKey("album")) {
-            if (content.getMetadata() == null) {
-                content.setMetadata(new Media.ContentMetadata());
-            }
-            content.getMetadata().album = song["album"];
+            metadata.album = song["album"];
         }
         
         // Set cover art if available
         if (song.hasKey("coverArt")) {
-            var coverArtUrl = _api.getCoverArtUrl(song["coverArt"] as String);
             // Note: Cover art would need to be downloaded separately
-            // and set using content.getMetadata().albumArt
+            // and set using metadata.albumArt
+            // var coverArtUrl = _api.getCoverArtUrl(song["coverArt"] as String);
         }
         
+        // Create and return Content object
+        var content = new Media.Content(contentRef, metadata);
         return content;
     }
 }

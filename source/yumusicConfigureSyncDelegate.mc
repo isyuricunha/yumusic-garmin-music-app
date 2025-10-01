@@ -3,7 +3,7 @@ import Toybox.Lang;
 import Toybox.Communications;
 
 class yumusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
-    private var _view as yumusicConfigureSyncView;
+    private var _view as yumusicConfigureSyncView?;
     private var _api as SubsonicAPI;
     private var _settings as SettingsManager;
 
