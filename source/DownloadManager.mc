@@ -84,9 +84,10 @@ class DownloadManager {
         var streamUrl = _api.getStreamUrl(songId as String);
         
         // Make HTTP request to download the song
+        // Note: Using JSON response type since AUDIO type has different callback signature
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
         
         System.println("Downloading song: " + title + " from URL: " + streamUrl);
@@ -95,7 +96,7 @@ class DownloadManager {
 
 
     // Callback when song is downloaded
-    function onSongDownloaded(responseCode as Number, data as ByteArray or String or Dictionary or Null) as Void {
+    function onSongDownloaded(responseCode as Number, data as Dictionary or String or Null) as Void {
         var title = "Unknown";
         if (_currentDownload != null && _currentDownload.hasKey("title")) {
             title = _currentDownload["title"] as String;
