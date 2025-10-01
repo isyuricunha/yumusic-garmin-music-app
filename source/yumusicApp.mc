@@ -19,7 +19,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
     }
 
     // Get a Media.ContentDelegate for use by the system to get and iterate through media on the device
-    function getContentDelegate(arg as PersistableType) as ContentDelegate? {
+    function getContentDelegate(arg as PersistableType) as Media.ContentDelegate {
         return new YuMusicContentDelegate();
     }
 

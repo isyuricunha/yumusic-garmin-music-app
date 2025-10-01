@@ -1,0 +1,64 @@
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [WatchUi,1,14,21]; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
+import Toybox.Lang;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 5; @symbol_classdef = [YuMusicConfirmDelegate,5,6,28]; @symbol_extends<0> = [WatchUi,5,37,44]; @symbol_extends<1> = [BehaviorDelegate,5,45,61]; ]
+class YuMusicConfirmDelegate extends WatchUi.BehaviorDelegate {
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 7; @symbol_functiondef = [initialize,7,13,23]; ]
+    function initialize() as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_7_26_9_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 8 8 ]
+        symbol [ BehaviorDelegate %tmp.2 8 8 24 ];
+        %tmp.2 = getv ? :BehaviorDelegate;
+        symbol [ initialize %tmp.3 8 25 35 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_7_26_9_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 12; @symbol_functiondef = [onBack,12,13,19]; @symbol_return<0> = [Boolean,12,25,32]; ]
+    function onBack() as Boolean {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_12_33_16_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 14 8 ]
+        symbol [ WatchUi %tmp.1 14 8 15 ];
+        %tmp.1 = getm $.Toybox.WatchUi;
+        symbol [ popView %tmp.2 14 16 23 ];
+        %tmp.2 = getv function %tmp.1 :popView;
+        symbol [ WatchUi %tmp.3 14 24 31 ];
+        %tmp.3 = getm $.Toybox.WatchUi;
+        symbol [ SLIDE_RIGHT %tmp.4 14 32 43 ];
+        %tmp.4 = getv %tmp.3 :SLIDE_RIGHT;
+        invoke %tmp.1 %tmp.2(%tmp.4);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 15 8 ]
+        %tmp.5 = true;
+        ret %tmp.5;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_12_33_16_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 19; @symbol_functiondef = [onSelect,19,13,21]; @symbol_return<0> = [Boolean,19,27,34]; ]
+    function onSelect() as Boolean {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_19_35_22_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 20 8 ]
+        symbol [ WatchUi %tmp.1 20 8 15 ];
+        %tmp.1 = getm $.Toybox.WatchUi;
+        symbol [ popView %tmp.2 20 16 23 ];
+        %tmp.2 = getv function %tmp.1 :popView;
+        symbol [ WatchUi %tmp.3 20 24 31 ];
+        %tmp.3 = getm $.Toybox.WatchUi;
+        symbol [ SLIDE_RIGHT %tmp.4 20 32 43 ];
+        %tmp.4 = getv %tmp.3 :SLIDE_RIGHT;
+        invoke %tmp.1 %tmp.2(%tmp.4);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 21 8 ]
+        %tmp.5 = true;
+        ret %tmp.5;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_19_35_22_4_stop:
+    }
+}
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 1; ]
+<init> {
+}

@@ -1,0 +1,228 @@
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Application,1,14,25]; @symbol_importdef<2> = [Storage,1,26,33]; ]
+import Toybox.Application.Storage;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
+import Toybox.Lang;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 5; @symbol_classdef = [YuMusicServerConfig,5,6,25]; ]
+class YuMusicServerConfig {
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 6; @position = 18; @symbol_constdef = [SERVER_URL_KEY,6,18,32]; ]
+    private
+    const SERVER_URL_KEY = "serverUrl";
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 7; @position = 18; @symbol_constdef = [USERNAME_KEY,7,18,30]; ]
+    private
+    const USERNAME_KEY = "username";
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 8; @position = 18; @symbol_constdef = [PASSWORD_KEY,8,18,30]; ]
+    private
+    const PASSWORD_KEY = "password";
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 9; @position = 18; @symbol_constdef = [CONFIGURED_KEY,9,18,32]; ]
+    private
+    const CONFIGURED_KEY = "configured";
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 11; @symbol_functiondef = [initialize,11,13,23]; ]
+    function initialize() as Void {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 15; @symbol_functiondef = [saveConfig,15,13,23]; @symbol_param<0> = [serverUrl,15,24,33]; @symbol_param<0>_type<0> = [String,15,37,43]; @symbol_param<1> = [username,15,45,53]; @symbol_param<1>_type<0> = [String,15,57,63]; @symbol_param<2> = [password,15,65,73]; @symbol_param<2>_type<0> = [String,15,77,83]; ]
+    function saveConfig(serverUrl as String, username as String, password as String) as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_15_93_20_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 16 8 ]
+        symbol [ Storage %tmp.1 16 8 15 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ setValue %tmp.2 16 16 24 ];
+        %tmp.2 = getv function %tmp.1 :setValue;
+        symbol [ SERVER_URL_KEY %tmp.4 16 25 39 ];
+        %tmp.4 = getv ? :SERVER_URL_KEY;
+        %tmp.5 = lgetv %serverUrl;
+        symbol [ serverUrl %tmp.5 16 41 50 ];
+        invoke %tmp.1 %tmp.2(%tmp.4, %tmp.5);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 17 8 ]
+        symbol [ Storage %tmp.6 17 8 15 ];
+        %tmp.6 = getm $.Toybox.Application.Storage;
+        symbol [ setValue %tmp.7 17 16 24 ];
+        %tmp.7 = getv function %tmp.6 :setValue;
+        symbol [ USERNAME_KEY %tmp.9 17 25 37 ];
+        %tmp.9 = getv ? :USERNAME_KEY;
+        %tmp.10 = lgetv %username;
+        symbol [ username %tmp.10 17 39 47 ];
+        invoke %tmp.6 %tmp.7(%tmp.9, %tmp.10);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 18 8 ]
+        symbol [ Storage %tmp.11 18 8 15 ];
+        %tmp.11 = getm $.Toybox.Application.Storage;
+        symbol [ setValue %tmp.12 18 16 24 ];
+        %tmp.12 = getv function %tmp.11 :setValue;
+        symbol [ PASSWORD_KEY %tmp.14 18 25 37 ];
+        %tmp.14 = getv ? :PASSWORD_KEY;
+        %tmp.15 = lgetv %password;
+        symbol [ password %tmp.15 18 39 47 ];
+        invoke %tmp.11 %tmp.12(%tmp.14, %tmp.15);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 19 8 ]
+        symbol [ Storage %tmp.16 19 8 15 ];
+        %tmp.16 = getm $.Toybox.Application.Storage;
+        symbol [ setValue %tmp.17 19 16 24 ];
+        %tmp.17 = getv function %tmp.16 :setValue;
+        symbol [ CONFIGURED_KEY %tmp.19 19 25 39 ];
+        %tmp.19 = getv ? :CONFIGURED_KEY;
+        %tmp.20 = true;
+        invoke %tmp.16 %tmp.17(%tmp.19, %tmp.20);
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_15_93_20_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 23; @symbol_functiondef = [getServerUrl,23,13,25]; @symbol_return<0> = [String,23,31,37]; ]
+    function getServerUrl() as String or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_23_39_25_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 24 8 ]
+        symbol [ Storage %tmp.1 24 15 22 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ getValue %tmp.2 24 23 31 ];
+        %tmp.2 = getv function %tmp.1 :getValue;
+        symbol [ SERVER_URL_KEY %tmp.4 24 32 46 ];
+        %tmp.4 = getv ? :SERVER_URL_KEY;
+        %tmp.5 = invoke %tmp.1 %tmp.2(%tmp.4);
+        ret %tmp.5;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_23_39_25_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 28; @symbol_functiondef = [getUsername,28,13,24]; @symbol_return<0> = [String,28,30,36]; ]
+    function getUsername() as String or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_28_38_30_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 29 8 ]
+        symbol [ Storage %tmp.1 29 15 22 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ getValue %tmp.2 29 23 31 ];
+        %tmp.2 = getv function %tmp.1 :getValue;
+        symbol [ USERNAME_KEY %tmp.4 29 32 44 ];
+        %tmp.4 = getv ? :USERNAME_KEY;
+        %tmp.5 = invoke %tmp.1 %tmp.2(%tmp.4);
+        ret %tmp.5;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_28_38_30_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 33; @symbol_functiondef = [getPassword,33,13,24]; @symbol_return<0> = [String,33,30,36]; ]
+    function getPassword() as String or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_33_38_35_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 34 8 ]
+        symbol [ Storage %tmp.1 34 15 22 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ getValue %tmp.2 34 23 31 ];
+        %tmp.2 = getv function %tmp.1 :getValue;
+        symbol [ PASSWORD_KEY %tmp.4 34 32 44 ];
+        %tmp.4 = getv ? :PASSWORD_KEY;
+        %tmp.5 = invoke %tmp.1 %tmp.2(%tmp.4);
+        ret %tmp.5;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_33_38_35_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 38; @symbol_functiondef = [isConfigured,38,13,25]; @symbol_return<0> = [Boolean,38,31,38]; ]
+    function isConfigured() as Boolean {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_38_39_41_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 39 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_38_39_41_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_38_39_41_4_stop" ]
+        %configured.1 = local;
+        symbol [ configured %configured.1 39 12 22 ];
+        symbol [ Storage %tmp.1 39 25 32 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ getValue %tmp.2 39 33 41 ];
+        %tmp.2 = getv function %tmp.1 :getValue;
+        symbol [ CONFIGURED_KEY %tmp.4 39 42 56 ];
+        %tmp.4 = getv ? :CONFIGURED_KEY;
+        %tmp.5 = invoke %tmp.1 %tmp.2(%tmp.4);
+        lputv %configured.1 %tmp.5;
+        symbol [ configured %configured.1 39 12 22 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 40 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_15_40_51_begin:
+        %tmp.6 = lgetv %configured.1;
+        symbol [ configured %tmp.6 40 15 25 ];
+        %tmp.7 = null;
+        %tmp.8 = ne %tmp.6 %tmp.7;
+        %tmp.9 = dup %tmp.8;
+        bf %tmp.9 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_37_40_51_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_37_40_51_true:
+        %tmp.10 = lgetv %configured.1;
+        symbol [ configured %tmp.10 40 37 47 ];
+        %tmp.11 = as %tmp.10 { (!Null) };
+        %tmp.12 = true;
+        %tmp.13 = eq %tmp.11 %tmp.12;
+        %tmp.14 = and %tmp.8 %tmp.13;
+        push %tmp.14;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_37_40_51_end:
+        %tmp.15 = phi [%tmp.9 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_15_40_51_begin] [%tmp.14 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_37_40_51_true] [%tmp.15 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_40_37_40_51_end];
+        ret %tmp.15;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_38_39_41_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 44; @symbol_functiondef = [clearConfig,44,13,24]; ]
+    function clearConfig() as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_44_35_49_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 45 8 ]
+        symbol [ Storage %tmp.1 45 8 15 ];
+        %tmp.1 = getm $.Toybox.Application.Storage;
+        symbol [ deleteValue %tmp.2 45 16 27 ];
+        %tmp.2 = getv function %tmp.1 :deleteValue;
+        symbol [ SERVER_URL_KEY %tmp.4 45 28 42 ];
+        %tmp.4 = getv ? :SERVER_URL_KEY;
+        invoke %tmp.1 %tmp.2(%tmp.4);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 46 8 ]
+        symbol [ Storage %tmp.5 46 8 15 ];
+        %tmp.5 = getm $.Toybox.Application.Storage;
+        symbol [ deleteValue %tmp.6 46 16 27 ];
+        %tmp.6 = getv function %tmp.5 :deleteValue;
+        symbol [ USERNAME_KEY %tmp.8 46 28 40 ];
+        %tmp.8 = getv ? :USERNAME_KEY;
+        invoke %tmp.5 %tmp.6(%tmp.8);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 47 8 ]
+        symbol [ Storage %tmp.9 47 8 15 ];
+        %tmp.9 = getm $.Toybox.Application.Storage;
+        symbol [ deleteValue %tmp.10 47 16 27 ];
+        %tmp.10 = getv function %tmp.9 :deleteValue;
+        symbol [ PASSWORD_KEY %tmp.12 47 28 40 ];
+        %tmp.12 = getv ? :PASSWORD_KEY;
+        invoke %tmp.9 %tmp.10(%tmp.12);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 48 8 ]
+        symbol [ Storage %tmp.13 48 8 15 ];
+        %tmp.13 = getm $.Toybox.Application.Storage;
+        symbol [ deleteValue %tmp.14 48 16 27 ];
+        %tmp.14 = getv function %tmp.13 :deleteValue;
+        symbol [ CONFIGURED_KEY %tmp.16 48 28 42 ];
+        %tmp.16 = getv ? :CONFIGURED_KEY;
+        invoke %tmp.13 %tmp.14(%tmp.16);
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_44_35_49_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 52; @symbol_functiondef = [getConfig,52,13,22]; @symbol_return<0> = [Dictionary,52,28,38]; ]
+    function getConfig() as Dictionary {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_52_39_59_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc" 53 8 ]
+        %tmp.1 = newd 4;
+        %tmp.2 = "serverUrl";
+        %tmp.3 = self;
+        symbol [ getServerUrl %tmp.4 54 27 39 ];
+        %tmp.4 = getv function %tmp.3 :getServerUrl;
+        %tmp.5 = invoke %tmp.3 %tmp.4();
+        %tmp.6 = dup %tmp.1;
+        %tmp.7 = aputv %tmp.6 %tmp.2 %tmp.5;
+        %tmp.8 = "username";
+        %tmp.9 = self;
+        symbol [ getUsername %tmp.10 55 26 37 ];
+        %tmp.10 = getv function %tmp.9 :getUsername;
+        %tmp.11 = invoke %tmp.9 %tmp.10();
+        %tmp.12 = dup %tmp.7;
+        %tmp.13 = aputv %tmp.12 %tmp.8 %tmp.11;
+        %tmp.14 = "password";
+        %tmp.15 = self;
+        symbol [ getPassword %tmp.16 56 26 37 ];
+        %tmp.16 = getv function %tmp.15 :getPassword;
+        %tmp.17 = invoke %tmp.15 %tmp.16();
+        %tmp.18 = dup %tmp.13;
+        %tmp.19 = aputv %tmp.18 %tmp.14 %tmp.17;
+        %tmp.20 = "configured";
+        %tmp.21 = self;
+        symbol [ isConfigured %tmp.22 57 28 40 ];
+        %tmp.22 = getv function %tmp.21 :isConfigured;
+        %tmp.23 = invoke %tmp.21 %tmp.22();
+        %tmp.24 = dup %tmp.19;
+        %tmp.25 = aputv %tmp.24 %tmp.20 %tmp.23;
+        ret %tmp.25;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicServerConfig_mc_52_39_59_4_stop:
+    }
+}
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicServerConfig.mc"; @line = 1; ]
+<init> {
+}

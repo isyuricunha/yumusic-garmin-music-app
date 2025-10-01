@@ -1,10 +1,15 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
+import Toybox.Lang;
 
 class YuMusicConfigurePlaybackView extends WatchUi.View {
+    private var _serverConfig as YuMusicServerConfig;
+    private var _library as YuMusicLibrary;
 
     function initialize() {
         View.initialize();
+        _serverConfig = new YuMusicServerConfig();
+        _library = new YuMusicLibrary();
     }
 
     // Load your resources here
@@ -20,8 +25,43 @@ class YuMusicConfigurePlaybackView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        // Call the parent onUpdate function to redraw the layout
-        View.onUpdate(dc);
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
+        
+        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        
+        var width = dc.getWidth();
+        var centerX = width / 2;
+        var y = 40;
+
+        // Draw title
+        dc.drawText(centerX, y, Graphics.FONT_MEDIUM, "Playback Settings", Graphics.TEXT_JUSTIFY_CENTER);
+        y += 50;
+
+        // Show library stats
+        var stats = _library.getStats();
+        dc.drawText(centerX, y, Graphics.FONT_SMALL, stats["songCount"] + " songs", Graphics.TEXT_JUSTIFY_CENTER);
+        y += 30;
+
+        if (stats["songCount"] > 0) {
+            var minutes = stats["totalDuration"] / 60;
+            dc.drawText(centerX, y, Graphics.FONT_TINY, minutes + " minutes", Graphics.TEXT_JUSTIFY_CENTER);
+            y += 40;
+        }
+
+        // Show shuffle status
+        var shuffleText = _library.getShuffle() ? "Shuffle: ON" : "Shuffle: OFF";
+        dc.drawText(centerX, y, Graphics.FONT_SMALL, shuffleText, Graphics.TEXT_JUSTIFY_CENTER);
+        y += 40;
+
+        // Show server status
+        if (_serverConfig.isConfigured()) {
+            dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: Connected", Graphics.TEXT_JUSTIFY_CENTER);
+        } else {
+            dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: Not configured", Graphics.TEXT_JUSTIFY_CENTER);
+        }
     }
 
     // Called when this View is removed from the screen. Save the

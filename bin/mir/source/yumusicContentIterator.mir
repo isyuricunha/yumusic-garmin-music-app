@@ -1,0 +1,550 @@
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Lang,1,14,18]; ]
+import Toybox.Lang;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Media,2,14,19]; ]
+import Toybox.Media;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 4; @symbol_classdef = [YuMusicContentIterator,4,6,28]; @symbol_extends<0> = [Media,4,37,42]; @symbol_extends<1> = [ContentIterator,4,43,58]; ]
+class YuMusicContentIterator extends Media.ContentIterator {
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 4; ]
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 4; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 5; @position = 16; @symbol_vardef = [_library,5,16,24]; @symbol_type<0> = [YuMusicLibrary,5,28,42]; ]
+    private
+    var _library as YuMusicLibrary;
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 6; @position = 16; @symbol_vardef = [_songs,6,16,22]; @symbol_type<0> = [Array,6,26,31]; ]
+    private
+    var _songs as Array;
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 7; @position = 16; @symbol_vardef = [_currentIndex,7,16,29]; @symbol_type<0> = [Number,7,33,39]; ]
+    private
+    var _currentIndex as Number = 0;
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 8; @position = 16; @symbol_vardef = [_shuffle,8,16,24]; @symbol_type<0> = [Boolean,8,28,35]; ]
+    private
+    var _shuffle as Boolean = false;
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 10; @symbol_functiondef = [initialize,10,13,23]; ]
+    function initialize() as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_10_26_20_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 11 8 ]
+        symbol [ ContentIterator %tmp.2 11 8 23 ];
+        %tmp.2 = getv ? :ContentIterator;
+        symbol [ initialize %tmp.3 11 24 34 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 12 8 ]
+        symbol [ YuMusicLibrary %tmp.7 12 23 37 ];
+        %tmp.7 = getv ? :YuMusicLibrary;
+        %tmp.4 = newc %tmp.7 ();
+        symbol [ _library ? 12 8 16 ];
+        putv self :_library %tmp.4;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 13 8 ]
+        symbol [ _library %tmp.9 13 17 25 ];
+        %tmp.9 = getv ? :_library;
+        symbol [ getSongs %tmp.10 13 26 34 ];
+        %tmp.10 = getv function %tmp.9 :getSongs;
+        %tmp.11 = invoke %tmp.9 %tmp.10();
+        symbol [ _songs ? 13 8 14 ];
+        putv self :_songs %tmp.11;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 14 8 ]
+        symbol [ _library %tmp.13 14 19 27 ];
+        %tmp.13 = getv ? :_library;
+        symbol [ getShuffle %tmp.14 14 28 38 ];
+        %tmp.14 = getv function %tmp.13 :getShuffle;
+        %tmp.15 = invoke %tmp.13 %tmp.14();
+        symbol [ _shuffle ? 14 8 16 ];
+        putv self :_shuffle %tmp.15;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 17 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_8_19_8_if_stmt:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_12_17_40_begin:
+        symbol [ _shuffle %tmp.17 17 12 20 ];
+        %tmp.17 = getv ? :_shuffle;
+        bf %tmp.17 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_8_19_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_24_17_40_true:
+        symbol [ _songs %tmp.19 17 24 30 ];
+        %tmp.19 = getv ? :_songs;
+        symbol [ size %tmp.20 17 31 35 ];
+        %tmp.20 = getv function %tmp.19 :size;
+        %tmp.21 = invoke %tmp.19 %tmp.20();
+        %tmp.22 = 0;
+        %tmp.23 = gt %tmp.21 %tmp.22;
+        push %tmp.23;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_24_17_40_end:
+        %tmp.24 = phi [%tmp.17 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_12_17_40_begin] [%tmp.23 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_24_17_40_true] [%tmp.24 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_24_17_40_end];
+        bf %tmp.24 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_8_19_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_8_19_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_43_19_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 18 12 ]
+        %tmp.25 = self;
+        symbol [ shuffleSongs %tmp.26 18 12 24 ];
+        %tmp.26 = getv function %tmp.25 :shuffleSongs;
+        invoke %tmp.25 %tmp.26();
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_43_19_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_8_19_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_17_8_19_8_if_end:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_10_26_20_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 23; @symbol_functiondef = [shuffleSongs,23,21,33]; ]
+    private
+    function shuffleSongs() as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_23_44_31_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 25 8 ]
+        for @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_test @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_incr @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_init:
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_begin" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_end" ]
+        %i.1 = local;
+        symbol [ i %i.1 25 17 18 ];
+        symbol [ _songs %tmp.2 25 21 27 ];
+        %tmp.2 = getv ? :_songs;
+        symbol [ size %tmp.3 25 28 32 ];
+        %tmp.3 = getv function %tmp.2 :size;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 1;
+        %tmp.6 = sub %tmp.4 %tmp.5;
+        lputv %i.1 %tmp.6;
+        symbol [ i %i.1 25 17 18 ];
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_test:
+        %tmp.7 = lgetv %i.1;
+        symbol [ i %tmp.7 25 40 41 ];
+        %tmp.8 = 0;
+        %tmp.9 = gt %tmp.7 %tmp.8;
+        bf %tmp.9 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_begin:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_52_30_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 26 12 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_52_30_8_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_52_30_8_stop" ]
+        %j.2 = local;
+        symbol [ j %j.2 26 16 17 ];
+        symbol [ System %tmp.11 26 21 27 ];
+        %tmp.11 = getv ? :System;
+        symbol [ getTimer %tmp.12 26 28 36 ];
+        %tmp.12 = getv function %tmp.11 :getTimer;
+        %tmp.13 = invoke %tmp.11 %tmp.12();
+        %tmp.14 = lgetv %i.1;
+        symbol [ i %tmp.14 26 42 43 ];
+        %tmp.15 = 1;
+        %tmp.16 = add %tmp.14 %tmp.15;
+        %tmp.17 = mod %tmp.13 %tmp.16;
+        symbol [ toNumber %tmp.18 26 50 58 ];
+        %tmp.18 = getv function %tmp.17 :toNumber;
+        %tmp.19 = invoke %tmp.17 %tmp.18();
+        lputv %j.2 %tmp.19;
+        symbol [ j %j.2 26 16 17 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 27 12 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_52_30_8_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_52_30_8_stop" ]
+        %temp.3 = local;
+        symbol [ temp %temp.3 27 16 20 ];
+        symbol [ _songs %tmp.21 27 23 29 ];
+        %tmp.21 = getv ? :_songs;
+        %tmp.22 = lgetv %i.1;
+        symbol [ i %tmp.22 27 30 31 ];
+        %tmp.23 = agetv %tmp.21 %tmp.22;
+        lputv %temp.3 %tmp.23;
+        symbol [ temp %temp.3 27 16 20 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 28 12 ]
+        symbol [ _songs %tmp.24 28 12 18 ];
+        %tmp.24 = getv self :_songs;
+        symbol [ _songs %tmp.26 28 24 30 ];
+        %tmp.26 = getv ? :_songs;
+        %tmp.27 = lgetv %j.2;
+        symbol [ j %tmp.27 28 31 32 ];
+        %tmp.28 = agetv %tmp.26 %tmp.27;
+        %tmp.29 = lgetv %i.1;
+        symbol [ i %tmp.29 28 19 20 ];
+        aputv %tmp.24 %tmp.29 %tmp.28;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 29 12 ]
+        symbol [ _songs %tmp.30 29 12 18 ];
+        %tmp.30 = getv self :_songs;
+        %tmp.31 = lgetv %temp.3;
+        symbol [ temp %tmp.31 29 24 28 ];
+        %tmp.32 = lgetv %j.2;
+        symbol [ j %tmp.32 29 19 20 ];
+        aputv %tmp.30 %tmp.32 %tmp.31;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_52_30_8_stop:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_incr:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 25 ]
+        %tmp.35 = lgetv %i.1;
+        symbol [ i %tmp.35 25 47 48 ];
+        %tmp.36 = sub %tmp.35 1;
+        lputv %i.1 %tmp.36;
+        symbol [ i %i.1 25 47 48 ];
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_test;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_25_8_30_8_for_end:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_23_44_31_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 34; @symbol_functiondef = [canSkip,34,13,20]; @symbol_return<0> = [Boolean,34,26,33]; ]
+    function canSkip() as Boolean {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_34_34_36_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 35 8 ]
+        %tmp.1 = true;
+        ret %tmp.1;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_34_34_36_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 39; @symbol_functiondef = [get,39,13,16]; @symbol_return<0> = [Content,39,22,29]; ]
+    function get() as Content or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_39_31_45_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 40 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_8_42_8_if_stmt:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_12_40_63_begin:
+        symbol [ _songs %tmp.2 40 12 18 ];
+        %tmp.2 = getv ? :_songs;
+        symbol [ size %tmp.3 40 19 23 ];
+        %tmp.3 = getv function %tmp.2 :size;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 0;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        bt %tmp.6 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_8_42_8_if_true;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_34_40_63_false:
+        symbol [ _currentIndex %tmp.8 40 34 47 ];
+        %tmp.8 = getv ? :_currentIndex;
+        symbol [ _songs %tmp.10 40 51 57 ];
+        %tmp.10 = getv ? :_songs;
+        symbol [ size %tmp.11 40 58 62 ];
+        %tmp.11 = getv function %tmp.10 :size;
+        %tmp.12 = invoke %tmp.10 %tmp.11();
+        %tmp.13 = gte %tmp.8 %tmp.12;
+        push %tmp.13;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_34_40_63_end:
+        %tmp.14 = phi [%tmp.6 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_12_40_63_begin] [%tmp.13 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_34_40_63_false] [%tmp.14 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_34_40_63_end];
+        bf %tmp.14 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_8_42_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_8_42_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_66_42_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 41 12 ]
+        %tmp.15 = null;
+        ret %tmp.15;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_66_42_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_8_42_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_40_8_42_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 44 8 ]
+        symbol [ _library %tmp.17 44 15 23 ];
+        %tmp.17 = getv ? :_library;
+        symbol [ createMediaContent %tmp.18 44 24 42 ];
+        %tmp.18 = getv function %tmp.17 :createMediaContent;
+        symbol [ _songs %tmp.20 44 43 49 ];
+        %tmp.20 = getv ? :_songs;
+        symbol [ _currentIndex %tmp.22 44 50 63 ];
+        %tmp.22 = getv ? :_currentIndex;
+        %tmp.23 = agetv %tmp.20 %tmp.22;
+        %tmp.24 = invoke %tmp.17 %tmp.18(%tmp.23);
+        ret %tmp.24;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_39_31_45_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 48; @symbol_functiondef = [getPlaybackProfile,48,13,31]; @symbol_return<0> = [PlaybackProfile,48,37,52]; ]
+    function getPlaybackProfile() as PlaybackProfile or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_48_54_60_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 49 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_48_54_60_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_48_54_60_4_stop" ]
+        %profile.1 = local;
+        symbol [ profile %profile.1 49 12 19 ];
+        symbol [ Media %tmp.3 49 26 31 ];
+        %tmp.3 = getm $.Toybox.Media;
+        symbol [ PlaybackProfile %tmp.4 49 32 47 ];
+        %tmp.4 = getv function ? %tmp.3 :PlaybackProfile;
+        %tmp.1 = newc %tmp.4 ();
+        lputv %profile.1 %tmp.1;
+        symbol [ profile %profile.1 49 12 19 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 50 8 ]
+        %tmp.5 = lgetv %profile.1;
+        symbol [ profile %tmp.5 50 8 15 ];
+        %tmp.6 = false;
+        symbol [ attemptSkipAfterThumbsDown ? 50 16 42 ];
+        putv %tmp.5 :attemptSkipAfterThumbsDown %tmp.6;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 51 8 ]
+        %tmp.7 = lgetv %profile.1;
+        symbol [ profile %tmp.7 51 8 15 ];
+        %tmp.8 = newa 3;
+        symbol [ PLAYBACK_CONTROL_SKIP_BACKWARD %tmp.10 52 12 42 ];
+        %tmp.10 = getv ? :PLAYBACK_CONTROL_SKIP_BACKWARD;
+        %tmp.11 = dup %tmp.8;
+        %tmp.12 = aputv %tmp.11 0 %tmp.10;
+        symbol [ PLAYBACK_CONTROL_PLAYBACK %tmp.14 53 12 37 ];
+        %tmp.14 = getv ? :PLAYBACK_CONTROL_PLAYBACK;
+        %tmp.15 = dup %tmp.12;
+        %tmp.16 = aputv %tmp.15 1 %tmp.14;
+        symbol [ PLAYBACK_CONTROL_SKIP_FORWARD %tmp.18 54 12 41 ];
+        %tmp.18 = getv ? :PLAYBACK_CONTROL_SKIP_FORWARD;
+        %tmp.19 = dup %tmp.16;
+        %tmp.20 = aputv %tmp.19 2 %tmp.18;
+        symbol [ playbackControls ? 51 16 32 ];
+        putv %tmp.7 :playbackControls %tmp.20;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 56 8 ]
+        %tmp.21 = lgetv %profile.1;
+        symbol [ profile %tmp.21 56 8 15 ];
+        %tmp.22 = 1;
+        symbol [ playbackNotificationThreshold ? 56 16 45 ];
+        putv %tmp.21 :playbackNotificationThreshold %tmp.22;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 57 8 ]
+        %tmp.23 = lgetv %profile.1;
+        symbol [ profile %tmp.23 57 8 15 ];
+        %tmp.24 = false;
+        symbol [ requirePlaybackNotification ? 57 16 43 ];
+        putv %tmp.23 :requirePlaybackNotification %tmp.24;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 58 8 ]
+        %tmp.25 = lgetv %profile.1;
+        symbol [ profile %tmp.25 58 8 15 ];
+        %tmp.26 = null;
+        symbol [ skipPreviousThreshold ? 58 16 37 ];
+        putv %tmp.25 :skipPreviousThreshold %tmp.26;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 59 8 ]
+        %tmp.27 = lgetv %profile.1;
+        symbol [ profile %tmp.27 59 15 22 ];
+        ret %tmp.27;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_48_54_60_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 63; @symbol_functiondef = [next,63,13,17]; @symbol_return<0> = [Content,63,23,30]; ]
+    function next() as Content or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_63_32_76_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 64 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_8_66_8_if_stmt:
+        symbol [ _songs %tmp.2 64 12 18 ];
+        %tmp.2 = getv ? :_songs;
+        symbol [ size %tmp.3 64 19 23 ];
+        %tmp.3 = getv function %tmp.2 :size;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 0;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        bf %tmp.6 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_8_66_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_8_66_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_32_66_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 65 12 ]
+        %tmp.7 = null;
+        ret %tmp.7;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_32_66_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_8_66_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_64_8_66_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 68 8 ]
+        symbol [ _currentIndex %tmp.10 68 8 21 ];
+        %tmp.10 = getv ? :_currentIndex;
+        %tmp.11 = add %tmp.10 1;
+        symbol [ _currentIndex ? 68 8 21 ];
+        putv self :_currentIndex dup %tmp.11;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 71 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_8_73_8_if_stmt:
+        symbol [ _currentIndex %tmp.13 71 12 25 ];
+        %tmp.13 = getv ? :_currentIndex;
+        symbol [ _songs %tmp.15 71 29 35 ];
+        %tmp.15 = getv ? :_songs;
+        symbol [ size %tmp.16 71 36 40 ];
+        %tmp.16 = getv function %tmp.15 :size;
+        %tmp.17 = invoke %tmp.15 %tmp.16();
+        %tmp.18 = gte %tmp.13 %tmp.17;
+        bf %tmp.18 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_8_73_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_8_73_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_44_73_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 72 12 ]
+        %tmp.19 = 0;
+        symbol [ _currentIndex ? 72 12 25 ];
+        putv self :_currentIndex %tmp.19;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_44_73_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_8_73_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_71_8_73_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 75 8 ]
+        %tmp.20 = self;
+        symbol [ get %tmp.21 75 15 18 ];
+        %tmp.21 = getv function %tmp.20 :get;
+        %tmp.22 = invoke %tmp.20 %tmp.21();
+        ret %tmp.22;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_63_32_76_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 79; @symbol_functiondef = [peekNext,79,13,21]; @symbol_return<0> = [Content,79,27,34]; ]
+    function peekNext() as Content or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_79_36_92_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 80 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_8_82_8_if_stmt:
+        symbol [ _songs %tmp.2 80 12 18 ];
+        %tmp.2 = getv ? :_songs;
+        symbol [ size %tmp.3 80 19 23 ];
+        %tmp.3 = getv function %tmp.2 :size;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 0;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        bf %tmp.6 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_8_82_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_8_82_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_32_82_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 81 12 ]
+        %tmp.7 = null;
+        ret %tmp.7;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_32_82_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_8_82_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_80_8_82_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 84 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_79_36_92_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_79_36_92_4_stop" ]
+        %nextIndex.1 = local;
+        symbol [ nextIndex %nextIndex.1 84 12 21 ];
+        symbol [ _currentIndex %tmp.9 84 24 37 ];
+        %tmp.9 = getv ? :_currentIndex;
+        %tmp.10 = 1;
+        %tmp.11 = add %tmp.9 %tmp.10;
+        lputv %nextIndex.1 %tmp.11;
+        symbol [ nextIndex %nextIndex.1 84 12 21 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 87 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_8_89_8_if_stmt:
+        %tmp.12 = lgetv %nextIndex.1;
+        symbol [ nextIndex %tmp.12 87 12 21 ];
+        symbol [ _songs %tmp.14 87 25 31 ];
+        %tmp.14 = getv ? :_songs;
+        symbol [ size %tmp.15 87 32 36 ];
+        %tmp.15 = getv function %tmp.14 :size;
+        %tmp.16 = invoke %tmp.14 %tmp.15();
+        %tmp.17 = gte %tmp.12 %tmp.16;
+        bf %tmp.17 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_8_89_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_8_89_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_40_89_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 88 12 ]
+        %tmp.18 = 0;
+        lputv %nextIndex.1 %tmp.18;
+        symbol [ nextIndex %nextIndex.1 88 12 21 ];
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_40_89_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_8_89_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_87_8_89_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 91 8 ]
+        symbol [ _library %tmp.20 91 15 23 ];
+        %tmp.20 = getv ? :_library;
+        symbol [ createMediaContent %tmp.21 91 24 42 ];
+        %tmp.21 = getv function %tmp.20 :createMediaContent;
+        symbol [ _songs %tmp.23 91 43 49 ];
+        %tmp.23 = getv ? :_songs;
+        %tmp.24 = lgetv %nextIndex.1;
+        symbol [ nextIndex %tmp.24 91 50 59 ];
+        %tmp.25 = agetv %tmp.23 %tmp.24;
+        %tmp.26 = invoke %tmp.20 %tmp.21(%tmp.25);
+        ret %tmp.26;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_79_36_92_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 95; @symbol_functiondef = [peekPrevious,95,13,25]; @symbol_return<0> = [Content,95,31,38]; ]
+    function peekPrevious() as Content or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_95_40_108_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 96 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_8_98_8_if_stmt:
+        symbol [ _songs %tmp.2 96 12 18 ];
+        %tmp.2 = getv ? :_songs;
+        symbol [ size %tmp.3 96 19 23 ];
+        %tmp.3 = getv function %tmp.2 :size;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 0;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        bf %tmp.6 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_8_98_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_8_98_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_32_98_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 97 12 ]
+        %tmp.7 = null;
+        ret %tmp.7;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_32_98_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_8_98_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_96_8_98_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 100 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_95_40_108_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_95_40_108_4_stop" ]
+        %prevIndex.1 = local;
+        symbol [ prevIndex %prevIndex.1 100 12 21 ];
+        symbol [ _currentIndex %tmp.9 100 24 37 ];
+        %tmp.9 = getv ? :_currentIndex;
+        %tmp.10 = 1;
+        %tmp.11 = sub %tmp.9 %tmp.10;
+        lputv %prevIndex.1 %tmp.11;
+        symbol [ prevIndex %prevIndex.1 100 12 21 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 103 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_8_105_8_if_stmt:
+        %tmp.12 = lgetv %prevIndex.1;
+        symbol [ prevIndex %tmp.12 103 12 21 ];
+        %tmp.13 = 0;
+        %tmp.14 = lt %tmp.12 %tmp.13;
+        bf %tmp.14 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_8_105_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_8_105_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_27_105_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 104 12 ]
+        symbol [ _songs %tmp.16 104 24 30 ];
+        %tmp.16 = getv ? :_songs;
+        symbol [ size %tmp.17 104 31 35 ];
+        %tmp.17 = getv function %tmp.16 :size;
+        %tmp.18 = invoke %tmp.16 %tmp.17();
+        %tmp.19 = 1;
+        %tmp.20 = sub %tmp.18 %tmp.19;
+        lputv %prevIndex.1 %tmp.20;
+        symbol [ prevIndex %prevIndex.1 104 12 21 ];
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_27_105_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_8_105_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_103_8_105_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 107 8 ]
+        symbol [ _library %tmp.22 107 15 23 ];
+        %tmp.22 = getv ? :_library;
+        symbol [ createMediaContent %tmp.23 107 24 42 ];
+        %tmp.23 = getv function %tmp.22 :createMediaContent;
+        symbol [ _songs %tmp.25 107 43 49 ];
+        %tmp.25 = getv ? :_songs;
+        %tmp.26 = lgetv %prevIndex.1;
+        symbol [ prevIndex %tmp.26 107 50 59 ];
+        %tmp.27 = agetv %tmp.25 %tmp.26;
+        %tmp.28 = invoke %tmp.22 %tmp.23(%tmp.27);
+        ret %tmp.28;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_95_40_108_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 111; @symbol_functiondef = [previous,111,13,21]; @symbol_return<0> = [Content,111,27,34]; ]
+    function previous() as Content or Null {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_111_36_124_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 112 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_8_114_8_if_stmt:
+        symbol [ _songs %tmp.2 112 12 18 ];
+        %tmp.2 = getv ? :_songs;
+        symbol [ size %tmp.3 112 19 23 ];
+        %tmp.3 = getv function %tmp.2 :size;
+        %tmp.4 = invoke %tmp.2 %tmp.3();
+        %tmp.5 = 0;
+        %tmp.6 = eq %tmp.4 %tmp.5;
+        bf %tmp.6 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_8_114_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_8_114_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_32_114_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 113 12 ]
+        %tmp.7 = null;
+        ret %tmp.7;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_32_114_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_8_114_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_112_8_114_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 116 8 ]
+        symbol [ _currentIndex %tmp.10 116 8 21 ];
+        %tmp.10 = getv ? :_currentIndex;
+        %tmp.11 = sub %tmp.10 1;
+        symbol [ _currentIndex ? 116 8 21 ];
+        putv self :_currentIndex dup %tmp.11;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 119 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_8_121_8_if_stmt:
+        symbol [ _currentIndex %tmp.13 119 12 25 ];
+        %tmp.13 = getv ? :_currentIndex;
+        %tmp.14 = 0;
+        %tmp.15 = lt %tmp.13 %tmp.14;
+        bf %tmp.15 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_8_121_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_8_121_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_31_121_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 120 12 ]
+        symbol [ _songs %tmp.17 120 28 34 ];
+        %tmp.17 = getv ? :_songs;
+        symbol [ size %tmp.18 120 35 39 ];
+        %tmp.18 = getv function %tmp.17 :size;
+        %tmp.19 = invoke %tmp.17 %tmp.18();
+        %tmp.20 = 1;
+        %tmp.21 = sub %tmp.19 %tmp.20;
+        symbol [ _currentIndex ? 120 12 25 ];
+        putv self :_currentIndex %tmp.21;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_31_121_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_8_121_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_119_8_121_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 123 8 ]
+        %tmp.22 = self;
+        symbol [ get %tmp.23 123 15 18 ];
+        %tmp.23 = getv function %tmp.22 :get;
+        %tmp.24 = invoke %tmp.22 %tmp.23();
+        ret %tmp.24;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_111_36_124_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 127; @symbol_functiondef = [shuffling,127,13,22]; @symbol_return<0> = [Boolean,127,28,35]; ]
+    function shuffling() as Boolean {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_127_36_129_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc" 128 8 ]
+        symbol [ _shuffle %tmp.2 128 15 23 ];
+        %tmp.2 = getv ? :_shuffle;
+        ret %tmp.2;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentIterator_mc_127_36_129_4_stop:
+    }
+}
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentIterator.mc"; @line = 1; ]
+<init> {
+}

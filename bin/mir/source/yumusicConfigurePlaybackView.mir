@@ -1,0 +1,394 @@
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Graphics,1,14,22]; ]
+import Toybox.Graphics;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [WatchUi,2,14,21]; ]
+import Toybox.WatchUi;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [Lang,3,14,18]; ]
+import Toybox.Lang;
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 5; @symbol_classdef = [YuMusicConfigurePlaybackView,5,6,34]; @symbol_extends<0> = [WatchUi,5,43,50]; @symbol_extends<1> = [View,5,51,55]; ]
+class YuMusicConfigurePlaybackView extends WatchUi.View {
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 5; ]
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 5; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 6; @position = 16; @symbol_vardef = [_serverConfig,6,16,29]; @symbol_type<0> = [YuMusicServerConfig,6,33,52]; ]
+    private
+    var _serverConfig as YuMusicServerConfig;
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 7; @position = 16; @symbol_vardef = [_library,7,16,24]; @symbol_type<0> = [YuMusicLibrary,7,28,42]; ]
+    private
+    var _library as YuMusicLibrary;
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 9; @symbol_functiondef = [initialize,9,13,23]; ]
+    function initialize() as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_9_26_13_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 10 8 ]
+        symbol [ View %tmp.2 10 8 12 ];
+        %tmp.2 = getv ? :View;
+        symbol [ initialize %tmp.3 10 13 23 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 11 8 ]
+        symbol [ YuMusicServerConfig %tmp.7 11 28 47 ];
+        %tmp.7 = getv ? :YuMusicServerConfig;
+        %tmp.4 = newc %tmp.7 ();
+        symbol [ _serverConfig ? 11 8 21 ];
+        putv self :_serverConfig %tmp.4;
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 12 8 ]
+        symbol [ YuMusicLibrary %tmp.11 12 23 37 ];
+        %tmp.11 = getv ? :YuMusicLibrary;
+        %tmp.8 = newc %tmp.11 ();
+        symbol [ _library ? 12 8 16 ];
+        putv self :_library %tmp.8;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_9_26_13_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 16; @symbol_functiondef = [onLayout,16,13,21]; @symbol_param<0> = [dc,16,22,24]; @symbol_param<0>_type<0> = [Dc,16,28,30]; ]
+    function onLayout(dc as Dc) as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_16_40_18_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 17 8 ]
+        %tmp.1 = self;
+        symbol [ setLayout %tmp.2 17 8 17 ];
+        %tmp.2 = getv function %tmp.1 :setLayout;
+        symbol [ Rez %tmp.4 17 18 21 ];
+        %tmp.4 = getv ? :Rez;
+        symbol [ Layouts %tmp.5 17 22 29 ];
+        %tmp.5 = getv %tmp.4 :Layouts;
+        symbol [ ConfigurePlaybackLayout %tmp.6 17 30 53 ];
+        %tmp.6 = getv function %tmp.5 :ConfigurePlaybackLayout;
+        %tmp.7 = lgetv %dc;
+        symbol [ dc %tmp.7 17 54 56 ];
+        %tmp.8 = invoke %tmp.5 %tmp.6(%tmp.7);
+        invoke %tmp.1 %tmp.2(%tmp.8);
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_16_40_18_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 23; @symbol_functiondef = [onShow,23,13,19]; ]
+    function onShow() as Void {
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 27; @symbol_functiondef = [onUpdate,27,13,21]; @symbol_param<0> = [dc,27,22,24]; @symbol_param<0>_type<0> = [Dc,27,28,30]; ]
+    function onUpdate(dc as Dc) as Void {
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 28 8 ]
+        %tmp.1 = lgetv %dc;
+        symbol [ dc %tmp.1 28 8 10 ];
+        symbol [ setColor %tmp.2 28 11 19 ];
+        %tmp.2 = getv function %tmp.1 :setColor;
+        symbol [ Graphics %tmp.3 28 20 28 ];
+        %tmp.3 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.4 28 29 40 ];
+        %tmp.4 = getv %tmp.3 :COLOR_BLACK;
+        symbol [ Graphics %tmp.5 28 42 50 ];
+        %tmp.5 = getm $.Toybox.Graphics;
+        symbol [ COLOR_BLACK %tmp.6 28 51 62 ];
+        %tmp.6 = getv %tmp.5 :COLOR_BLACK;
+        invoke %tmp.1 %tmp.2(%tmp.4, %tmp.6);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 29 8 ]
+        %tmp.7 = lgetv %dc;
+        symbol [ dc %tmp.7 29 8 10 ];
+        symbol [ clear %tmp.8 29 11 16 ];
+        %tmp.8 = getv function %tmp.7 :clear;
+        invoke %tmp.7 %tmp.8();
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 31 8 ]
+        %tmp.9 = lgetv %dc;
+        symbol [ dc %tmp.9 31 8 10 ];
+        symbol [ setColor %tmp.10 31 11 19 ];
+        %tmp.10 = getv function %tmp.9 :setColor;
+        symbol [ Graphics %tmp.11 31 20 28 ];
+        %tmp.11 = getm $.Toybox.Graphics;
+        symbol [ COLOR_WHITE %tmp.12 31 29 40 ];
+        %tmp.12 = getv %tmp.11 :COLOR_WHITE;
+        symbol [ Graphics %tmp.13 31 42 50 ];
+        %tmp.13 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.14 31 51 68 ];
+        %tmp.14 = getv %tmp.13 :COLOR_TRANSPARENT;
+        invoke %tmp.9 %tmp.10(%tmp.12, %tmp.14);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 33 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_stop" ]
+        %width.1 = local;
+        symbol [ width %width.1 33 12 17 ];
+        %tmp.15 = lgetv %dc;
+        symbol [ dc %tmp.15 33 20 22 ];
+        symbol [ getWidth %tmp.16 33 23 31 ];
+        %tmp.16 = getv function %tmp.15 :getWidth;
+        %tmp.17 = invoke %tmp.15 %tmp.16();
+        lputv %width.1 %tmp.17;
+        symbol [ width %width.1 33 12 17 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 34 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_stop" ]
+        %centerX.2 = local;
+        symbol [ centerX %centerX.2 34 12 19 ];
+        %tmp.18 = lgetv %width.1;
+        symbol [ width %tmp.18 34 22 27 ];
+        %tmp.19 = 2;
+        %tmp.20 = div %tmp.18 %tmp.19;
+        lputv %centerX.2 %tmp.20;
+        symbol [ centerX %centerX.2 34 12 19 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 35 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_stop" ]
+        %y.3 = local;
+        symbol [ y %y.3 35 12 13 ];
+        %tmp.21 = 40;
+        lputv %y.3 %tmp.21;
+        symbol [ y %y.3 35 12 13 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 38 8 ]
+        %tmp.22 = lgetv %dc;
+        symbol [ dc %tmp.22 38 8 10 ];
+        symbol [ drawText %tmp.23 38 11 19 ];
+        %tmp.23 = getv function %tmp.22 :drawText;
+        %tmp.24 = lgetv %centerX.2;
+        symbol [ centerX %tmp.24 38 20 27 ];
+        %tmp.25 = lgetv %y.3;
+        symbol [ y %tmp.25 38 29 30 ];
+        symbol [ Graphics %tmp.26 38 32 40 ];
+        %tmp.26 = getm $.Toybox.Graphics;
+        symbol [ FONT_MEDIUM %tmp.27 38 41 52 ];
+        %tmp.27 = getv %tmp.26 :FONT_MEDIUM;
+        %tmp.28 = "Playback Settings";
+        symbol [ Graphics %tmp.29 38 75 83 ];
+        %tmp.29 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.30 38 84 103 ];
+        %tmp.30 = getv %tmp.29 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.27, %tmp.28, %tmp.30);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 39 8 ]
+        %tmp.31 = lgetv %y.3;
+        symbol [ y %tmp.31 39 8 9 ];
+        %tmp.32 = 50;
+        %tmp.33 = add %tmp.31 %tmp.32;
+        lputv %y.3 %tmp.33;
+        symbol [ y %y.3 39 8 9 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 42 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_stop" ]
+        %stats.4 = local;
+        symbol [ stats %stats.4 42 12 17 ];
+        symbol [ _library %tmp.35 42 20 28 ];
+        %tmp.35 = getv ? :_library;
+        symbol [ getStats %tmp.36 42 29 37 ];
+        %tmp.36 = getv function %tmp.35 :getStats;
+        %tmp.37 = invoke %tmp.35 %tmp.36();
+        lputv %stats.4 %tmp.37;
+        symbol [ stats %stats.4 42 12 17 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 43 8 ]
+        %tmp.38 = lgetv %dc;
+        symbol [ dc %tmp.38 43 8 10 ];
+        symbol [ drawText %tmp.39 43 11 19 ];
+        %tmp.39 = getv function %tmp.38 :drawText;
+        %tmp.40 = lgetv %centerX.2;
+        symbol [ centerX %tmp.40 43 20 27 ];
+        %tmp.41 = lgetv %y.3;
+        symbol [ y %tmp.41 43 29 30 ];
+        symbol [ Graphics %tmp.42 43 32 40 ];
+        %tmp.42 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.43 43 41 51 ];
+        %tmp.43 = getv %tmp.42 :FONT_SMALL;
+        %tmp.44 = lgetv %stats.4;
+        symbol [ stats %tmp.44 43 53 58 ];
+        %tmp.45 = "songCount";
+        %tmp.46 = agetv %tmp.44 %tmp.45;
+        %tmp.47 = " songs";
+        %tmp.48 = add %tmp.46 %tmp.47;
+        symbol [ Graphics %tmp.49 43 84 92 ];
+        %tmp.49 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.50 43 93 112 ];
+        %tmp.50 = getv %tmp.49 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.38 %tmp.39(%tmp.40, %tmp.41, %tmp.43, %tmp.48, %tmp.50);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 44 8 ]
+        %tmp.51 = lgetv %y.3;
+        symbol [ y %tmp.51 44 8 9 ];
+        %tmp.52 = 30;
+        %tmp.53 = add %tmp.51 %tmp.52;
+        lputv %y.3 %tmp.53;
+        symbol [ y %y.3 44 8 9 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 46 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_8_50_8_if_stmt:
+        %tmp.54 = lgetv %stats.4;
+        symbol [ stats %tmp.54 46 12 17 ];
+        %tmp.55 = "songCount";
+        %tmp.56 = agetv %tmp.54 %tmp.55;
+        %tmp.57 = 0;
+        %tmp.58 = gt %tmp.56 %tmp.57;
+        bf %tmp.58 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_8_50_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_8_50_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_36_50_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 47 12 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_36_50_8_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_36_50_8_stop" ]
+        %minutes.5 = local;
+        symbol [ minutes %minutes.5 47 16 23 ];
+        %tmp.59 = lgetv %stats.4;
+        symbol [ stats %tmp.59 47 26 31 ];
+        %tmp.60 = "totalDuration";
+        %tmp.61 = agetv %tmp.59 %tmp.60;
+        %tmp.62 = 60;
+        %tmp.63 = div %tmp.61 %tmp.62;
+        lputv %minutes.5 %tmp.63;
+        symbol [ minutes %minutes.5 47 16 23 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 48 12 ]
+        %tmp.64 = lgetv %dc;
+        symbol [ dc %tmp.64 48 12 14 ];
+        symbol [ drawText %tmp.65 48 15 23 ];
+        %tmp.65 = getv function %tmp.64 :drawText;
+        %tmp.66 = lgetv %centerX.2;
+        symbol [ centerX %tmp.66 48 24 31 ];
+        %tmp.67 = lgetv %y.3;
+        symbol [ y %tmp.67 48 33 34 ];
+        symbol [ Graphics %tmp.68 48 36 44 ];
+        %tmp.68 = getm $.Toybox.Graphics;
+        symbol [ FONT_TINY %tmp.69 48 45 54 ];
+        %tmp.69 = getv %tmp.68 :FONT_TINY;
+        %tmp.70 = lgetv %minutes.5;
+        symbol [ minutes %tmp.70 48 56 63 ];
+        %tmp.71 = " minutes";
+        %tmp.72 = add %tmp.70 %tmp.71;
+        symbol [ Graphics %tmp.73 48 78 86 ];
+        %tmp.73 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.74 48 87 106 ];
+        %tmp.74 = getv %tmp.73 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.64 %tmp.65(%tmp.66, %tmp.67, %tmp.69, %tmp.72, %tmp.74);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 49 12 ]
+        %tmp.75 = lgetv %y.3;
+        symbol [ y %tmp.75 49 12 13 ];
+        %tmp.76 = 40;
+        %tmp.77 = add %tmp.75 %tmp.76;
+        lputv %y.3 %tmp.77;
+        symbol [ y %y.3 49 12 13 ];
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_36_50_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_8_50_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_46_8_50_8_if_end:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 53 8 ]
+        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_stop" ]
+        %shuffleText.6 = local;
+        symbol [ shuffleText %shuffleText.6 53 12 23 ];
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_begin:
+        symbol [ _library %tmp.79 53 26 34 ];
+        %tmp.79 = getv ? :_library;
+        symbol [ getShuffle %tmp.80 53 35 45 ];
+        %tmp.80 = getv function %tmp.79 :getShuffle;
+        %tmp.81 = invoke %tmp.79 %tmp.80();
+        bf %tmp.81 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_else_false;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_true:
+        %tmp.82 = "Shuffle: ON";
+        push %tmp.82;
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_else_false:
+        %tmp.83 = "Shuffle: OFF";
+        push %tmp.83;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_end:
+        %tmp.84 = phi [%tmp.81 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_begin] [%tmp.82 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_true] [%tmp.83 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_else_false] [%tmp.84 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_53_26_53_66_end];
+        lputv %shuffleText.6 %tmp.84;
+        symbol [ shuffleText %shuffleText.6 53 12 23 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 54 8 ]
+        %tmp.85 = lgetv %dc;
+        symbol [ dc %tmp.85 54 8 10 ];
+        symbol [ drawText %tmp.86 54 11 19 ];
+        %tmp.86 = getv function %tmp.85 :drawText;
+        %tmp.87 = lgetv %centerX.2;
+        symbol [ centerX %tmp.87 54 20 27 ];
+        %tmp.88 = lgetv %y.3;
+        symbol [ y %tmp.88 54 29 30 ];
+        symbol [ Graphics %tmp.89 54 32 40 ];
+        %tmp.89 = getm $.Toybox.Graphics;
+        symbol [ FONT_SMALL %tmp.90 54 41 51 ];
+        %tmp.90 = getv %tmp.89 :FONT_SMALL;
+        %tmp.91 = lgetv %shuffleText.6;
+        symbol [ shuffleText %tmp.91 54 53 64 ];
+        symbol [ Graphics %tmp.92 54 66 74 ];
+        %tmp.92 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.93 54 75 94 ];
+        %tmp.93 = getv %tmp.92 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.85 %tmp.86(%tmp.87, %tmp.88, %tmp.90, %tmp.91, %tmp.93);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 55 8 ]
+        %tmp.94 = lgetv %y.3;
+        symbol [ y %tmp.94 55 8 9 ];
+        %tmp.95 = 40;
+        %tmp.96 = add %tmp.94 %tmp.95;
+        lputv %y.3 %tmp.96;
+        symbol [ y %y.3 55 8 9 ];
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 58 8 ]
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_8_64_8_if_stmt:
+        symbol [ _serverConfig %tmp.98 58 12 25 ];
+        %tmp.98 = getv ? :_serverConfig;
+        symbol [ isConfigured %tmp.99 58 26 38 ];
+        %tmp.99 = getv function %tmp.98 :isConfigured;
+        %tmp.100 = invoke %tmp.98 %tmp.99();
+        bf %tmp.100 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_8_64_8_if_else_false;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_8_64_8_if_true:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_42_61_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 59 12 ]
+        %tmp.101 = lgetv %dc;
+        symbol [ dc %tmp.101 59 12 14 ];
+        symbol [ setColor %tmp.102 59 15 23 ];
+        %tmp.102 = getv function %tmp.101 :setColor;
+        symbol [ Graphics %tmp.103 59 24 32 ];
+        %tmp.103 = getm $.Toybox.Graphics;
+        symbol [ COLOR_GREEN %tmp.104 59 33 44 ];
+        %tmp.104 = getv %tmp.103 :COLOR_GREEN;
+        symbol [ Graphics %tmp.105 59 46 54 ];
+        %tmp.105 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.106 59 55 72 ];
+        %tmp.106 = getv %tmp.105 :COLOR_TRANSPARENT;
+        invoke %tmp.101 %tmp.102(%tmp.104, %tmp.106);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 60 12 ]
+        %tmp.107 = lgetv %dc;
+        symbol [ dc %tmp.107 60 12 14 ];
+        symbol [ drawText %tmp.108 60 15 23 ];
+        %tmp.108 = getv function %tmp.107 :drawText;
+        %tmp.109 = lgetv %centerX.2;
+        symbol [ centerX %tmp.109 60 24 31 ];
+        %tmp.110 = lgetv %y.3;
+        symbol [ y %tmp.110 60 33 34 ];
+        symbol [ Graphics %tmp.111 60 36 44 ];
+        %tmp.111 = getm $.Toybox.Graphics;
+        symbol [ FONT_TINY %tmp.112 60 45 54 ];
+        %tmp.112 = getv %tmp.111 :FONT_TINY;
+        %tmp.113 = "Server: Connected";
+        symbol [ Graphics %tmp.114 60 77 85 ];
+        %tmp.114 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.115 60 86 105 ];
+        %tmp.115 = getv %tmp.114 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.107 %tmp.108(%tmp.109, %tmp.110, %tmp.112, %tmp.113, %tmp.115);
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_42_61_8_stop:
+        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_8_64_8_if_end;
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_8_64_8_if_else_false:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_61_15_64_8_start:
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 62 12 ]
+        %tmp.116 = lgetv %dc;
+        symbol [ dc %tmp.116 62 12 14 ];
+        symbol [ setColor %tmp.117 62 15 23 ];
+        %tmp.117 = getv function %tmp.116 :setColor;
+        symbol [ Graphics %tmp.118 62 24 32 ];
+        %tmp.118 = getm $.Toybox.Graphics;
+        symbol [ COLOR_RED %tmp.119 62 33 42 ];
+        %tmp.119 = getv %tmp.118 :COLOR_RED;
+        symbol [ Graphics %tmp.120 62 44 52 ];
+        %tmp.120 = getm $.Toybox.Graphics;
+        symbol [ COLOR_TRANSPARENT %tmp.121 62 53 70 ];
+        %tmp.121 = getv %tmp.120 :COLOR_TRANSPARENT;
+        invoke %tmp.116 %tmp.117(%tmp.119, %tmp.121);
+[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc" 63 12 ]
+        %tmp.122 = lgetv %dc;
+        symbol [ dc %tmp.122 63 12 14 ];
+        symbol [ drawText %tmp.123 63 15 23 ];
+        %tmp.123 = getv function %tmp.122 :drawText;
+        %tmp.124 = lgetv %centerX.2;
+        symbol [ centerX %tmp.124 63 24 31 ];
+        %tmp.125 = lgetv %y.3;
+        symbol [ y %tmp.125 63 33 34 ];
+        symbol [ Graphics %tmp.126 63 36 44 ];
+        %tmp.126 = getm $.Toybox.Graphics;
+        symbol [ FONT_TINY %tmp.127 63 45 54 ];
+        %tmp.127 = getv %tmp.126 :FONT_TINY;
+        %tmp.128 = "Server: Not configured";
+        symbol [ Graphics %tmp.129 63 82 90 ];
+        %tmp.129 = getm $.Toybox.Graphics;
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.130 63 91 110 ];
+        %tmp.130 = getv %tmp.129 :TEXT_JUSTIFY_CENTER;
+        invoke %tmp.122 %tmp.123(%tmp.124, %tmp.125, %tmp.127, %tmp.128, %tmp.130);
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_61_15_64_8_stop:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_58_8_64_8_if_end:
+C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_27_40_65_4_stop:
+    }
+    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 70; @symbol_functiondef = [onHide,70,13,19]; ]
+    function onHide() as Void {
+    }
+}
+[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigurePlaybackView.mc"; @line = 1; ]
+<init> {
+}
