@@ -42,7 +42,7 @@ class yumusicApp extends Application.AudioContentProviderApp {
     }
 
     // Get a delegate that communicates sync status to the system for syncing media content to the device
-    function getSyncDelegate() as Media.SyncDelegate? {
+    function getSyncDelegate() as Communications.SyncDelegate? {
         return new yumusicSyncDelegate();
     }
 

@@ -1,9 +1,8 @@
 import Toybox.Communications;
-import Toybox.Media;
 import Toybox.Lang;
 import Toybox.Application.Storage;
 
-class yumusicSyncDelegate extends Media.SyncDelegate {
+class yumusicSyncDelegate extends Communications.SyncDelegate {
     private var _syncList as Array<Dictionary>;
     private var _currentIndex as Number;
     private var _api as SubsonicAPI;
@@ -35,7 +34,7 @@ class yumusicSyncDelegate extends Media.SyncDelegate {
         
         if (!_settings.isConfigured()) {
             System.println("SyncDelegate: Not configured");
-            Media.notifySyncComplete("Not configured. Please set server URL, username, and password in Garmin Connect Mobile.");
+            Communications.notifySyncComplete("Not configured. Please set server URL, username, and password in Garmin Connect Mobile.");
             return;
         }
         
@@ -77,7 +76,7 @@ class yumusicSyncDelegate extends Media.SyncDelegate {
             }
         }
         System.println("SyncDelegate: Failed to load playlist");
-        Media.notifySyncComplete("Failed to load playlist");
+        Communications.notifySyncComplete("Failed to load playlist");
     }
 
     // Handle random songs response
@@ -102,14 +101,14 @@ class yumusicSyncDelegate extends Media.SyncDelegate {
             }
         }
         System.println("SyncDelegate: Failed to load songs");
-        Media.notifySyncComplete("Failed to load songs");
+        Communications.notifySyncComplete("Failed to load songs");
     }
 
     // Download next song in the sync list
     private function syncNextSong() as Void {
         if (_currentIndex >= _syncList.size()) {
             System.println("SyncDelegate: All songs synced!");
-            Media.notifySyncComplete(null);
+            Communications.notifySyncComplete(null);
             return;
         }
         
@@ -128,16 +127,15 @@ class yumusicSyncDelegate extends Media.SyncDelegate {
         
         // Update progress
         var progress = ((_currentIndex * 100) / _syncList.size());
-        Media.notifySyncProgress(progress);
+        Communications.notifySyncProgress(progress);
         
         // Get stream URL
         var streamUrl = _api.getStreamUrl(songId as String);
         
-        // Download the audio file
+        // Download the audio file - use JSON response type for now
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO,
-            :mediaEncoding => Media.ENCODING_MP3
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
         
         System.println("SyncDelegate: Requesting " + streamUrl);
@@ -145,7 +143,7 @@ class yumusicSyncDelegate extends Media.SyncDelegate {
     }
     
     // Callback when song is downloaded
-    function onSongDownloaded(responseCode as Number, data as Media.ContentRef or Null) as Void {
+    function onSongDownloaded(responseCode as Number, data as Dictionary or String or Null) as Void {
         var song = _syncList[_currentIndex];
         var title = song.hasKey("title") ? song["title"] : "Unknown";
         
@@ -173,6 +171,6 @@ class yumusicSyncDelegate extends Media.SyncDelegate {
     function onStopSync() as Void {
         System.println("SyncDelegate: Sync cancelled by user");
         Communications.cancelAllRequests();
-        Media.notifySyncComplete("Sync cancelled");
+        Communications.notifySyncComplete("Sync cancelled");
     }
 }
