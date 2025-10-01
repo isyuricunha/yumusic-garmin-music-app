@@ -7,14 +7,12 @@ class yumusicPlaylistSelectionDelegate extends WatchUi.BehaviorDelegate {
     private var _view as yumusicPlaylistSelectionView;
     private var _api as SubsonicAPI;
     private var _settings as SettingsManager;
-    private var _library as MusicLibrary;
 
     function initialize(view as yumusicPlaylistSelectionView) {
         BehaviorDelegate.initialize();
         _view = view;
         _api = new SubsonicAPI();
         _settings = new SettingsManager();
-        _library = new MusicLibrary();
         
         // Configure API
         if (_settings.isConfigured()) {
@@ -43,6 +41,8 @@ class yumusicPlaylistSelectionDelegate extends WatchUi.BehaviorDelegate {
 
     // Handle playlists response
     function onPlaylistsResponse(responseCode as Number, data as Dictionary or String or Null) as Void {
+        System.println("PlaylistDelegate: Received playlists response - HTTP " + responseCode);
+        
         if (responseCode == 200 && data != null && data instanceof Dictionary) {
             var response = data as Dictionary;
             if (response.hasKey("subsonic-response")) {

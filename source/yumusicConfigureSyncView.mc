@@ -33,6 +33,7 @@ class yumusicConfigureSyncView extends WatchUi.View {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() as Void {
+        WatchUi.requestUpdate();
     }
 
     // Update the view

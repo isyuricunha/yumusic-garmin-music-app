@@ -86,6 +86,8 @@ class SubsonicAPI {
     function ping(callback as Method) as Void {
         var url = buildBaseUrl("ping");
         
+        System.println("SubsonicAPI: Pinging server at: " + url);
+        
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
@@ -160,6 +162,8 @@ class SubsonicAPI {
     function getPlaylists(callback as Method) as Void {
         var url = buildBaseUrl("getPlaylists");
         
+        System.println("SubsonicAPI: Getting playlists from: " + url);
+        
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
@@ -172,6 +176,8 @@ class SubsonicAPI {
     function getPlaylist(playlistId as String, callback as Method) as Void {
         var url = buildBaseUrl("getPlaylist") + "&id=" + playlistId;
         
+        System.println("SubsonicAPI: Getting playlist " + playlistId + " from: " + url);
+        
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
@@ -183,6 +189,7 @@ class SubsonicAPI {
     // Get stream URL for a song
     function getStreamUrl(songId as String) as String {
         if (_serverUrl == null || _username == null) {
+            System.println("SubsonicAPI: ERROR - Server URL or username not configured");
             return "";
         }
 
@@ -196,6 +203,8 @@ class SubsonicAPI {
         url += "&s=" + salt;
         url += "&v=" + API_VERSION;
         url += "&c=" + CLIENT_NAME;
+        
+        System.println("SubsonicAPI: Generated stream URL for song " + songId + ": " + url);
         
         return url;
     }

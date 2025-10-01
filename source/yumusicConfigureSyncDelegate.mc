@@ -55,9 +55,13 @@ class yumusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
 
     // Browse playlists
     private function browsePlaylists() as Void {
-        var playlistView = new yumusicPlaylistSelectionView();
-        var playlistDelegate = new yumusicPlaylistSelectionDelegate(playlistView);
-        WatchUi.switchToView(playlistView, playlistDelegate, WatchUi.SLIDE_LEFT);
+        try {
+            var playlistView = new yumusicPlaylistSelectionView();
+            var playlistDelegate = new yumusicPlaylistSelectionDelegate(playlistView);
+            WatchUi.switchToView(playlistView, playlistDelegate, WatchUi.SLIDE_LEFT);
+        } catch (ex) {
+            _view.setStatusText("Error loading");
+        }
     }
     
     // Show settings info
@@ -97,16 +101,21 @@ class yumusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
 
     // Handle ping response
     function onPingResponse(responseCode as Number, data as Dictionary or String or Null) as Void {
+        System.println("ConfigureSyncDelegate: Received ping response - HTTP " + responseCode);
+        
         if (responseCode == 200 && data != null) {
+            System.println("ConfigureSyncDelegate: Ping successful, data received");
             var response = data as Dictionary;
             if (response.hasKey("subsonic-response")) {
                 var subsonicResponse = response["subsonic-response"];
                 if (subsonicResponse.hasKey("status") && subsonicResponse["status"].equals("ok")) {
+                    System.println("ConfigureSyncDelegate: Server responded OK");
                     _view.setStatusText("success");
                     return;
                 }
             }
         }
+        System.println("ConfigureSyncDelegate: Ping failed - HTTP " + responseCode);
         _view.setStatusText("failed");
     }
 

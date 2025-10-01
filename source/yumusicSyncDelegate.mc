@@ -6,13 +6,11 @@ class yumusicSyncDelegate extends Communications.SyncDelegate {
     private var _downloadManager as DownloadManager?;
     private var _api as SubsonicAPI;
     private var _settings as SettingsManager;
-    private var _isSyncing as Boolean;
 
     function initialize() {
         SyncDelegate.initialize();
         _api = new SubsonicAPI();
         _settings = new SettingsManager();
-        _isSyncing = false;
         
         // Configure API
         if (_settings.isConfigured()) {
@@ -33,8 +31,6 @@ class yumusicSyncDelegate extends Communications.SyncDelegate {
             Communications.notifySyncComplete("Not configured. Please set server URL, username, and password in Garmin Connect Mobile.");
             return;
         }
-
-        _isSyncing = true;
         
         // Get the selected playlist or songs to download
         var playlistId = _settings.getCurrentPlaylist();
@@ -65,7 +61,6 @@ class yumusicSyncDelegate extends Communications.SyncDelegate {
             }
         }
         Communications.notifySyncComplete("Failed to load playlist");
-        _isSyncing = false;
     }
 
     // Handle random songs response
@@ -85,7 +80,6 @@ class yumusicSyncDelegate extends Communications.SyncDelegate {
             }
         }
         Communications.notifySyncComplete("Failed to load songs");
-        _isSyncing = false;
     }
 
     // Start downloading songs
@@ -108,7 +102,6 @@ class yumusicSyncDelegate extends Communications.SyncDelegate {
     function onDownloadProgress(complete as Boolean, message as String) as Void {
         if (complete) {
             Communications.notifySyncComplete(null);
-            _isSyncing = false;
         }
         // Progress messages can be logged or displayed
     }
@@ -126,6 +119,5 @@ class yumusicSyncDelegate extends Communications.SyncDelegate {
         }
         Communications.cancelAllRequests();
         Communications.notifySyncComplete("Sync cancelled");
-        _isSyncing = false;
     }
 }

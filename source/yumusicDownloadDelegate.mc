@@ -11,7 +11,6 @@ class yumusicDownloadDelegate extends WatchUi.BehaviorDelegate {
     private var _playlistId as String;
     private var _playlistName as String;
     private var _songs as Array<Dictionary>;
-    private var _downloadedCount as Number;
 
     function initialize(view as yumusicDownloadView, playlistId as String, playlistName as String) {
         BehaviorDelegate.initialize();
@@ -22,7 +21,6 @@ class yumusicDownloadDelegate extends WatchUi.BehaviorDelegate {
         _settings = new SettingsManager();
         _library = new MusicLibrary();
         _songs = [] as Array<Dictionary>;
-        _downloadedCount = 0;
         
         // Configure API
         if (_settings.isConfigured()) {
@@ -54,6 +52,8 @@ class yumusicDownloadDelegate extends WatchUi.BehaviorDelegate {
 
     // Handle playlist response
     function onPlaylistResponse(responseCode as Number, data as Dictionary or String or Null) as Void {
+        System.println("DownloadDelegate: Received playlist response - HTTP " + responseCode);
+        
         if (responseCode == 200 && data != null && data instanceof Dictionary) {
             var response = data as Dictionary;
             if (response.hasKey("subsonic-response")) {
@@ -79,6 +79,8 @@ class yumusicDownloadDelegate extends WatchUi.BehaviorDelegate {
                     var playlist = subsonicResponse["playlist"];
                     if (playlist.hasKey("entry")) {
                         _songs = playlist["entry"] as Array<Dictionary>;
+                        
+                        System.println("DownloadDelegate: Found " + _songs.size() + " songs in playlist");
                         
                         if (_songs.size() == 0) {
                             _view.setError("Playlist is empty");
@@ -112,24 +114,54 @@ class yumusicDownloadDelegate extends WatchUi.BehaviorDelegate {
         _view.setError(errorMsg);
     }
 
-    // Process songs (in Garmin system, this prepares them for streaming)
+    // Process songs - actually download them via HTTP
     private function processSongs() as Void {
-        var totalSongs = _songs.size();
+        System.println("DownloadDelegate: Starting to process " + _songs.size() + " songs");
         
-        // Simulate download progress by showing each song
+        var totalSongs = _songs.size();
+        _view.updateProgress(0, totalSongs, "Starting...");
+        
+        // Create download manager and queue songs
+        var downloadManager = new DownloadManager(_api);
+        
         for (var i = 0; i < _songs.size(); i++) {
             var song = _songs[i];
-            var title = song.hasKey("title") ? song["title"] : "Unknown";
-            
-            // Update progress
-            _view.updateProgress(i + 1, totalSongs, title as String);
-            
-            // In a real download scenario, we would call Communications.makeWebRequest here
-            // But Garmin's Audio Content Provider streams on demand, so we just queue them
+            if (song != null) {
+                downloadManager.queueSong(song);
+            }
         }
         
-        // Mark as complete
-        _view.setComplete();
+        // Start downloading songs
+        downloadManager.startDownload(method(:onDownloadProgress));
+    }
+    
+    // Handle download progress updates
+    function onDownloadProgress(complete as Boolean, message as String) as Void {
+        System.println("DownloadDelegate: Download progress - Complete: " + complete + ", Message: " + message);
+        
+        if (complete) {
+            _view.setComplete();
+        } else {
+            // Parse message to update progress
+            // Message format: "Downloading: SongTitle (X remaining)"
+            var totalSongs = _songs.size();
+            var currentSong = totalSongs; // Default to last
+            
+            // Try to extract remaining count from message
+            if (message.find("remaining") != null) {
+                var startIdx = message.find("(");
+                var endIdx = message.find(" remaining");
+                if (startIdx != null && endIdx != null) {
+                    var remainingStr = message.substring(startIdx + 1, endIdx);
+                    var remaining = remainingStr.toNumber();
+                    if (remaining != null) {
+                        currentSong = totalSongs - remaining;
+                    }
+                }
+            }
+            
+            _view.updateProgress(currentSong, totalSongs, message);
+        }
     }
 
     // Handle back button

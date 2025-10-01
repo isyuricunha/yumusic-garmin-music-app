@@ -5,18 +5,20 @@ import Toybox.System;
 
 // Manager for downloading music files from Subsonic/Navidrome server
 class DownloadManager {
-    private var _api as SubsonicAPI;
     private var _downloadQueue as Array<Dictionary>;
     private var _currentDownload as Dictionary?;
     private var _downloadCallback as Method?;
     private var _isDownloading as Boolean;
+    private var _api as SubsonicAPI;
+    private var _downloadedSongs as Array<Dictionary>;
 
     function initialize(api as SubsonicAPI) {
-        _api = api;
         _downloadQueue = [] as Array<Dictionary>;
         _currentDownload = null;
         _downloadCallback = null;
         _isDownloading = false;
+        _api = api;
+        _downloadedSongs = [] as Array<Dictionary>;
     }
 
     // Add song to download queue
@@ -55,7 +57,7 @@ class DownloadManager {
         if (_downloadQueue.size() == 0) {
             _isDownloading = false;
             if (_downloadCallback != null) {
-                _downloadCallback.invoke(true, "All songs queued");
+                _downloadCallback.invoke(true, "All songs downloaded");
             }
             return;
         }
@@ -70,23 +72,59 @@ class DownloadManager {
             return;
         }
 
-        // In Garmin's Audio Content Provider system, we don't manually download files.
-        // Instead, we create ContentRef objects with valid stream URLs.
-        // The system automatically caches audio when it's played.
-        // So we just validate the song info and move to the next.
-        
         var title = _currentDownload.hasKey("title") ? _currentDownload["title"] : "Unknown";
         
         // Notify progress
         if (_downloadCallback != null) {
             var remaining = _downloadQueue.size();
-            _downloadCallback.invoke(false, "Queued: " + title + " (" + remaining + " remaining)");
+            _downloadCallback.invoke(false, "Downloading: " + title + " (" + remaining + " remaining)");
         }
         
-        // Continue with next song
-        downloadNext();
+        // Get stream URL for the song
+        var streamUrl = _api.getStreamUrl(songId as String);
+        
+        // Make HTTP request to download the song
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO
+        };
+        
+        System.println("Downloading song: " + title + " from URL: " + streamUrl);
+        Communications.makeWebRequest(streamUrl, {}, options, method(:onSongDownloaded));
     }
 
+
+    // Callback when song is downloaded
+    function onSongDownloaded(responseCode as Number, data as ByteArray or String or Dictionary or Null) as Void {
+        var title = "Unknown";
+        if (_currentDownload != null && _currentDownload.hasKey("title")) {
+            title = _currentDownload["title"] as String;
+        }
+        
+        System.println("Download response for " + title + ": HTTP " + responseCode);
+        
+        if (responseCode == 200 && data != null) {
+            System.println("Successfully downloaded: " + title);
+            
+            // Store the downloaded song data
+            if (_currentDownload != null) {
+                _downloadedSongs.add(_currentDownload);
+            }
+            
+            // Continue with next song
+            downloadNext();
+        } else {
+            // Log error but continue with next song
+            System.println("Failed to download " + title + ": HTTP " + responseCode);
+            
+            if (_downloadCallback != null) {
+                _downloadCallback.invoke(false, "Failed: " + title);
+            }
+            
+            // Continue despite error
+            downloadNext();
+        }
+    }
 
     // Stop current download
     function stopDownload() as Void {
@@ -105,5 +143,10 @@ class DownloadManager {
     // Get current download info
     function getCurrentDownload() as Dictionary? {
         return _currentDownload;
+    }
+    
+    // Get list of successfully downloaded songs
+    function getDownloadedSongs() as Array<Dictionary> {
+        return _downloadedSongs;
     }
 }
