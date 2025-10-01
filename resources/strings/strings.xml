@@ -1,34 +1,6 @@
 <strings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
-    <string id="AppName">yumusic</string>
+    <string id="AppName">YuMusic</string>
 
-    <string id="configureSyncMessage">Configure Server\nNavidrome/Subsonic</string>
-    <string id="configurePlaybackMessage">Select Music</string>
-    
-    <!-- Menu items -->
-    <string id="randomSongs">Random Songs</string>
-    <string id="playlists">Playlists</string>
-    <string id="artists">Artists</string>
-    <string id="albums">Albums</string>
-    <string id="search">Search</string>
-    
-    <!-- Status messages -->
-    <string id="notConfigured">Not Configured</string>
-    <string id="connecting">Connecting...</string>
-    <string id="connected">Connected!</string>
-    <string id="connectionFailed">Connection Failed</string>
-    <string id="loading">Loading...</string>
-    <string id="noMusic">No Music Found</string>
-    
-    <!-- Instructions -->
-    <string id="useGarminConnect">Use Garmin Connect\nMobile App to\nConfigure Server</string>
-    
-    <!-- Settings Property Names -->
-    <string id="serverUrlName">Server URL</string>
-    <string id="usernameName">Username</string>
-    <string id="passwordName">Password</string>
-    
-    <!-- Settings Titles -->
-    <string id="serverUrlTitle">Navidrome/Subsonic Server URL (e.g., http://192.168.1.100:4533)</string>
-    <string id="usernameTitle">Server Username</string>
-    <string id="passwordTitle">Server Password</string>
+    <string id="configureSyncMessage">Configure\nSync</string>
+    <string id="configurePlaybackMessage">Configure\nPlayback</string>
 </strings>

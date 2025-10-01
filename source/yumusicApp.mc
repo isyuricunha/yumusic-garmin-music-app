@@ -4,26 +4,10 @@ import Toybox.Lang;
 import Toybox.Media;
 import Toybox.WatchUi;
 
-class yumusicApp extends Application.AudioContentProviderApp {
-    private var _library as MusicLibrary;
-    private var _settings as SettingsManager;
-    private var _api as SubsonicAPI;
+class YuMusicApp extends Application.AudioContentProviderApp {
 
     function initialize() {
         AudioContentProviderApp.initialize();
-        _library = new MusicLibrary();
-        _settings = new SettingsManager();
-        _api = new SubsonicAPI();
-        
-        // Configure API if settings exist
-        if (_settings.isConfigured()) {
-            var serverUrl = _settings.getServerUrl();
-            var username = _settings.getUsername();
-            var password = _settings.getPassword();
-            if (serverUrl != null && username != null && password != null) {
-                _api.configure(serverUrl, username, password);
-            }
-        }
     }
 
     // onStart() is called on application start up
@@ -35,49 +19,27 @@ class yumusicApp extends Application.AudioContentProviderApp {
     }
 
     // Get a Media.ContentDelegate for use by the system to get and iterate through media on the device
-    function getContentDelegate(arg as PersistableType) as Media.ContentDelegate {
-        var delegate = new yumusicContentDelegate();
-        delegate.setLibrary(_library);
-        return delegate;
+    function getContentDelegate(arg as PersistableType) as ContentDelegate? {
+        return new YuMusicContentDelegate();
     }
 
     // Get a delegate that communicates sync status to the system for syncing media content to the device
     function getSyncDelegate() as Communications.SyncDelegate? {
-        return new yumusicSyncDelegate();
+        return new YuMusicSyncDelegate();
     }
 
     // Get the initial view for configuring playback
     function getPlaybackConfigurationView() as [Views] or [Views, InputDelegates] {
-        var view = new yumusicConfigurePlaybackView();
-        var delegate = new yumusicConfigurePlaybackDelegate();
-        delegate.setView(view);
-        return [ view, delegate ];
+        return [ new YuMusicConfigurePlaybackView(), new YuMusicConfigurePlaybackDelegate() ];
     }
 
     // Get the initial view for configuring sync
     function getSyncConfigurationView() as [Views] or [Views, InputDelegates] {
-        var view = new yumusicConfigureSyncView();
-        var delegate = new yumusicConfigureSyncDelegate();
-        delegate.setView(view);
-        return [ view, delegate ];
+        return [ new YuMusicConfigureSyncView(), new YuMusicConfigureSyncDelegate() ];
     }
 
-    // Get the music library
-    function getLibrary() as MusicLibrary {
-        return _library;
-    }
-
-    // Get the settings manager
-    function getSettings() as SettingsManager {
-        return _settings;
-    }
-
-    // Get the API client
-    function getAPI() as SubsonicAPI {
-        return _api;
-    }
 }
 
-function getApp() as yumusicApp {
-    return Application.getApp() as yumusicApp;
+function getApp() as YuMusicApp {
+    return Application.getApp() as YuMusicApp;
 }
