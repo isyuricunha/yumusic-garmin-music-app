@@ -1,53 +1,53 @@
+import Toybox.Application;
+import Toybox.Application.Properties;
 import Toybox.Application.Storage;
 import Toybox.Lang;
 
 // Manager for storing and retrieving app settings
 class SettingsManager {
-    private const KEY_SERVER_URL = "serverUrl";
-    private const KEY_USERNAME = "username";
-    private const KEY_PASSWORD = "password";
-    private const KEY_CONFIGURED = "configured";
     private const KEY_CURRENT_PLAYLIST = "currentPlaylist";
     private const KEY_SHUFFLE_MODE = "shuffleMode";
 
     function initialize() {
     }
 
-    // Save server configuration
-    function saveServerConfig(serverUrl as String, username as String, password as String) as Void {
-        Storage.setValue(KEY_SERVER_URL, serverUrl);
-        Storage.setValue(KEY_USERNAME, username);
-        Storage.setValue(KEY_PASSWORD, password);
-        Storage.setValue(KEY_CONFIGURED, true);
-    }
-
-    // Get server URL
+    // Get server URL from Properties
     function getServerUrl() as String? {
-        return Storage.getValue(KEY_SERVER_URL);
+        var url = Properties.getValue("serverUrl");
+        if (url != null && url instanceof String && (url as String).length() > 0) {
+            return url as String;
+        }
+        return null;
     }
 
-    // Get username
+    // Get username from Properties
     function getUsername() as String? {
-        return Storage.getValue(KEY_USERNAME);
+        var username = Properties.getValue("username");
+        if (username != null && username instanceof String && (username as String).length() > 0) {
+            return username as String;
+        }
+        return null;
     }
 
-    // Get password
+    // Get password from Properties
     function getPassword() as String? {
-        return Storage.getValue(KEY_PASSWORD);
+        var password = Properties.getValue("password");
+        if (password != null && password instanceof String && (password as String).length() > 0) {
+            return password as String;
+        }
+        return null;
     }
 
     // Check if app is configured
     function isConfigured() as Boolean {
-        var configured = Storage.getValue(KEY_CONFIGURED);
-        return configured != null && configured;
+        var url = getServerUrl();
+        var username = getUsername();
+        var password = getPassword();
+        return url != null && username != null && password != null;
     }
 
     // Clear all settings
     function clearSettings() as Void {
-        Storage.deleteValue(KEY_SERVER_URL);
-        Storage.deleteValue(KEY_USERNAME);
-        Storage.deleteValue(KEY_PASSWORD);
-        Storage.deleteValue(KEY_CONFIGURED);
         Storage.deleteValue(KEY_CURRENT_PLAYLIST);
         Storage.deleteValue(KEY_SHUFFLE_MODE);
     }

@@ -35,7 +35,7 @@ class yumusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
 
         if (serverUrl != null && username != null && password != null) {
             _api.configure(serverUrl, username, password);
-            _view.setStatusText("Testing connection...");
+            _view.setStatusText("testing");
             _api.ping(method(:onPingResponse));
         }
     }
@@ -47,12 +47,12 @@ class yumusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
             if (response.hasKey("subsonic-response")) {
                 var subsonicResponse = response["subsonic-response"];
                 if (subsonicResponse.hasKey("status") && subsonicResponse["status"].equals("ok")) {
-                    _view.setStatusText("Connected!\nReady to sync");
+                    _view.setStatusText("success");
                     return;
                 }
             }
         }
-        _view.setStatusText("Connection failed\nCheck settings");
+        _view.setStatusText("failed");
     }
 
     // Handle back button - exit configuration

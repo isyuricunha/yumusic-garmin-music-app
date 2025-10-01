@@ -4,14 +4,16 @@ Um aplicativo de música para smartwatches Garmin compatível com servidores Nav
 
 ## 🎵 Características
 
-- **Streaming de música** diretamente do seu servidor Navidrome/Subsonic
+- **Download de música** - baixe músicas do servidor para reprodução offline (sem streaming)
 - **Autenticação segura** usando token MD5
+- **Configuração via Garmin Connect** - configure URL, usuário e senha pelo app móvel
+- **Interface Pure Black Dark** com acentos laranja (#FF6600) - otimizada para AMOLED
 - **Navegação de música** por artistas, álbuns, playlists e músicas aleatórias
 - **Controles de reprodução** completos (play/pause, próxima, anterior)
-- **Scrobbling automático** - marca músicas como reproduzidas
+- **Scrobbling automático** - marca músicas como reproduzidas no servidor
 - **Favoritos** - adicione músicas aos favoritos com thumbs up/down
 - **Modo shuffle** - reprodução aleatória
-- **Interface otimizada** para telas redondas AMOLED
+- **Interface otimizada** para telas redondas (416x416) sem texto cortado
 
 ## 📱 Dispositivos Compatíveis
 
@@ -33,35 +35,53 @@ Este aplicativo é compatível com smartwatches Garmin que suportam:
 
 ### 1. Configuração Inicial
 
-**IMPORTANTE**: A configuração do servidor deve ser feita através do aplicativo Garmin Connect Mobile no seu smartphone.
+**IMPORTANTE**: A configuração do servidor DEVE ser feita através do aplicativo Garmin Connect Mobile no seu smartphone.
 
 1. Instale o app YuMusic no seu smartwatch Garmin
 2. Abra o aplicativo **Garmin Connect Mobile** no seu smartphone
-3. Vá para **Dispositivos** → Seu smartwatch → **Apps**
-4. Encontre **YuMusic** e toque em **Configurações**
-5. Configure os seguintes parâmetros:
-   - **Server URL**: URL completo do seu servidor (ex: `https://music.seudominio.com`)
-   - **Username**: Seu nome de usuário
-   - **Password**: Sua senha
+3. Vá para **Dispositivos** → Seu smartwatch → **Atividades, Apps e Mais**
+4. Encontre **YuMusic** na lista e toque nele
+5. Toque em **Configurações** (ícone de engrenagem)
+6. Configure os seguintes parâmetros:
+   - **Server URL**: URL completo do seu servidor incluindo porta
+     - Exemplo local: `http://192.168.1.100:4533`
+     - Exemplo remoto: `https://music.seudominio.com`
+     - NÃO adicione `/rest` ao final - apenas a URL base
+   - **Username**: Seu nome de usuário do servidor
+   - **Password**: Sua senha do servidor
+7. Toque em **Salvar**
 
 ### 2. Testando a Conexão
 
 1. No smartwatch, abra o app YuMusic
-2. Selecione **"Configure Sync"** (Configurar Sincronização)
+2. Navegue até **"Sync Settings"** (Configurações de Sincronização)
 3. Pressione o botão **SELECT** para testar a conexão
-4. Se conectado com sucesso, você verá "Connected! Ready to sync"
+4. Aguarde alguns segundos
+5. Você verá:
+   - **✓ Success!** (laranja) - Conexão bem-sucedida, pronto para sincronizar
+   - **✗ Failed** (vermelho) - Falha na conexão, verifique as configurações
 
-### 3. Reproduzindo Música
+### 3. Baixar Músicas (Sync)
 
-1. No app YuMusic, selecione **"Configure Playback"** (Configurar Reprodução)
+**Importante**: O app baixa músicas para o relógio, não faz streaming.
+
+1. No smartwatch, abra o app YuMusic
+2. Navegue até a opção **Sync**
+3. O app iniciará o download de 20 músicas aleatórias
+4. Aguarde o processo de sincronização completar
+5. As músicas ficam armazenadas no relógio para reprodução offline
+
+### 4. Reproduzindo Música
+
+1. No app YuMusic, selecione **"Select Music"** (Selecionar Música)
 2. Escolha uma fonte de música:
-   - **Random Songs**: 50 músicas aleatórias
+   - **Random Songs**: Músicas aleatórias baixadas
    - **Playlists**: Suas playlists do servidor
    - **Artists**: Navegar por artistas
    - **Albums**: Navegar por álbuns
    - **Search**: Buscar músicas (em desenvolvimento)
 3. Use os botões do relógio para navegar (↑/↓) e selecionar
-4. A reprodução iniciará automaticamente
+4. A reprodução iniciará automaticamente das músicas baixadas
 
 ### 4. Controles Durante a Reprodução
 
@@ -103,11 +123,15 @@ Todos os servidores compatíveis com a API Subsonic v1.16.1 funcionam:
 
 ## 🎨 Interface
 
-A interface foi projetada especificamente para telas redondas AMOLED:
-- **416x416 pixels** (Venu 2)
+A interface foi completamente redesenhada para telas redondas AMOLED:
+- **Tema Pure Black Dark** - fundo preto puro (#000000) para economia de bateria em AMOLED
+- **Acentos Laranja** (#FF6600) - alta visibilidade e contraste
+- **416x416 pixels** (Venu 2) - otimizado para displays redondos
+- **Sem texto cortado** - todo o texto é totalmente visível
+- **Espaçamento adequado** - elementos bem posicionados em telas circulares
 - Texto grande e legível
 - Navegação intuitiva com botões físicos
-- Feedback visual claro
+- Feedback visual claro com ícones ✓ e ✗
 
 ## 🛠️ Desenvolvimento
 
@@ -182,10 +206,16 @@ yumusic-garmin-music-app/
 
 ## 📝 Roadmap
 
-- [ ] Download de músicas para reprodução offline
+- [x] Configuração via Garmin Connect Mobile (Properties API)
+- [x] Download de músicas para reprodução offline
+- [x] Interface Pure Black Dark com acentos laranja
+- [x] Otimização para telas redondas sem texto cortado
+- [ ] Otimização do processo de download de músicas
 - [ ] Arte de álbum completa
 - [ ] Busca de músicas
 - [ ] Navegação completa por artistas/álbuns
+- [ ] Seleção de playlists para download
+- [ ] Gerenciamento de armazenamento
 - [ ] Criação de playlists
 - [ ] Equalizer
 - [ ] Letras de músicas

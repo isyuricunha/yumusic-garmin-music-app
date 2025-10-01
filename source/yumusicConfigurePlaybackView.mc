@@ -5,6 +5,8 @@ import Toybox.Lang;
 class yumusicConfigurePlaybackView extends WatchUi.View {
     private var _menuItems as Array<String>;
     private var _selectedIndex as Number;
+    private const ORANGE = 0xFF6600;
+    private const DARK_ORANGE = 0xCC5200;
 
     function initialize() {
         View.initialize();
@@ -20,7 +22,7 @@ class yumusicConfigurePlaybackView extends WatchUi.View {
 
     // Load your resources here
     function onLayout(dc as Dc) as Void {
-        setLayout(Rez.Layouts.ConfigurePlaybackLayout(dc));
+        // Don't use XML layout, draw everything manually
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -31,56 +33,72 @@ class yumusicConfigurePlaybackView extends WatchUi.View {
 
     // Update the view
     function onUpdate(dc as Dc) as Void {
-        // Call the parent onUpdate function to redraw the layout
-        View.onUpdate(dc);
-        
-        // Draw menu items
         var width = dc.getWidth();
         var height = dc.getHeight();
+        var centerX = width / 2;
         var centerY = height / 2;
-        var itemHeight = 40;
         
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+        // Pure black background
+        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_BLACK);
+        dc.clear();
         
-        // Draw title
+        // Title at top with orange accent
+        dc.setColor(ORANGE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            width / 2,
-            20,
-            Graphics.FONT_SMALL,
-            "Select Music Source",
-            Graphics.TEXT_JUSTIFY_CENTER
+            centerX,
+            height * 0.15,
+            Graphics.FONT_TINY,
+            "SELECT MUSIC",
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         
-        // Draw current selection
+        // Draw orange line under title
+        dc.setColor(ORANGE, Graphics.COLOR_TRANSPARENT);
+        dc.drawLine(centerX - 50, height * 0.18, centerX + 50, height * 0.18);
+        
+        // Draw current selection - larger and in orange
+        dc.setColor(ORANGE, Graphics.COLOR_TRANSPARENT);
         dc.drawText(
-            width / 2,
+            centerX,
             centerY,
             Graphics.FONT_MEDIUM,
             _menuItems[_selectedIndex],
             Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
         );
         
-        // Draw navigation hints
-        dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+        // Draw previous item hint (dimmed white)
         if (_selectedIndex > 0) {
+            dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
-                width / 2,
-                centerY - itemHeight,
+                centerX,
+                centerY - (height * 0.15),
                 Graphics.FONT_TINY,
-                "▲ " + _menuItems[_selectedIndex - 1],
-                Graphics.TEXT_JUSTIFY_CENTER
+                "↑ " + _menuItems[_selectedIndex - 1],
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
             );
         }
         
+        // Draw next item hint (dimmed white)
         if (_selectedIndex < _menuItems.size() - 1) {
+            dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
             dc.drawText(
-                width / 2,
-                centerY + itemHeight,
+                centerX,
+                centerY + (height * 0.15),
                 Graphics.FONT_TINY,
-                "▼ " + _menuItems[_selectedIndex + 1],
-                Graphics.TEXT_JUSTIFY_CENTER
+                "↓ " + _menuItems[_selectedIndex + 1],
+                Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
             );
         }
+        
+        // Draw selection indicator at bottom
+        dc.setColor(DARK_ORANGE, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(
+            centerX,
+            height * 0.85,
+            Graphics.FONT_XTINY,
+            (_selectedIndex + 1) + " / " + _menuItems.size(),
+            Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER
+        );
     }
 
     // Called when this View is removed from the screen. Save the
