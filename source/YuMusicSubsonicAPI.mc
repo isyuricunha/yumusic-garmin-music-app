@@ -2,6 +2,7 @@ import Toybox.Lang;
 import Toybox.Communications;
 import Toybox.Cryptography;
 import Toybox.StringUtil;
+import Toybox.System;
 
 // SubSonic API client for Navidrome/Gonic/AirSonic/SubSonic servers
 class YuMusicSubsonicAPI {
