@@ -23,15 +23,20 @@ class YuMusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
                 var menu = new WatchUi.Menu2({:title => "Playlists"});
                 
                 for (var i = 0; i < playlists.size(); i++) {
-                    var playlist = playlists[i];
-                    menu.addItem(
-                        new WatchUi.MenuItem(
-                            playlist["name"],
-                            playlist["songCount"] + " songs",
-                            playlist["id"],
-                            {}
-                        )
-                    );
+                    var playlist = playlists[i] as Dictionary?;
+                    if (playlist == null) {
+                        continue;
+                    }
+
+                    var name = playlist["name"] as String?;
+                    var id = playlist["id"] as String?;
+                    var songCount = playlist["songCount"] as Number?;
+                    if (name == null || id == null) {
+                        continue;
+                    }
+
+                    var subtitle = (songCount != null ? songCount.toString() : "0") + " songs";
+                    menu.addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
                 }
                 
                 WatchUi.pushView(menu, new YuMusicPlaylistMenuDelegate(), WatchUi.SLIDE_LEFT);

@@ -1,6 +1,7 @@
 import Toybox.Lang;
 import Toybox.Communications;
 import Toybox.Cryptography;
+import Toybox.PersistedContent;
 import Toybox.StringUtil;
 import Toybox.System;
 
@@ -91,16 +92,18 @@ class YuMusicSubsonicAPI {
         url += "&f=json";
 
         var auth = generateAuthToken();
-        if (auth.hasKey("t") && auth.hasKey("s")) {
-            url += "&t=" + auth["t"];
-            url += "&s=" + auth["s"];
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
         }
 
         return url;
     }
 
     // Test server connection
-    function ping(callback as Method) as Void {
+    function ping(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("ping");
         
         var options = {
@@ -112,7 +115,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get all playlists
-    function getPlaylists(callback as Method) as Void {
+    function getPlaylists(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPlaylists");
         
         var options = {
@@ -124,7 +127,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get playlist details with songs
-    function getPlaylist(playlistId as String, callback as Method) as Void {
+    function getPlaylist(playlistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPlaylist") + "&id=" + playlistId;
         
         var options = {
@@ -136,7 +139,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get random songs
-    function getRandomSongs(size as Number, callback as Method) as Void {
+    function getRandomSongs(size as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getRandomSongs") + "&size=" + size.toString();
         
         var options = {
@@ -148,7 +151,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get all artists
-    function getArtists(callback as Method) as Void {
+    function getArtists(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getArtists");
         
         var options = {
@@ -160,7 +163,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get artist albums
-    function getArtist(artistId as String, callback as Method) as Void {
+    function getArtist(artistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getArtist") + "&id=" + artistId;
         
         var options = {
@@ -172,7 +175,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get album songs
-    function getAlbum(albumId as String, callback as Method) as Void {
+    function getAlbum(albumId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getAlbum") + "&id=" + albumId;
         
         var options = {
@@ -184,7 +187,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Search for songs, albums, artists
-    function search(query as String, callback as Method) as Void {
+    function search(query as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("search3") + "&query=" + query;
         url += "&artistCount=10&albumCount=10&songCount=20";
         
@@ -209,9 +212,11 @@ class YuMusicSubsonicAPI {
         url += "&c=" + _clientName;
 
         var auth = generateAuthToken();
-        if (auth.hasKey("t") && auth.hasKey("s")) {
-            url += "&t=" + auth["t"];
-            url += "&s=" + auth["s"];
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
         }
 
         return url;
@@ -232,9 +237,11 @@ class YuMusicSubsonicAPI {
         url += "&maxBitRate=320";
 
         var auth = generateAuthToken();
-        if (auth.hasKey("t") && auth.hasKey("s")) {
-            url += "&t=" + auth["t"];
-            url += "&s=" + auth["s"];
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
         }
 
         return url;
@@ -254,16 +261,18 @@ class YuMusicSubsonicAPI {
         url += "&c=" + _clientName;
 
         var auth = generateAuthToken();
-        if (auth.hasKey("t") && auth.hasKey("s")) {
-            url += "&t=" + auth["t"];
-            url += "&s=" + auth["s"];
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
         }
 
         return url;
     }
 
     // Scrobble a song (mark as played)
-    function scrobble(songId as String, callback as Method) as Void {
+    function scrobble(songId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("scrobble") + "&id=" + songId;
         url += "&submission=true";
         
@@ -276,7 +285,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Star a song/album/artist
-    function star(itemId as String, callback as Method) as Void {
+    function star(itemId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("star") + "&id=" + itemId;
         
         var options = {
@@ -288,7 +297,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Unstar a song/album/artist
-    function unstar(itemId as String, callback as Method) as Void {
+    function unstar(itemId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("unstar") + "&id=" + itemId;
         
         var options = {

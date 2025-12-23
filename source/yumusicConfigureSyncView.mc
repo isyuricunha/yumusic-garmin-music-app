@@ -1,6 +1,7 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
+import Toybox.PersistedContent;
 
 // This is the View that is used to configure the songs
 // to sync. New pages may be pushed as needed to complete
@@ -38,7 +39,15 @@ class YuMusicConfigureSyncView extends WatchUi.View {
 
         // Configure API and load playlists
         var config = _serverConfig.getConfig();
-        _api.configure(config["serverUrl"], config["username"], config["password"]);
+        var serverUrl = config["serverUrl"] as String?;
+        var username = config["username"] as String?;
+        var password = config["password"] as String?;
+        if (serverUrl == null || username == null || password == null) {
+            _error = "Server not configured";
+            WatchUi.requestUpdate();
+            return;
+        }
+        _api.configure(serverUrl, username, password);
         
         _loading = true;
         WatchUi.requestUpdate();
@@ -48,15 +57,18 @@ class YuMusicConfigureSyncView extends WatchUi.View {
     }
 
     // Callback when playlists are received
-    function onPlaylistsReceived(responseCode as Number, data as Dictionary?) as Void {
+    function onPlaylistsReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         _loading = false;
-        
-        if (responseCode == 200 && data != null) {
-            if (data.hasKey("subsonic-response")) {
-                var response = data["subsonic-response"];
-                if (response.hasKey("playlists") && response["playlists"].hasKey("playlist")) {
-                    _playlists = response["playlists"]["playlist"];
-                    _library.savePlaylists(_playlists);
+ 
+        var dict = data as Dictionary?;
+        if (responseCode == 200 && dict != null) {
+            var subsonic = dict["subsonic-response"] as Dictionary?;
+            if (subsonic != null) {
+                var playlistsContainer = subsonic["playlists"] as Dictionary?;
+                var playlists = playlistsContainer != null ? playlistsContainer["playlist"] as Array? : null;
+                if (playlists != null) {
+                    _playlists = playlists;
+                    _library.savePlaylists(playlists);
                     _error = null;
                 } else {
                     _error = "No playlists found";

@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Communications;
+import Toybox.PersistedContent;
 
 // Delegate for playlist selection menu
 class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
@@ -16,8 +17,11 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         
         // Configure API
         var config = _serverConfig.getConfig();
-        if (config["serverUrl"] != null) {
-            _api.configure(config["serverUrl"], config["username"], config["password"]);
+        var serverUrl = config["serverUrl"] as String?;
+        var username = config["username"] as String?;
+        var password = config["password"] as String?;
+        if (serverUrl != null && username != null && password != null) {
+            _api.configure(serverUrl, username, password);
         }
     }
 
@@ -38,54 +42,75 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     // Callback when playlist details are received
-    function onPlaylistReceived(responseCode as Number, data as Dictionary?) as Void {
+    function onPlaylistReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         // Pop loading view
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
         
-        if (responseCode == 200 && data != null) {
-            if (data.hasKey("subsonic-response")) {
-                var response = data["subsonic-response"];
-                if (response.hasKey("playlist")) {
-                    var playlist = response["playlist"];
+        var dict = data as Dictionary?;
+        if (responseCode == 200 && dict != null) {
+            var response = dict["subsonic-response"] as Dictionary?;
+            var playlist = response != null ? response["playlist"] as Dictionary? : null;
+            if (playlist != null) {
+                var songs = playlist["entry"] as Array?;
+                if (songs != null) {
                     
-                    if (playlist.hasKey("entry")) {
-                        var songs = playlist["entry"];
-                        
-                        // Process songs and prepare for download
-                        var processedSongs = [];
-                        for (var i = 0; i < songs.size(); i++) {
-                            var song = songs[i];
-                            var processedSong = {
-                                "id" => song["id"],
-                                "title" => song["title"],
-                                "artist" => song.hasKey("artist") ? song["artist"] : "Unknown",
-                                "album" => song.hasKey("album") ? song["album"] : "Unknown",
-                                "duration" => song.hasKey("duration") ? song["duration"] : 0,
-                                "url" => _api.getDownloadUrl(song["id"]),
-                                "streamUrl" => _api.getStreamUrl(song["id"]),
-                                "coverArtUrl" => song.hasKey("coverArt") ? _api.getCoverArtUrl(song["coverArt"], 200) : null
-                            };
-                            processedSongs.add(processedSong);
+                    // Process songs and prepare for download
+                    var processedSongs = [];
+                    for (var i = 0; i < songs.size(); i++) {
+                        var song = songs[i] as Dictionary?;
+                        if (song == null) {
+                            continue;
                         }
-                        
-                        // Save songs to library
-                        _library.saveSongs(processedSongs);
-                        _library.setCurrentPlaylist(playlist["id"]);
-                        
-                        // Show confirmation
-                        var confirmView = new YuMusicConfirmView(
-                            "Ready to Sync",
-                            processedSongs.size() + " songs selected"
-                        );
-                        WatchUi.pushView(confirmView, new YuMusicConfirmDelegate(), WatchUi.SLIDE_LEFT);
-                    } else {
-                        showError("Playlist is empty");
+
+                        var songId = song["id"] as String?;
+                        var title = song["title"] as String?;
+                        if (songId == null || title == null) {
+                            continue;
+                        }
+
+                        var duration = song.hasKey("duration") ? song["duration"] as Number? : null;
+                        var artist = song.hasKey("artist") ? song["artist"] as String? : null;
+                        if (artist == null) {
+                            artist = "Unknown";
+                        }
+
+                        var album = song.hasKey("album") ? song["album"] as String? : null;
+                        if (album == null) {
+                            album = "Unknown";
+                        }
+
+                        var coverArtId = song.hasKey("coverArt") ? song["coverArt"] as String? : null;
+                        var processedSong = {
+                            "id" => songId,
+                            "title" => title,
+                            "artist" => artist,
+                            "album" => album,
+                            "duration" => duration != null ? duration : 0,
+                            "url" => _api.getDownloadUrl(songId),
+                            "streamUrl" => _api.getStreamUrl(songId),
+                            "coverArtUrl" => coverArtId != null ? _api.getCoverArtUrl(coverArtId, 200) : null
+                        };
+                        processedSongs.add(processedSong);
                     }
+                    
+                    // Save songs to library
+                    _library.saveSongs(processedSongs);
+                    var playlistId = playlist["id"] as String?;
+                    if (playlistId != null) {
+                        _library.setCurrentPlaylist(playlistId);
+                    }
+                    
+                    // Show confirmation
+                    var confirmView = new YuMusicConfirmView(
+                        "Ready to Sync",
+                        processedSongs.size().toString() + " songs selected"
+                    );
+                    WatchUi.pushView(confirmView, new YuMusicConfirmDelegate(), WatchUi.SLIDE_LEFT);
                 } else {
-                    showError("Invalid playlist data");
+                    showError("Playlist is empty");
                 }
             } else {
-                showError("Invalid response");
+                showError("Invalid playlist data");
             }
         } else {
             showError("Failed to load playlist");

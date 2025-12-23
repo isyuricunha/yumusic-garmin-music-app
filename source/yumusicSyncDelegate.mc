@@ -1,6 +1,7 @@
 import Toybox.Communications;
 import Toybox.Lang;
 import Toybox.Media;
+import Toybox.PersistedContent;
 
 class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _library as YuMusicLibrary;
@@ -34,8 +35,11 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
         // Configure API
         var config = _serverConfig.getConfig();
-        if (config["serverUrl"] != null) {
-            _api.configure(config["serverUrl"], config["username"], config["password"]);
+        var serverUrl = config["serverUrl"] as String?;
+        var username = config["username"] as String?;
+        var password = config["password"] as String?;
+        if (serverUrl != null && username != null && password != null) {
+            _api.configure(serverUrl, username, password);
         } else {
             // Server not configured
             Communications.notifySyncComplete("Server not configured");
@@ -56,8 +60,19 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        var song = _songsToDownload[_currentDownloadIndex];
-        var url = song["url"];
+        var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
+        if (song == null) {
+            _currentDownloadIndex++;
+            downloadNextSong();
+            return;
+        }
+
+        var url = song["url"] as String?;
+        if (url == null) {
+            _currentDownloadIndex++;
+            downloadNextSong();
+            return;
+        }
 
         // Download options
         var options = {
@@ -79,15 +94,13 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     }
 
     // Callback when a song is downloaded
-    function onSongDownloaded(responseCode as Number, data as Dictionary or String or Null) as Void {
+    function onSongDownloaded(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200 && data != null) {
             // Song downloaded successfully
-            var song = _songsToDownload[_currentDownloadIndex];
-            
-            // Store the downloaded audio data
-            // In a real implementation, this would save to device storage
-            // For now, we'll just mark it as downloaded
-            song["downloaded"] = true;
+            var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
+            if (song != null) {
+                song["downloaded"] = true;
+            }
             
             // Move to next song
             _currentDownloadIndex++;
@@ -110,7 +123,11 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
         // Check if any songs are not downloaded
         for (var i = 0; i < songs.size(); i++) {
-            if (!songs[i].hasKey("downloaded") || songs[i]["downloaded"] == false) {
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            if (!song.hasKey("downloaded") || song["downloaded"] == false) {
                 return true;
             }
         }

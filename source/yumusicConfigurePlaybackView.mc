@@ -40,12 +40,20 @@ class YuMusicConfigurePlaybackView extends WatchUi.View {
 
         // Show library stats
         var stats = _library.getStats();
-        dc.drawText(centerX, y, Graphics.FONT_SMALL, stats["songCount"] + " songs", Graphics.TEXT_JUSTIFY_CENTER);
+        var songCount = stats["songCount"] as Number?;
+        if (songCount == null) {
+            songCount = 0;
+        }
+        dc.drawText(centerX, y, Graphics.FONT_SMALL, songCount.toString() + " songs", Graphics.TEXT_JUSTIFY_CENTER);
         y += 30;
 
-        if (stats["songCount"] > 0) {
-            var minutes = stats["totalDuration"] / 60;
-            dc.drawText(centerX, y, Graphics.FONT_TINY, minutes + " minutes", Graphics.TEXT_JUSTIFY_CENTER);
+        if (songCount > 0) {
+            var totalDuration = stats["totalDuration"] as Number?;
+            if (totalDuration == null) {
+                totalDuration = 0;
+            }
+            var minutes = (totalDuration / 60).toNumber();
+            dc.drawText(centerX, y, Graphics.FONT_TINY, minutes.toString() + " minutes", Graphics.TEXT_JUSTIFY_CENTER);
             y += 40;
         }
 

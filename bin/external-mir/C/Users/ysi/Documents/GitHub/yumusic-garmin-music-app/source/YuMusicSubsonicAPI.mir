@@ -1,0 +1,1705 @@
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Lang,1,14,18]; ]
+import Toybox.Lang;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Communications,2,14,28]; ]
+import Toybox.Communications;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [Cryptography,3,14,26]; ]
+import Toybox.Cryptography;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 4; @symbol_importdef<0> = [Toybox,4,7,13]; @symbol_importdef<1> = [PersistedContent,4,14,30]; ]
+import Toybox.PersistedContent;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 5; @symbol_importdef<0> = [Toybox,5,7,13]; @symbol_importdef<1> = [StringUtil,5,14,24]; ]
+import Toybox.StringUtil;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 6; @symbol_importdef<0> = [Toybox,6,7,13]; @symbol_importdef<1> = [System,6,14,20]; ]
+import Toybox.System;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 9; @symbol_classdef = [YuMusicSubsonicAPI,9,6,24]; ]
+class YuMusicSubsonicAPI {
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 9; ]
+    <init> {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 9; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 10; @position = 16; @symbol_vardef = [_serverUrl,10,16,26]; @symbol_type<0> = [String,10,30,36]; ]
+    private
+    var _serverUrl as String or Null;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 11; @position = 16; @symbol_vardef = [_username,11,16,25]; @symbol_type<0> = [String,11,29,35]; ]
+    private
+    var _username as String or Null;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 12; @position = 16; @symbol_vardef = [_password,12,16,25]; @symbol_type<0> = [String,12,29,35]; ]
+    private
+    var _password as String or Null;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 13; @position = 16; @symbol_vardef = [_apiVersion,13,16,27]; @symbol_type<0> = [String,13,31,37]; ]
+    private
+    var _apiVersion as String = "1.16.1";
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 14; @position = 16; @symbol_vardef = [_clientName,14,16,27]; @symbol_type<0> = [String,14,31,37]; ]
+    private
+    var _clientName as String = "YuMusic";
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 16; @symbol_functiondef = [initialize,16,13,23]; ]
+    function initialize() as Void {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 20; @symbol_functiondef = [configure,20,13,22]; @symbol_param<0> = [serverUrl,20,23,32]; @symbol_param<0>_type<0> = [String,20,36,42]; @symbol_param<1> = [username,20,44,52]; @symbol_param<1>_type<0> = [String,20,56,62]; @symbol_param<2> = [password,20,64,72]; @symbol_param<2>_type<0> = [String,20,76,82]; ]
+    function configure(serverUrl as String, username as String, password as String) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_20_92_24_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 21 8 ]
+        %tmp.1 = lgetv %serverUrl;
+        symbol [ serverUrl %tmp.1 21 21 30 ];
+        symbol [ _serverUrl ? 21 8 18 ];
+        putv self :_serverUrl %tmp.1;
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 22 8 ]
+        %tmp.2 = lgetv %username;
+        symbol [ username %tmp.2 22 20 28 ];
+        symbol [ _username ? 22 8 17 ];
+        putv self :_username %tmp.2;
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 23 8 ]
+        %tmp.3 = lgetv %password;
+        symbol [ password %tmp.3 23 20 28 ];
+        symbol [ _password ? 23 8 17 ];
+        putv self :_password %tmp.3;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_20_92_24_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 27; @symbol_functiondef = [generateAuthToken,27,21,38]; @symbol_return<0> = [Dictionary,27,44,54]; ]
+    private
+    function generateAuthToken() as Dictionary {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 28 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_8_30_8_if_stmt:
+        symbol [ _password %tmp.2 28 12 21 ];
+        %tmp.2 = getv ? :_password;
+        %tmp.3 = null;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bf %tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_8_30_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_8_30_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_31_30_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 29 12 ]
+        %tmp.5 = newd 0;
+        ret %tmp.5;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_31_30_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_8_30_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_28_8_30_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 33 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_stop" ]
+        %salt.1 = local;
+        symbol [ salt %salt.1 33 12 16 ];
+        %tmp.6 = self;
+        symbol [ generateSalt %tmp.7 33 19 31 ];
+        %tmp.7 = getv function %tmp.6 :generateSalt;
+        %tmp.8 = invoke %tmp.6 %tmp.7();
+        lputv %salt.1 %tmp.8;
+        symbol [ salt %salt.1 33 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 36 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_stop" ]
+        %tokenString.2 = local;
+        symbol [ tokenString %tokenString.2 36 12 23 ];
+        symbol [ _password %tmp.10 36 26 35 ];
+        %tmp.10 = getv ? :_password;
+        %tmp.11 = lgetv %salt.1;
+        symbol [ salt %tmp.11 36 38 42 ];
+        %tmp.12 = add %tmp.10 %tmp.11;
+        lputv %tokenString.2 %tmp.12;
+        symbol [ tokenString %tokenString.2 36 12 23 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 37 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_stop" ]
+        %md5.3 = local;
+        symbol [ md5 %md5.3 37 12 15 ];
+        symbol [ Cryptography %tmp.15 37 22 34 ];
+        %tmp.15 = getm $.Toybox.Cryptography;
+        symbol [ Hash %tmp.16 37 35 39 ];
+        %tmp.16 = getv function ? %tmp.15 :Hash;
+        %tmp.17 = newd 1;
+        %tmp.19 = const :algorithm;
+        symbol [ algorithm %tmp.19 37 42 51 const ];
+        symbol [ Cryptography %tmp.20 37 55 67 ];
+        %tmp.20 = getm $.Toybox.Cryptography;
+        symbol [ HASH_MD5 %tmp.21 37 68 76 ];
+        %tmp.21 = getv %tmp.20 :HASH_MD5;
+        %tmp.22 = dup %tmp.17;
+        %tmp.23 = aputv %tmp.22 %tmp.19 %tmp.21;
+        %tmp.13 = newc %tmp.16 (%tmp.23);
+        lputv %md5.3 %tmp.13;
+        symbol [ md5 %md5.3 37 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 38 8 ]
+        %tmp.24 = lgetv %md5.3;
+        symbol [ md5 %tmp.24 38 8 11 ];
+        symbol [ update %tmp.25 38 12 18 ];
+        %tmp.25 = getv function %tmp.24 :update;
+        %tmp.26 = self;
+        symbol [ stringToByteArray %tmp.27 38 19 36 ];
+        %tmp.27 = getv function %tmp.26 :stringToByteArray;
+        %tmp.28 = lgetv %tokenString.2;
+        symbol [ tokenString %tmp.28 38 37 48 ];
+        %tmp.29 = invoke %tmp.26 %tmp.27(%tmp.28);
+        invoke %tmp.24 %tmp.25(%tmp.29);
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 39 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_stop" ]
+        %hashValue.4 = local;
+        symbol [ hashValue %hashValue.4 39 12 21 ];
+        %tmp.30 = lgetv %md5.3;
+        symbol [ md5 %tmp.30 39 24 27 ];
+        symbol [ digest %tmp.31 39 28 34 ];
+        %tmp.31 = getv function %tmp.30 :digest;
+        %tmp.32 = invoke %tmp.30 %tmp.31();
+        lputv %hashValue.4 %tmp.32;
+        symbol [ hashValue %hashValue.4 39 12 21 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 41 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_stop" ]
+        %token.5 = local;
+        symbol [ token %token.5 41 12 17 ];
+        %tmp.33 = self;
+        symbol [ bytesToHex %tmp.34 41 20 30 ];
+        %tmp.34 = getv function %tmp.33 :bytesToHex;
+        %tmp.35 = lgetv %hashValue.4;
+        symbol [ hashValue %tmp.35 41 31 40 ];
+        %tmp.36 = invoke %tmp.33 %tmp.34(%tmp.35);
+        lputv %token.5 %tmp.36;
+        symbol [ token %token.5 41 12 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 43 8 ]
+        %tmp.37 = newd 2;
+        %tmp.38 = "t";
+        %tmp.39 = lgetv %token.5;
+        symbol [ token %tmp.39 44 19 24 ];
+        %tmp.40 = dup %tmp.37;
+        %tmp.41 = aputv %tmp.40 %tmp.38 %tmp.39;
+        %tmp.42 = "s";
+        %tmp.43 = lgetv %salt.1;
+        symbol [ salt %tmp.43 45 19 23 ];
+        %tmp.44 = dup %tmp.41;
+        %tmp.45 = aputv %tmp.44 %tmp.42 %tmp.43;
+        ret %tmp.45;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_27_55_47_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 50; @symbol_functiondef = [generateSalt,50,21,33]; @symbol_return<0> = [String,50,39,45]; ]
+    private
+    function generateSalt() as String {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 51 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_stop" ]
+        %chars.1 = local;
+        symbol [ chars %chars.1 51 12 17 ];
+        %tmp.1 = "abcdefghijklmnopqrstuvwxyz0123456789";
+        lputv %chars.1 %tmp.1;
+        symbol [ chars %chars.1 51 12 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 52 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_stop" ]
+        %salt.2 = local;
+        symbol [ salt %salt.2 52 12 16 ];
+        %tmp.2 = "";
+        lputv %salt.2 %tmp.2;
+        symbol [ salt %salt.2 52 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 53 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_stop" ]
+        %time.3 = local;
+        symbol [ time %time.3 53 12 16 ];
+        symbol [ System %tmp.3 53 19 25 ];
+        %tmp.3 = getm $.Toybox.System;
+        symbol [ getTimer %tmp.4 53 26 34 ];
+        %tmp.4 = getv function %tmp.3 :getTimer;
+        %tmp.5 = invoke %tmp.3 %tmp.4();
+        lputv %time.3 %tmp.5;
+        symbol [ time %time.3 53 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 55 8 ]
+        for @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_test @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_incr @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_init:
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_begin" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_end" ]
+        %i.4 = local;
+        symbol [ i %i.4 55 17 18 ];
+        %tmp.6 = 0;
+        lputv %i.4 %tmp.6;
+        symbol [ i %i.4 55 17 18 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_test:
+        %tmp.7 = lgetv %i.4;
+        symbol [ i %tmp.7 55 24 25 ];
+        %tmp.8 = 6;
+        %tmp.9 = lt %tmp.7 %tmp.8;
+        bf %tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_begin:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_36_58_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 56 12 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_36_58_8_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_36_58_8_stop" ]
+        %index.5 = local;
+        symbol [ index %index.5 56 16 21 ];
+        %tmp.10 = lgetv %time.3;
+        symbol [ time %tmp.10 56 25 29 ];
+        %tmp.11 = lgetv %i.4;
+        symbol [ i %tmp.11 56 32 33 ];
+        %tmp.12 = 7;
+        %tmp.13 = mul %tmp.11 %tmp.12;
+        %tmp.14 = add %tmp.10 %tmp.13;
+        %tmp.15 = lgetv %chars.1;
+        symbol [ chars %tmp.15 56 41 46 ];
+        symbol [ length %tmp.16 56 47 53 ];
+        %tmp.16 = getv function %tmp.15 :length;
+        %tmp.17 = invoke %tmp.15 %tmp.16();
+        %tmp.18 = mod %tmp.14 %tmp.17;
+        lputv %index.5 %tmp.18;
+        symbol [ index %index.5 56 16 21 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 57 12 ]
+        %tmp.19 = lgetv %salt.2;
+        symbol [ salt %tmp.19 57 12 16 ];
+        %tmp.20 = lgetv %chars.1;
+        symbol [ chars %tmp.20 57 20 25 ];
+        symbol [ substring %tmp.21 57 26 35 ];
+        %tmp.21 = getv function %tmp.20 :substring;
+        %tmp.22 = lgetv %index.5;
+        symbol [ index %tmp.22 57 36 41 ];
+        %tmp.23 = lgetv %index.5;
+        symbol [ index %tmp.23 57 43 48 ];
+        %tmp.24 = 1;
+        %tmp.25 = add %tmp.23 %tmp.24;
+        %tmp.26 = invoke %tmp.20 %tmp.21(%tmp.22, %tmp.25);
+        %tmp.27 = add %tmp.19 %tmp.26;
+        lputv %salt.2 %tmp.27;
+        symbol [ salt %salt.2 57 12 16 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_36_58_8_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_incr:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 55 ]
+        %tmp.30 = lgetv %i.4;
+        symbol [ i %tmp.30 55 31 32 ];
+        %tmp.31 = add %tmp.30 1;
+        lputv %i.4 %tmp.31;
+        symbol [ i %i.4 55 31 32 ];
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_test;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_55_8_58_8_for_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 60 8 ]
+        %tmp.32 = lgetv %salt.2;
+        symbol [ salt %tmp.32 60 15 19 ];
+        ret %tmp.32;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_50_46_61_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 64; @symbol_functiondef = [bytesToHex,64,21,31]; @symbol_param<0> = [bytes,64,32,37]; @symbol_param<0>_type<0> = [ByteArray,64,41,50]; @symbol_return<0> = [String,64,55,61]; ]
+    private
+    function bytesToHex(bytes as ByteArray) as String {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_64_62_75_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 65 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_64_62_75_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_64_62_75_4_stop" ]
+        %hex.1 = local;
+        symbol [ hex %hex.1 65 12 15 ];
+        %tmp.1 = "";
+        lputv %hex.1 %tmp.1;
+        symbol [ hex %hex.1 65 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 66 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_64_62_75_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_64_62_75_4_stop" ]
+        %hexChars.2 = local;
+        symbol [ hexChars %hexChars.2 66 12 20 ];
+        %tmp.2 = "0123456789abcdef";
+        lputv %hexChars.2 %tmp.2;
+        symbol [ hexChars %hexChars.2 66 12 20 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 68 8 ]
+        for @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_test @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_incr @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_init:
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_begin" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_end" ]
+        %i.3 = local;
+        symbol [ i %i.3 68 17 18 ];
+        %tmp.3 = 0;
+        lputv %i.3 %tmp.3;
+        symbol [ i %i.3 68 17 18 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_test:
+        %tmp.4 = lgetv %i.3;
+        symbol [ i %tmp.4 68 24 25 ];
+        %tmp.5 = lgetv %bytes;
+        symbol [ bytes %tmp.5 68 28 33 ];
+        symbol [ size %tmp.6 68 34 38 ];
+        %tmp.6 = getv function %tmp.5 :size;
+        %tmp.7 = invoke %tmp.5 %tmp.6();
+        %tmp.8 = lt %tmp.4 %tmp.7;
+        bf %tmp.8 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_begin:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_47_72_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 69 12 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_47_72_8_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_47_72_8_stop" ]
+        %b.4 = local;
+        symbol [ b %b.4 69 16 17 ];
+        %tmp.9 = lgetv %bytes;
+        symbol [ bytes %tmp.9 69 20 25 ];
+        %tmp.10 = lgetv %i.3;
+        symbol [ i %tmp.10 69 26 27 ];
+        %tmp.11 = agetv %tmp.9 %tmp.10;
+        lputv %b.4 %tmp.11;
+        symbol [ b %b.4 69 16 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 70 12 ]
+        %tmp.12 = lgetv %hex.1;
+        symbol [ hex %tmp.12 70 12 15 ];
+        %tmp.13 = lgetv %hexChars.2;
+        symbol [ hexChars %tmp.13 70 19 27 ];
+        symbol [ substring %tmp.14 70 28 37 ];
+        %tmp.14 = getv function %tmp.13 :substring;
+        %tmp.15 = lgetv %b.4;
+        symbol [ b %tmp.15 70 39 40 ];
+        %tmp.16 = 4;
+        %tmp.17 = shr %tmp.15 %tmp.16;
+        %tmp.18 = 0x0F;
+        %tmp.19 = bitand %tmp.17 %tmp.18;
+        %tmp.20 = lgetv %b.4;
+        symbol [ b %tmp.20 70 57 58 ];
+        %tmp.21 = 4;
+        %tmp.22 = shr %tmp.20 %tmp.21;
+        %tmp.23 = 0x0F;
+        %tmp.24 = bitand %tmp.22 %tmp.23;
+        %tmp.25 = 1;
+        %tmp.26 = add %tmp.24 %tmp.25;
+        %tmp.27 = invoke %tmp.13 %tmp.14(%tmp.19, %tmp.26);
+        %tmp.28 = add %tmp.12 %tmp.27;
+        lputv %hex.1 %tmp.28;
+        symbol [ hex %hex.1 70 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 71 12 ]
+        %tmp.29 = lgetv %hex.1;
+        symbol [ hex %tmp.29 71 12 15 ];
+        %tmp.30 = lgetv %hexChars.2;
+        symbol [ hexChars %tmp.30 71 19 27 ];
+        symbol [ substring %tmp.31 71 28 37 ];
+        %tmp.31 = getv function %tmp.30 :substring;
+        %tmp.32 = lgetv %b.4;
+        symbol [ b %tmp.32 71 38 39 ];
+        %tmp.33 = 0x0F;
+        %tmp.34 = bitand %tmp.32 %tmp.33;
+        %tmp.35 = lgetv %b.4;
+        symbol [ b %tmp.35 71 49 50 ];
+        %tmp.36 = 0x0F;
+        %tmp.37 = bitand %tmp.35 %tmp.36;
+        %tmp.38 = 1;
+        %tmp.39 = add %tmp.37 %tmp.38;
+        %tmp.40 = invoke %tmp.30 %tmp.31(%tmp.34, %tmp.39);
+        %tmp.41 = add %tmp.29 %tmp.40;
+        lputv %hex.1 %tmp.41;
+        symbol [ hex %hex.1 71 12 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_47_72_8_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_incr:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 68 ]
+        %tmp.44 = lgetv %i.3;
+        symbol [ i %tmp.44 68 42 43 ];
+        %tmp.45 = add %tmp.44 1;
+        lputv %i.3 %tmp.45;
+        symbol [ i %i.3 68 42 43 ];
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_test;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_68_8_72_8_for_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 74 8 ]
+        %tmp.46 = lgetv %hex.1;
+        symbol [ hex %tmp.46 74 15 18 ];
+        ret %tmp.46;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_64_62_75_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 78; @symbol_functiondef = [stringToByteArray,78,21,38]; @symbol_param<0> = [str,78,39,42]; @symbol_param<0>_type<0> = [String,78,46,52]; @symbol_return<0> = [ByteArray,78,57,66]; ]
+    private
+    function stringToByteArray(str as String) as ByteArray {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_78_67_80_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 79 8 ]
+        %tmp.1 = lgetv %str;
+        symbol [ str %tmp.1 79 15 18 ];
+        symbol [ toUtf8Array %tmp.2 79 19 30 ];
+        %tmp.2 = getv function %tmp.1 :toUtf8Array;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        %tmp.4 = as %tmp.3 ByteArray;
+        symbol [ ByteArray %tmp.4 79 36 45 ];
+        ret %tmp.4;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_78_67_80_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 83; @symbol_functiondef = [buildBaseUrl,83,21,33]; @symbol_param<0> = [endpoint,83,34,42]; @symbol_param<0>_type<0> = [String,83,46,52]; @symbol_return<0> = [String,83,57,63]; ]
+    private
+    function buildBaseUrl(endpoint as String) as String {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 84 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_8_86_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_12_84_47_begin:
+        symbol [ _serverUrl %tmp.2 84 12 22 ];
+        %tmp.2 = getv ? :_serverUrl;
+        %tmp.3 = null;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bt %tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_8_86_8_if_true;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_34_84_47_false:
+        symbol [ _username %tmp.6 84 34 43 ];
+        %tmp.6 = getv ? :_username;
+        %tmp.7 = null;
+        %tmp.8 = eq %tmp.6 %tmp.7;
+        push %tmp.8;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_34_84_47_end:
+        %tmp.9 = phi [%tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_12_84_47_begin] [%tmp.8 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_34_84_47_false] [%tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_34_84_47_end];
+        bf %tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_8_86_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_8_86_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_53_86_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 85 12 ]
+        %tmp.10 = "";
+        ret %tmp.10;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_53_86_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_8_86_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_84_8_86_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 88 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 88 12 15 ];
+        symbol [ _serverUrl %tmp.12 88 18 28 ];
+        %tmp.12 = getv ? :_serverUrl;
+        %tmp.13 = "/rest/";
+        %tmp.14 = add %tmp.12 %tmp.13;
+        %tmp.15 = lgetv %endpoint;
+        symbol [ endpoint %tmp.15 88 42 50 ];
+        %tmp.16 = add %tmp.14 %tmp.15;
+        %tmp.17 = ".view?";
+        %tmp.18 = add %tmp.16 %tmp.17;
+        lputv %url.1 %tmp.18;
+        symbol [ url %url.1 88 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 89 8 ]
+        %tmp.19 = lgetv %url.1;
+        symbol [ url %tmp.19 89 8 11 ];
+        %tmp.20 = "u=";
+        symbol [ _username %tmp.22 89 22 31 ];
+        %tmp.22 = getv ? :_username;
+        %tmp.23 = add %tmp.20 %tmp.22;
+        %tmp.24 = add %tmp.19 %tmp.23;
+        lputv %url.1 %tmp.24;
+        symbol [ url %url.1 89 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 90 8 ]
+        %tmp.25 = lgetv %url.1;
+        symbol [ url %tmp.25 90 8 11 ];
+        %tmp.26 = "&v=";
+        symbol [ _apiVersion %tmp.28 90 23 34 ];
+        %tmp.28 = getv ? :_apiVersion;
+        %tmp.29 = add %tmp.26 %tmp.28;
+        %tmp.30 = add %tmp.25 %tmp.29;
+        lputv %url.1 %tmp.30;
+        symbol [ url %url.1 90 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 91 8 ]
+        %tmp.31 = lgetv %url.1;
+        symbol [ url %tmp.31 91 8 11 ];
+        %tmp.32 = "&c=";
+        symbol [ _clientName %tmp.34 91 23 34 ];
+        %tmp.34 = getv ? :_clientName;
+        %tmp.35 = add %tmp.32 %tmp.34;
+        %tmp.36 = add %tmp.31 %tmp.35;
+        lputv %url.1 %tmp.36;
+        symbol [ url %url.1 91 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 92 8 ]
+        %tmp.37 = lgetv %url.1;
+        symbol [ url %tmp.37 92 8 11 ];
+        %tmp.38 = "&f=json";
+        %tmp.39 = add %tmp.37 %tmp.38;
+        lputv %url.1 %tmp.39;
+        symbol [ url %url.1 92 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 94 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_stop" ]
+        %auth.2 = local;
+        symbol [ auth %auth.2 94 12 16 ];
+        %tmp.40 = self;
+        symbol [ generateAuthToken %tmp.41 94 19 36 ];
+        %tmp.41 = getv function %tmp.40 :generateAuthToken;
+        %tmp.42 = invoke %tmp.40 %tmp.41();
+        lputv %auth.2 %tmp.42;
+        symbol [ auth %auth.2 94 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 95 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_stop" ]
+        %token.3 = local;
+        symbol [ token %token.3 95 12 17 ];
+        %tmp.43 = lgetv %auth.2;
+        symbol [ auth %tmp.43 95 20 24 ];
+        %tmp.44 = "t";
+        %tmp.45 = agetv %tmp.43 %tmp.44;
+        %tmp.46 = as %tmp.45 String or Null;
+        symbol [ String %tmp.46 95 33 39 ];
+        lputv %token.3 %tmp.46;
+        symbol [ token %token.3 95 12 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 96 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_stop" ]
+        %salt.4 = local;
+        symbol [ salt %salt.4 96 12 16 ];
+        %tmp.47 = lgetv %auth.2;
+        symbol [ auth %tmp.47 96 19 23 ];
+        %tmp.48 = "s";
+        %tmp.49 = agetv %tmp.47 %tmp.48;
+        %tmp.50 = as %tmp.49 String or Null;
+        symbol [ String %tmp.50 96 32 38 ];
+        lputv %salt.4 %tmp.50;
+        symbol [ salt %salt.4 96 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 97 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_8_100_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_12_97_37_begin:
+        %tmp.51 = lgetv %token.3;
+        symbol [ token %tmp.51 97 12 17 ];
+        %tmp.52 = null;
+        %tmp.53 = ne %tmp.51 %tmp.52;
+        bf %tmp.53 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_8_100_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_29_97_37_true:
+        %tmp.54 = lgetv %salt.4;
+        symbol [ salt %tmp.54 97 29 33 ];
+        %tmp.55 = null;
+        %tmp.56 = ne %tmp.54 %tmp.55;
+        push %tmp.56;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_29_97_37_end:
+        %tmp.57 = phi [%tmp.53 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_12_97_37_begin] [%tmp.56 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_29_97_37_true] [%tmp.57 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_29_97_37_end];
+        bf %tmp.57 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_8_100_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_8_100_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_43_100_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 98 12 ]
+        %tmp.58 = lgetv %url.1;
+        symbol [ url %tmp.58 98 12 15 ];
+        %tmp.59 = "&t=";
+        %tmp.60 = lgetv %token.3;
+        symbol [ token %tmp.60 98 27 32 ];
+        %tmp.61 = as %tmp.60 { (!Null) };
+        %tmp.62 = add %tmp.59 %tmp.61;
+        %tmp.63 = add %tmp.58 %tmp.62;
+        lputv %url.1 %tmp.63;
+        symbol [ url %url.1 98 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 99 12 ]
+        %tmp.64 = lgetv %url.1;
+        symbol [ url %tmp.64 99 12 15 ];
+        %tmp.65 = "&s=";
+        %tmp.66 = lgetv %salt.4;
+        symbol [ salt %tmp.66 99 27 31 ];
+        %tmp.67 = as %tmp.66 { (!Null) };
+        %tmp.68 = add %tmp.65 %tmp.67;
+        %tmp.69 = add %tmp.64 %tmp.68;
+        lputv %url.1 %tmp.69;
+        symbol [ url %url.1 99 12 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_43_100_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_8_100_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_97_8_100_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 102 8 ]
+        %tmp.70 = lgetv %url.1;
+        symbol [ url %tmp.70 102 15 18 ];
+        ret %tmp.70;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_83_64_103_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 106; @symbol_functiondef = [ping,106,13,17]; @symbol_param<0> = [callback,106,18,26]; @symbol_param<0>_type<0> = [responseCode,106,37,49]; @symbol_param<0>_type<1> = [Number,106,53,59]; @symbol_param<0>_type<2> = [data,106,61,65]; @symbol_param<0>_type<3> = [Dictionary,106,69,79]; @symbol_param<0>_type<4> = [String,106,83,89]; @symbol_param<0>_type<5> = [PersistedContent,106,93,109]; @symbol_param<0>_type<6> = [Iterator,106,110,118]; ]
+    function ping(callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_106_145_115_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 107 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_106_145_115_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_106_145_115_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 107 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 107 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "ping";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        lputv %url.1 %tmp.4;
+        symbol [ url %url.1 107 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 109 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_106_145_115_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_106_145_115_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 109 12 19 ];
+        %tmp.5 = newd 2;
+        %tmp.7 = const :method;
+        symbol [ method %tmp.7 110 13 19 const ];
+        symbol [ Communications %tmp.8 110 23 37 ];
+        %tmp.8 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.9 110 38 61 ];
+        %tmp.9 = getv %tmp.8 :HTTP_REQUEST_METHOD_GET;
+        %tmp.10 = dup %tmp.5;
+        %tmp.11 = aputv %tmp.10 %tmp.7 %tmp.9;
+        %tmp.13 = const :responseType;
+        symbol [ responseType %tmp.13 111 13 25 const ];
+        symbol [ Communications %tmp.14 111 29 43 ];
+        %tmp.14 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.15 111 44 75 ];
+        %tmp.15 = getv %tmp.14 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.16 = dup %tmp.11;
+        %tmp.17 = aputv %tmp.16 %tmp.13 %tmp.15;
+        lputv %options.2 %tmp.17;
+        symbol [ options %options.2 109 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 114 8 ]
+        symbol [ Communications %tmp.18 114 8 22 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.19 114 23 37 ];
+        %tmp.19 = getv function %tmp.18 :makeWebRequest;
+        %tmp.20 = lgetv %url.1;
+        symbol [ url %tmp.20 114 38 41 ];
+        %tmp.21 = null;
+        %tmp.22 = lgetv %options.2;
+        symbol [ options %tmp.22 114 49 56 ];
+        %tmp.23 = lgetv %callback;
+        symbol [ callback %tmp.23 114 58 66 ];
+        invoke %tmp.18 %tmp.19(%tmp.20, %tmp.21, %tmp.22, %tmp.23);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_106_145_115_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 118; @symbol_functiondef = [getPlaylists,118,13,25]; @symbol_param<0> = [callback,118,26,34]; @symbol_param<0>_type<0> = [responseCode,118,45,57]; @symbol_param<0>_type<1> = [Number,118,61,67]; @symbol_param<0>_type<2> = [data,118,69,73]; @symbol_param<0>_type<3> = [Dictionary,118,77,87]; @symbol_param<0>_type<4> = [String,118,91,97]; @symbol_param<0>_type<5> = [PersistedContent,118,101,117]; @symbol_param<0>_type<6> = [Iterator,118,118,126]; ]
+    function getPlaylists(callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_118_153_127_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 119 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_118_153_127_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_118_153_127_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 119 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 119 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "getPlaylists";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        lputv %url.1 %tmp.4;
+        symbol [ url %url.1 119 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 121 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_118_153_127_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_118_153_127_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 121 12 19 ];
+        %tmp.5 = newd 2;
+        %tmp.7 = const :method;
+        symbol [ method %tmp.7 122 13 19 const ];
+        symbol [ Communications %tmp.8 122 23 37 ];
+        %tmp.8 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.9 122 38 61 ];
+        %tmp.9 = getv %tmp.8 :HTTP_REQUEST_METHOD_GET;
+        %tmp.10 = dup %tmp.5;
+        %tmp.11 = aputv %tmp.10 %tmp.7 %tmp.9;
+        %tmp.13 = const :responseType;
+        symbol [ responseType %tmp.13 123 13 25 const ];
+        symbol [ Communications %tmp.14 123 29 43 ];
+        %tmp.14 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.15 123 44 75 ];
+        %tmp.15 = getv %tmp.14 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.16 = dup %tmp.11;
+        %tmp.17 = aputv %tmp.16 %tmp.13 %tmp.15;
+        lputv %options.2 %tmp.17;
+        symbol [ options %options.2 121 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 126 8 ]
+        symbol [ Communications %tmp.18 126 8 22 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.19 126 23 37 ];
+        %tmp.19 = getv function %tmp.18 :makeWebRequest;
+        %tmp.20 = lgetv %url.1;
+        symbol [ url %tmp.20 126 38 41 ];
+        %tmp.21 = null;
+        %tmp.22 = lgetv %options.2;
+        symbol [ options %tmp.22 126 49 56 ];
+        %tmp.23 = lgetv %callback;
+        symbol [ callback %tmp.23 126 58 66 ];
+        invoke %tmp.18 %tmp.19(%tmp.20, %tmp.21, %tmp.22, %tmp.23);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_118_153_127_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 130; @symbol_functiondef = [getPlaylist,130,13,24]; @symbol_param<0> = [playlistId,130,25,35]; @symbol_param<0>_type<0> = [String,130,39,45]; @symbol_param<1> = [callback,130,47,55]; @symbol_param<1>_type<0> = [responseCode,130,66,78]; @symbol_param<1>_type<1> = [Number,130,82,88]; @symbol_param<1>_type<2> = [data,130,90,94]; @symbol_param<1>_type<3> = [Dictionary,130,98,108]; @symbol_param<1>_type<4> = [String,130,112,118]; @symbol_param<1>_type<5> = [PersistedContent,130,122,138]; @symbol_param<1>_type<6> = [Iterator,130,139,147]; ]
+    function getPlaylist(playlistId as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_130_174_139_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 131 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_130_174_139_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_130_174_139_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 131 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 131 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "getPlaylist";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&id=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %playlistId;
+        symbol [ playlistId %tmp.7 131 57 67 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 131 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 133 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_130_174_139_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_130_174_139_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 133 12 19 ];
+        %tmp.9 = newd 2;
+        %tmp.11 = const :method;
+        symbol [ method %tmp.11 134 13 19 const ];
+        symbol [ Communications %tmp.12 134 23 37 ];
+        %tmp.12 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.13 134 38 61 ];
+        %tmp.13 = getv %tmp.12 :HTTP_REQUEST_METHOD_GET;
+        %tmp.14 = dup %tmp.9;
+        %tmp.15 = aputv %tmp.14 %tmp.11 %tmp.13;
+        %tmp.17 = const :responseType;
+        symbol [ responseType %tmp.17 135 13 25 const ];
+        symbol [ Communications %tmp.18 135 29 43 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.19 135 44 75 ];
+        %tmp.19 = getv %tmp.18 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.20 = dup %tmp.15;
+        %tmp.21 = aputv %tmp.20 %tmp.17 %tmp.19;
+        lputv %options.2 %tmp.21;
+        symbol [ options %options.2 133 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 138 8 ]
+        symbol [ Communications %tmp.22 138 8 22 ];
+        %tmp.22 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.23 138 23 37 ];
+        %tmp.23 = getv function %tmp.22 :makeWebRequest;
+        %tmp.24 = lgetv %url.1;
+        symbol [ url %tmp.24 138 38 41 ];
+        %tmp.25 = null;
+        %tmp.26 = lgetv %options.2;
+        symbol [ options %tmp.26 138 49 56 ];
+        %tmp.27 = lgetv %callback;
+        symbol [ callback %tmp.27 138 58 66 ];
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.26, %tmp.27);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_130_174_139_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 142; @symbol_functiondef = [getRandomSongs,142,13,27]; @symbol_param<0> = [size,142,28,32]; @symbol_param<0>_type<0> = [Number,142,36,42]; @symbol_param<1> = [callback,142,44,52]; @symbol_param<1>_type<0> = [responseCode,142,63,75]; @symbol_param<1>_type<1> = [Number,142,79,85]; @symbol_param<1>_type<2> = [data,142,87,91]; @symbol_param<1>_type<3> = [Dictionary,142,95,105]; @symbol_param<1>_type<4> = [String,142,109,115]; @symbol_param<1>_type<5> = [PersistedContent,142,119,135]; @symbol_param<1>_type<6> = [Iterator,142,136,144]; ]
+    function getRandomSongs(size as Number, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_142_171_151_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 143 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_142_171_151_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_142_171_151_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 143 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 143 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "getRandomSongs";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&size=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %size;
+        symbol [ size %tmp.7 143 62 66 ];
+        symbol [ toString %tmp.8 143 67 75 ];
+        %tmp.8 = getv function %tmp.7 :toString;
+        %tmp.9 = invoke %tmp.7 %tmp.8();
+        %tmp.10 = add %tmp.6 %tmp.9;
+        lputv %url.1 %tmp.10;
+        symbol [ url %url.1 143 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 145 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_142_171_151_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_142_171_151_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 145 12 19 ];
+        %tmp.11 = newd 2;
+        %tmp.13 = const :method;
+        symbol [ method %tmp.13 146 13 19 const ];
+        symbol [ Communications %tmp.14 146 23 37 ];
+        %tmp.14 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.15 146 38 61 ];
+        %tmp.15 = getv %tmp.14 :HTTP_REQUEST_METHOD_GET;
+        %tmp.16 = dup %tmp.11;
+        %tmp.17 = aputv %tmp.16 %tmp.13 %tmp.15;
+        %tmp.19 = const :responseType;
+        symbol [ responseType %tmp.19 147 13 25 const ];
+        symbol [ Communications %tmp.20 147 29 43 ];
+        %tmp.20 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.21 147 44 75 ];
+        %tmp.21 = getv %tmp.20 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.22 = dup %tmp.17;
+        %tmp.23 = aputv %tmp.22 %tmp.19 %tmp.21;
+        lputv %options.2 %tmp.23;
+        symbol [ options %options.2 145 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 150 8 ]
+        symbol [ Communications %tmp.24 150 8 22 ];
+        %tmp.24 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.25 150 23 37 ];
+        %tmp.25 = getv function %tmp.24 :makeWebRequest;
+        %tmp.26 = lgetv %url.1;
+        symbol [ url %tmp.26 150 38 41 ];
+        %tmp.27 = null;
+        %tmp.28 = lgetv %options.2;
+        symbol [ options %tmp.28 150 49 56 ];
+        %tmp.29 = lgetv %callback;
+        symbol [ callback %tmp.29 150 58 66 ];
+        invoke %tmp.24 %tmp.25(%tmp.26, %tmp.27, %tmp.28, %tmp.29);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_142_171_151_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 154; @symbol_functiondef = [getArtists,154,13,23]; @symbol_param<0> = [callback,154,24,32]; @symbol_param<0>_type<0> = [responseCode,154,43,55]; @symbol_param<0>_type<1> = [Number,154,59,65]; @symbol_param<0>_type<2> = [data,154,67,71]; @symbol_param<0>_type<3> = [Dictionary,154,75,85]; @symbol_param<0>_type<4> = [String,154,89,95]; @symbol_param<0>_type<5> = [PersistedContent,154,99,115]; @symbol_param<0>_type<6> = [Iterator,154,116,124]; ]
+    function getArtists(callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_154_151_163_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 155 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_154_151_163_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_154_151_163_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 155 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 155 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "getArtists";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        lputv %url.1 %tmp.4;
+        symbol [ url %url.1 155 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 157 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_154_151_163_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_154_151_163_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 157 12 19 ];
+        %tmp.5 = newd 2;
+        %tmp.7 = const :method;
+        symbol [ method %tmp.7 158 13 19 const ];
+        symbol [ Communications %tmp.8 158 23 37 ];
+        %tmp.8 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.9 158 38 61 ];
+        %tmp.9 = getv %tmp.8 :HTTP_REQUEST_METHOD_GET;
+        %tmp.10 = dup %tmp.5;
+        %tmp.11 = aputv %tmp.10 %tmp.7 %tmp.9;
+        %tmp.13 = const :responseType;
+        symbol [ responseType %tmp.13 159 13 25 const ];
+        symbol [ Communications %tmp.14 159 29 43 ];
+        %tmp.14 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.15 159 44 75 ];
+        %tmp.15 = getv %tmp.14 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.16 = dup %tmp.11;
+        %tmp.17 = aputv %tmp.16 %tmp.13 %tmp.15;
+        lputv %options.2 %tmp.17;
+        symbol [ options %options.2 157 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 162 8 ]
+        symbol [ Communications %tmp.18 162 8 22 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.19 162 23 37 ];
+        %tmp.19 = getv function %tmp.18 :makeWebRequest;
+        %tmp.20 = lgetv %url.1;
+        symbol [ url %tmp.20 162 38 41 ];
+        %tmp.21 = null;
+        %tmp.22 = lgetv %options.2;
+        symbol [ options %tmp.22 162 49 56 ];
+        %tmp.23 = lgetv %callback;
+        symbol [ callback %tmp.23 162 58 66 ];
+        invoke %tmp.18 %tmp.19(%tmp.20, %tmp.21, %tmp.22, %tmp.23);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_154_151_163_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 166; @symbol_functiondef = [getArtist,166,13,22]; @symbol_param<0> = [artistId,166,23,31]; @symbol_param<0>_type<0> = [String,166,35,41]; @symbol_param<1> = [callback,166,43,51]; @symbol_param<1>_type<0> = [responseCode,166,62,74]; @symbol_param<1>_type<1> = [Number,166,78,84]; @symbol_param<1>_type<2> = [data,166,86,90]; @symbol_param<1>_type<3> = [Dictionary,166,94,104]; @symbol_param<1>_type<4> = [String,166,108,114]; @symbol_param<1>_type<5> = [PersistedContent,166,118,134]; @symbol_param<1>_type<6> = [Iterator,166,135,143]; ]
+    function getArtist(artistId as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_166_170_175_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 167 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_166_170_175_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_166_170_175_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 167 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 167 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "getArtist";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&id=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %artistId;
+        symbol [ artistId %tmp.7 167 55 63 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 167 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 169 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_166_170_175_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_166_170_175_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 169 12 19 ];
+        %tmp.9 = newd 2;
+        %tmp.11 = const :method;
+        symbol [ method %tmp.11 170 13 19 const ];
+        symbol [ Communications %tmp.12 170 23 37 ];
+        %tmp.12 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.13 170 38 61 ];
+        %tmp.13 = getv %tmp.12 :HTTP_REQUEST_METHOD_GET;
+        %tmp.14 = dup %tmp.9;
+        %tmp.15 = aputv %tmp.14 %tmp.11 %tmp.13;
+        %tmp.17 = const :responseType;
+        symbol [ responseType %tmp.17 171 13 25 const ];
+        symbol [ Communications %tmp.18 171 29 43 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.19 171 44 75 ];
+        %tmp.19 = getv %tmp.18 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.20 = dup %tmp.15;
+        %tmp.21 = aputv %tmp.20 %tmp.17 %tmp.19;
+        lputv %options.2 %tmp.21;
+        symbol [ options %options.2 169 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 174 8 ]
+        symbol [ Communications %tmp.22 174 8 22 ];
+        %tmp.22 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.23 174 23 37 ];
+        %tmp.23 = getv function %tmp.22 :makeWebRequest;
+        %tmp.24 = lgetv %url.1;
+        symbol [ url %tmp.24 174 38 41 ];
+        %tmp.25 = null;
+        %tmp.26 = lgetv %options.2;
+        symbol [ options %tmp.26 174 49 56 ];
+        %tmp.27 = lgetv %callback;
+        symbol [ callback %tmp.27 174 58 66 ];
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.26, %tmp.27);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_166_170_175_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 178; @symbol_functiondef = [getAlbum,178,13,21]; @symbol_param<0> = [albumId,178,22,29]; @symbol_param<0>_type<0> = [String,178,33,39]; @symbol_param<1> = [callback,178,41,49]; @symbol_param<1>_type<0> = [responseCode,178,60,72]; @symbol_param<1>_type<1> = [Number,178,76,82]; @symbol_param<1>_type<2> = [data,178,84,88]; @symbol_param<1>_type<3> = [Dictionary,178,92,102]; @symbol_param<1>_type<4> = [String,178,106,112]; @symbol_param<1>_type<5> = [PersistedContent,178,116,132]; @symbol_param<1>_type<6> = [Iterator,178,133,141]; ]
+    function getAlbum(albumId as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_178_168_187_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 179 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_178_168_187_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_178_168_187_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 179 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 179 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "getAlbum";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&id=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %albumId;
+        symbol [ albumId %tmp.7 179 54 61 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 179 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 181 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_178_168_187_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_178_168_187_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 181 12 19 ];
+        %tmp.9 = newd 2;
+        %tmp.11 = const :method;
+        symbol [ method %tmp.11 182 13 19 const ];
+        symbol [ Communications %tmp.12 182 23 37 ];
+        %tmp.12 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.13 182 38 61 ];
+        %tmp.13 = getv %tmp.12 :HTTP_REQUEST_METHOD_GET;
+        %tmp.14 = dup %tmp.9;
+        %tmp.15 = aputv %tmp.14 %tmp.11 %tmp.13;
+        %tmp.17 = const :responseType;
+        symbol [ responseType %tmp.17 183 13 25 const ];
+        symbol [ Communications %tmp.18 183 29 43 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.19 183 44 75 ];
+        %tmp.19 = getv %tmp.18 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.20 = dup %tmp.15;
+        %tmp.21 = aputv %tmp.20 %tmp.17 %tmp.19;
+        lputv %options.2 %tmp.21;
+        symbol [ options %options.2 181 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 186 8 ]
+        symbol [ Communications %tmp.22 186 8 22 ];
+        %tmp.22 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.23 186 23 37 ];
+        %tmp.23 = getv function %tmp.22 :makeWebRequest;
+        %tmp.24 = lgetv %url.1;
+        symbol [ url %tmp.24 186 38 41 ];
+        %tmp.25 = null;
+        %tmp.26 = lgetv %options.2;
+        symbol [ options %tmp.26 186 49 56 ];
+        %tmp.27 = lgetv %callback;
+        symbol [ callback %tmp.27 186 58 66 ];
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.26, %tmp.27);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_178_168_187_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 190; @symbol_functiondef = [search,190,13,19]; @symbol_param<0> = [query,190,20,25]; @symbol_param<0>_type<0> = [String,190,29,35]; @symbol_param<1> = [callback,190,37,45]; @symbol_param<1>_type<0> = [responseCode,190,56,68]; @symbol_param<1>_type<1> = [Number,190,72,78]; @symbol_param<1>_type<2> = [data,190,80,84]; @symbol_param<1>_type<3> = [Dictionary,190,88,98]; @symbol_param<1>_type<4> = [String,190,102,108]; @symbol_param<1>_type<5> = [PersistedContent,190,112,128]; @symbol_param<1>_type<6> = [Iterator,190,129,137]; ]
+    function search(query as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_190_164_200_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 191 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_190_164_200_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_190_164_200_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 191 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 191 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "search3";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&query=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %query;
+        symbol [ query %tmp.7 191 56 61 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 191 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 192 8 ]
+        %tmp.9 = lgetv %url.1;
+        symbol [ url %tmp.9 192 8 11 ];
+        %tmp.10 = "&artistCount=10&albumCount=10&songCount=20";
+        %tmp.11 = add %tmp.9 %tmp.10;
+        lputv %url.1 %tmp.11;
+        symbol [ url %url.1 192 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 194 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_190_164_200_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_190_164_200_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 194 12 19 ];
+        %tmp.12 = newd 2;
+        %tmp.14 = const :method;
+        symbol [ method %tmp.14 195 13 19 const ];
+        symbol [ Communications %tmp.15 195 23 37 ];
+        %tmp.15 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.16 195 38 61 ];
+        %tmp.16 = getv %tmp.15 :HTTP_REQUEST_METHOD_GET;
+        %tmp.17 = dup %tmp.12;
+        %tmp.18 = aputv %tmp.17 %tmp.14 %tmp.16;
+        %tmp.20 = const :responseType;
+        symbol [ responseType %tmp.20 196 13 25 const ];
+        symbol [ Communications %tmp.21 196 29 43 ];
+        %tmp.21 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.22 196 44 75 ];
+        %tmp.22 = getv %tmp.21 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.23 = dup %tmp.18;
+        %tmp.24 = aputv %tmp.23 %tmp.20 %tmp.22;
+        lputv %options.2 %tmp.24;
+        symbol [ options %options.2 194 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 199 8 ]
+        symbol [ Communications %tmp.25 199 8 22 ];
+        %tmp.25 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.26 199 23 37 ];
+        %tmp.26 = getv function %tmp.25 :makeWebRequest;
+        %tmp.27 = lgetv %url.1;
+        symbol [ url %tmp.27 199 38 41 ];
+        %tmp.28 = null;
+        %tmp.29 = lgetv %options.2;
+        symbol [ options %tmp.29 199 49 56 ];
+        %tmp.30 = lgetv %callback;
+        symbol [ callback %tmp.30 199 58 66 ];
+        invoke %tmp.25 %tmp.26(%tmp.27, %tmp.28, %tmp.29, %tmp.30);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_190_164_200_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 203; @symbol_functiondef = [getDownloadUrl,203,13,27]; @symbol_param<0> = [songId,203,28,34]; @symbol_param<0>_type<0> = [String,203,38,44]; @symbol_return<0> = [String,203,49,55]; ]
+    function getDownloadUrl(songId as String) as String {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 204 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_8_206_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_12_204_47_begin:
+        symbol [ _serverUrl %tmp.2 204 12 22 ];
+        %tmp.2 = getv ? :_serverUrl;
+        %tmp.3 = null;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bt %tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_8_206_8_if_true;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_34_204_47_false:
+        symbol [ _username %tmp.6 204 34 43 ];
+        %tmp.6 = getv ? :_username;
+        %tmp.7 = null;
+        %tmp.8 = eq %tmp.6 %tmp.7;
+        push %tmp.8;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_34_204_47_end:
+        %tmp.9 = phi [%tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_12_204_47_begin] [%tmp.8 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_34_204_47_false] [%tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_34_204_47_end];
+        bf %tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_8_206_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_8_206_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_53_206_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 205 12 ]
+        %tmp.10 = "";
+        ret %tmp.10;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_53_206_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_8_206_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_204_8_206_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 208 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 208 12 15 ];
+        symbol [ _serverUrl %tmp.12 208 18 28 ];
+        %tmp.12 = getv ? :_serverUrl;
+        %tmp.13 = "/rest/download.view?";
+        %tmp.14 = add %tmp.12 %tmp.13;
+        lputv %url.1 %tmp.14;
+        symbol [ url %url.1 208 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 209 8 ]
+        %tmp.15 = lgetv %url.1;
+        symbol [ url %tmp.15 209 8 11 ];
+        %tmp.16 = "id=";
+        %tmp.17 = lgetv %songId;
+        symbol [ songId %tmp.17 209 23 29 ];
+        %tmp.18 = add %tmp.16 %tmp.17;
+        %tmp.19 = add %tmp.15 %tmp.18;
+        lputv %url.1 %tmp.19;
+        symbol [ url %url.1 209 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 210 8 ]
+        %tmp.20 = lgetv %url.1;
+        symbol [ url %tmp.20 210 8 11 ];
+        %tmp.21 = "&u=";
+        symbol [ _username %tmp.23 210 23 32 ];
+        %tmp.23 = getv ? :_username;
+        %tmp.24 = add %tmp.21 %tmp.23;
+        %tmp.25 = add %tmp.20 %tmp.24;
+        lputv %url.1 %tmp.25;
+        symbol [ url %url.1 210 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 211 8 ]
+        %tmp.26 = lgetv %url.1;
+        symbol [ url %tmp.26 211 8 11 ];
+        %tmp.27 = "&v=";
+        symbol [ _apiVersion %tmp.29 211 23 34 ];
+        %tmp.29 = getv ? :_apiVersion;
+        %tmp.30 = add %tmp.27 %tmp.29;
+        %tmp.31 = add %tmp.26 %tmp.30;
+        lputv %url.1 %tmp.31;
+        symbol [ url %url.1 211 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 212 8 ]
+        %tmp.32 = lgetv %url.1;
+        symbol [ url %tmp.32 212 8 11 ];
+        %tmp.33 = "&c=";
+        symbol [ _clientName %tmp.35 212 23 34 ];
+        %tmp.35 = getv ? :_clientName;
+        %tmp.36 = add %tmp.33 %tmp.35;
+        %tmp.37 = add %tmp.32 %tmp.36;
+        lputv %url.1 %tmp.37;
+        symbol [ url %url.1 212 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 214 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_stop" ]
+        %auth.2 = local;
+        symbol [ auth %auth.2 214 12 16 ];
+        %tmp.38 = self;
+        symbol [ generateAuthToken %tmp.39 214 19 36 ];
+        %tmp.39 = getv function %tmp.38 :generateAuthToken;
+        %tmp.40 = invoke %tmp.38 %tmp.39();
+        lputv %auth.2 %tmp.40;
+        symbol [ auth %auth.2 214 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 215 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_stop" ]
+        %token.3 = local;
+        symbol [ token %token.3 215 12 17 ];
+        %tmp.41 = lgetv %auth.2;
+        symbol [ auth %tmp.41 215 20 24 ];
+        %tmp.42 = "t";
+        %tmp.43 = agetv %tmp.41 %tmp.42;
+        %tmp.44 = as %tmp.43 String or Null;
+        symbol [ String %tmp.44 215 33 39 ];
+        lputv %token.3 %tmp.44;
+        symbol [ token %token.3 215 12 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 216 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_stop" ]
+        %salt.4 = local;
+        symbol [ salt %salt.4 216 12 16 ];
+        %tmp.45 = lgetv %auth.2;
+        symbol [ auth %tmp.45 216 19 23 ];
+        %tmp.46 = "s";
+        %tmp.47 = agetv %tmp.45 %tmp.46;
+        %tmp.48 = as %tmp.47 String or Null;
+        symbol [ String %tmp.48 216 32 38 ];
+        lputv %salt.4 %tmp.48;
+        symbol [ salt %salt.4 216 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 217 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_8_220_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_12_217_37_begin:
+        %tmp.49 = lgetv %token.3;
+        symbol [ token %tmp.49 217 12 17 ];
+        %tmp.50 = null;
+        %tmp.51 = ne %tmp.49 %tmp.50;
+        bf %tmp.51 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_8_220_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_29_217_37_true:
+        %tmp.52 = lgetv %salt.4;
+        symbol [ salt %tmp.52 217 29 33 ];
+        %tmp.53 = null;
+        %tmp.54 = ne %tmp.52 %tmp.53;
+        push %tmp.54;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_29_217_37_end:
+        %tmp.55 = phi [%tmp.51 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_12_217_37_begin] [%tmp.54 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_29_217_37_true] [%tmp.55 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_29_217_37_end];
+        bf %tmp.55 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_8_220_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_8_220_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_43_220_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 218 12 ]
+        %tmp.56 = lgetv %url.1;
+        symbol [ url %tmp.56 218 12 15 ];
+        %tmp.57 = "&t=";
+        %tmp.58 = lgetv %token.3;
+        symbol [ token %tmp.58 218 27 32 ];
+        %tmp.59 = as %tmp.58 { (!Null) };
+        %tmp.60 = add %tmp.57 %tmp.59;
+        %tmp.61 = add %tmp.56 %tmp.60;
+        lputv %url.1 %tmp.61;
+        symbol [ url %url.1 218 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 219 12 ]
+        %tmp.62 = lgetv %url.1;
+        symbol [ url %tmp.62 219 12 15 ];
+        %tmp.63 = "&s=";
+        %tmp.64 = lgetv %salt.4;
+        symbol [ salt %tmp.64 219 27 31 ];
+        %tmp.65 = as %tmp.64 { (!Null) };
+        %tmp.66 = add %tmp.63 %tmp.65;
+        %tmp.67 = add %tmp.62 %tmp.66;
+        lputv %url.1 %tmp.67;
+        symbol [ url %url.1 219 12 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_43_220_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_8_220_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_217_8_220_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 222 8 ]
+        %tmp.68 = lgetv %url.1;
+        symbol [ url %tmp.68 222 15 18 ];
+        ret %tmp.68;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_203_56_223_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 226; @symbol_functiondef = [getStreamUrl,226,13,25]; @symbol_param<0> = [songId,226,26,32]; @symbol_param<0>_type<0> = [String,226,36,42]; @symbol_return<0> = [String,226,47,53]; ]
+    function getStreamUrl(songId as String) as String {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 227 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_8_229_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_12_227_47_begin:
+        symbol [ _serverUrl %tmp.2 227 12 22 ];
+        %tmp.2 = getv ? :_serverUrl;
+        %tmp.3 = null;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bt %tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_8_229_8_if_true;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_34_227_47_false:
+        symbol [ _username %tmp.6 227 34 43 ];
+        %tmp.6 = getv ? :_username;
+        %tmp.7 = null;
+        %tmp.8 = eq %tmp.6 %tmp.7;
+        push %tmp.8;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_34_227_47_end:
+        %tmp.9 = phi [%tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_12_227_47_begin] [%tmp.8 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_34_227_47_false] [%tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_34_227_47_end];
+        bf %tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_8_229_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_8_229_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_53_229_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 228 12 ]
+        %tmp.10 = "";
+        ret %tmp.10;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_53_229_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_8_229_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_227_8_229_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 231 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 231 12 15 ];
+        symbol [ _serverUrl %tmp.12 231 18 28 ];
+        %tmp.12 = getv ? :_serverUrl;
+        %tmp.13 = "/rest/stream.view?";
+        %tmp.14 = add %tmp.12 %tmp.13;
+        lputv %url.1 %tmp.14;
+        symbol [ url %url.1 231 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 232 8 ]
+        %tmp.15 = lgetv %url.1;
+        symbol [ url %tmp.15 232 8 11 ];
+        %tmp.16 = "id=";
+        %tmp.17 = lgetv %songId;
+        symbol [ songId %tmp.17 232 23 29 ];
+        %tmp.18 = add %tmp.16 %tmp.17;
+        %tmp.19 = add %tmp.15 %tmp.18;
+        lputv %url.1 %tmp.19;
+        symbol [ url %url.1 232 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 233 8 ]
+        %tmp.20 = lgetv %url.1;
+        symbol [ url %tmp.20 233 8 11 ];
+        %tmp.21 = "&u=";
+        symbol [ _username %tmp.23 233 23 32 ];
+        %tmp.23 = getv ? :_username;
+        %tmp.24 = add %tmp.21 %tmp.23;
+        %tmp.25 = add %tmp.20 %tmp.24;
+        lputv %url.1 %tmp.25;
+        symbol [ url %url.1 233 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 234 8 ]
+        %tmp.26 = lgetv %url.1;
+        symbol [ url %tmp.26 234 8 11 ];
+        %tmp.27 = "&v=";
+        symbol [ _apiVersion %tmp.29 234 23 34 ];
+        %tmp.29 = getv ? :_apiVersion;
+        %tmp.30 = add %tmp.27 %tmp.29;
+        %tmp.31 = add %tmp.26 %tmp.30;
+        lputv %url.1 %tmp.31;
+        symbol [ url %url.1 234 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 235 8 ]
+        %tmp.32 = lgetv %url.1;
+        symbol [ url %tmp.32 235 8 11 ];
+        %tmp.33 = "&c=";
+        symbol [ _clientName %tmp.35 235 23 34 ];
+        %tmp.35 = getv ? :_clientName;
+        %tmp.36 = add %tmp.33 %tmp.35;
+        %tmp.37 = add %tmp.32 %tmp.36;
+        lputv %url.1 %tmp.37;
+        symbol [ url %url.1 235 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 236 8 ]
+        %tmp.38 = lgetv %url.1;
+        symbol [ url %tmp.38 236 8 11 ];
+        %tmp.39 = "&format=mp3";
+        %tmp.40 = add %tmp.38 %tmp.39;
+        lputv %url.1 %tmp.40;
+        symbol [ url %url.1 236 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 237 8 ]
+        %tmp.41 = lgetv %url.1;
+        symbol [ url %tmp.41 237 8 11 ];
+        %tmp.42 = "&maxBitRate=320";
+        %tmp.43 = add %tmp.41 %tmp.42;
+        lputv %url.1 %tmp.43;
+        symbol [ url %url.1 237 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 239 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_stop" ]
+        %auth.2 = local;
+        symbol [ auth %auth.2 239 12 16 ];
+        %tmp.44 = self;
+        symbol [ generateAuthToken %tmp.45 239 19 36 ];
+        %tmp.45 = getv function %tmp.44 :generateAuthToken;
+        %tmp.46 = invoke %tmp.44 %tmp.45();
+        lputv %auth.2 %tmp.46;
+        symbol [ auth %auth.2 239 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 240 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_stop" ]
+        %token.3 = local;
+        symbol [ token %token.3 240 12 17 ];
+        %tmp.47 = lgetv %auth.2;
+        symbol [ auth %tmp.47 240 20 24 ];
+        %tmp.48 = "t";
+        %tmp.49 = agetv %tmp.47 %tmp.48;
+        %tmp.50 = as %tmp.49 String or Null;
+        symbol [ String %tmp.50 240 33 39 ];
+        lputv %token.3 %tmp.50;
+        symbol [ token %token.3 240 12 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 241 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_stop" ]
+        %salt.4 = local;
+        symbol [ salt %salt.4 241 12 16 ];
+        %tmp.51 = lgetv %auth.2;
+        symbol [ auth %tmp.51 241 19 23 ];
+        %tmp.52 = "s";
+        %tmp.53 = agetv %tmp.51 %tmp.52;
+        %tmp.54 = as %tmp.53 String or Null;
+        symbol [ String %tmp.54 241 32 38 ];
+        lputv %salt.4 %tmp.54;
+        symbol [ salt %salt.4 241 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 242 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_8_245_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_12_242_37_begin:
+        %tmp.55 = lgetv %token.3;
+        symbol [ token %tmp.55 242 12 17 ];
+        %tmp.56 = null;
+        %tmp.57 = ne %tmp.55 %tmp.56;
+        bf %tmp.57 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_8_245_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_29_242_37_true:
+        %tmp.58 = lgetv %salt.4;
+        symbol [ salt %tmp.58 242 29 33 ];
+        %tmp.59 = null;
+        %tmp.60 = ne %tmp.58 %tmp.59;
+        push %tmp.60;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_29_242_37_end:
+        %tmp.61 = phi [%tmp.57 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_12_242_37_begin] [%tmp.60 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_29_242_37_true] [%tmp.61 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_29_242_37_end];
+        bf %tmp.61 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_8_245_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_8_245_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_43_245_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 243 12 ]
+        %tmp.62 = lgetv %url.1;
+        symbol [ url %tmp.62 243 12 15 ];
+        %tmp.63 = "&t=";
+        %tmp.64 = lgetv %token.3;
+        symbol [ token %tmp.64 243 27 32 ];
+        %tmp.65 = as %tmp.64 { (!Null) };
+        %tmp.66 = add %tmp.63 %tmp.65;
+        %tmp.67 = add %tmp.62 %tmp.66;
+        lputv %url.1 %tmp.67;
+        symbol [ url %url.1 243 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 244 12 ]
+        %tmp.68 = lgetv %url.1;
+        symbol [ url %tmp.68 244 12 15 ];
+        %tmp.69 = "&s=";
+        %tmp.70 = lgetv %salt.4;
+        symbol [ salt %tmp.70 244 27 31 ];
+        %tmp.71 = as %tmp.70 { (!Null) };
+        %tmp.72 = add %tmp.69 %tmp.71;
+        %tmp.73 = add %tmp.68 %tmp.72;
+        lputv %url.1 %tmp.73;
+        symbol [ url %url.1 244 12 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_43_245_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_8_245_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_242_8_245_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 247 8 ]
+        %tmp.74 = lgetv %url.1;
+        symbol [ url %tmp.74 247 15 18 ];
+        ret %tmp.74;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_226_54_248_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 251; @symbol_functiondef = [getCoverArtUrl,251,13,27]; @symbol_param<0> = [coverArtId,251,28,38]; @symbol_param<0>_type<0> = [String,251,42,48]; @symbol_param<1> = [size,251,50,54]; @symbol_param<1>_type<0> = [Number,251,58,64]; @symbol_return<0> = [String,251,69,75]; ]
+    function getCoverArtUrl(coverArtId as String, size as Number) as String {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 252 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_8_254_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_12_252_47_begin:
+        symbol [ _serverUrl %tmp.2 252 12 22 ];
+        %tmp.2 = getv ? :_serverUrl;
+        %tmp.3 = null;
+        %tmp.4 = eq %tmp.2 %tmp.3;
+        bt %tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_8_254_8_if_true;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_34_252_47_false:
+        symbol [ _username %tmp.6 252 34 43 ];
+        %tmp.6 = getv ? :_username;
+        %tmp.7 = null;
+        %tmp.8 = eq %tmp.6 %tmp.7;
+        push %tmp.8;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_34_252_47_end:
+        %tmp.9 = phi [%tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_12_252_47_begin] [%tmp.8 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_34_252_47_false] [%tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_34_252_47_end];
+        bf %tmp.9 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_8_254_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_8_254_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_53_254_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 253 12 ]
+        %tmp.10 = "";
+        ret %tmp.10;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_53_254_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_8_254_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_252_8_254_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 256 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 256 12 15 ];
+        symbol [ _serverUrl %tmp.12 256 18 28 ];
+        %tmp.12 = getv ? :_serverUrl;
+        %tmp.13 = "/rest/getCoverArt.view?";
+        %tmp.14 = add %tmp.12 %tmp.13;
+        lputv %url.1 %tmp.14;
+        symbol [ url %url.1 256 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 257 8 ]
+        %tmp.15 = lgetv %url.1;
+        symbol [ url %tmp.15 257 8 11 ];
+        %tmp.16 = "id=";
+        %tmp.17 = lgetv %coverArtId;
+        symbol [ coverArtId %tmp.17 257 23 33 ];
+        %tmp.18 = add %tmp.16 %tmp.17;
+        %tmp.19 = add %tmp.15 %tmp.18;
+        lputv %url.1 %tmp.19;
+        symbol [ url %url.1 257 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 258 8 ]
+        %tmp.20 = lgetv %url.1;
+        symbol [ url %tmp.20 258 8 11 ];
+        %tmp.21 = "&size=";
+        %tmp.22 = lgetv %size;
+        symbol [ size %tmp.22 258 26 30 ];
+        symbol [ toString %tmp.23 258 31 39 ];
+        %tmp.23 = getv function %tmp.22 :toString;
+        %tmp.24 = invoke %tmp.22 %tmp.23();
+        %tmp.25 = add %tmp.21 %tmp.24;
+        %tmp.26 = add %tmp.20 %tmp.25;
+        lputv %url.1 %tmp.26;
+        symbol [ url %url.1 258 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 259 8 ]
+        %tmp.27 = lgetv %url.1;
+        symbol [ url %tmp.27 259 8 11 ];
+        %tmp.28 = "&u=";
+        symbol [ _username %tmp.30 259 23 32 ];
+        %tmp.30 = getv ? :_username;
+        %tmp.31 = add %tmp.28 %tmp.30;
+        %tmp.32 = add %tmp.27 %tmp.31;
+        lputv %url.1 %tmp.32;
+        symbol [ url %url.1 259 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 260 8 ]
+        %tmp.33 = lgetv %url.1;
+        symbol [ url %tmp.33 260 8 11 ];
+        %tmp.34 = "&v=";
+        symbol [ _apiVersion %tmp.36 260 23 34 ];
+        %tmp.36 = getv ? :_apiVersion;
+        %tmp.37 = add %tmp.34 %tmp.36;
+        %tmp.38 = add %tmp.33 %tmp.37;
+        lputv %url.1 %tmp.38;
+        symbol [ url %url.1 260 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 261 8 ]
+        %tmp.39 = lgetv %url.1;
+        symbol [ url %tmp.39 261 8 11 ];
+        %tmp.40 = "&c=";
+        symbol [ _clientName %tmp.42 261 23 34 ];
+        %tmp.42 = getv ? :_clientName;
+        %tmp.43 = add %tmp.40 %tmp.42;
+        %tmp.44 = add %tmp.39 %tmp.43;
+        lputv %url.1 %tmp.44;
+        symbol [ url %url.1 261 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 263 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_stop" ]
+        %auth.2 = local;
+        symbol [ auth %auth.2 263 12 16 ];
+        %tmp.45 = self;
+        symbol [ generateAuthToken %tmp.46 263 19 36 ];
+        %tmp.46 = getv function %tmp.45 :generateAuthToken;
+        %tmp.47 = invoke %tmp.45 %tmp.46();
+        lputv %auth.2 %tmp.47;
+        symbol [ auth %auth.2 263 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 264 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_stop" ]
+        %token.3 = local;
+        symbol [ token %token.3 264 12 17 ];
+        %tmp.48 = lgetv %auth.2;
+        symbol [ auth %tmp.48 264 20 24 ];
+        %tmp.49 = "t";
+        %tmp.50 = agetv %tmp.48 %tmp.49;
+        %tmp.51 = as %tmp.50 String or Null;
+        symbol [ String %tmp.51 264 33 39 ];
+        lputv %token.3 %tmp.51;
+        symbol [ token %token.3 264 12 17 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 265 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_stop" ]
+        %salt.4 = local;
+        symbol [ salt %salt.4 265 12 16 ];
+        %tmp.52 = lgetv %auth.2;
+        symbol [ auth %tmp.52 265 19 23 ];
+        %tmp.53 = "s";
+        %tmp.54 = agetv %tmp.52 %tmp.53;
+        %tmp.55 = as %tmp.54 String or Null;
+        symbol [ String %tmp.55 265 32 38 ];
+        lputv %salt.4 %tmp.55;
+        symbol [ salt %salt.4 265 12 16 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 266 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_8_269_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_12_266_37_begin:
+        %tmp.56 = lgetv %token.3;
+        symbol [ token %tmp.56 266 12 17 ];
+        %tmp.57 = null;
+        %tmp.58 = ne %tmp.56 %tmp.57;
+        bf %tmp.58 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_8_269_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_29_266_37_true:
+        %tmp.59 = lgetv %salt.4;
+        symbol [ salt %tmp.59 266 29 33 ];
+        %tmp.60 = null;
+        %tmp.61 = ne %tmp.59 %tmp.60;
+        push %tmp.61;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_29_266_37_end:
+        %tmp.62 = phi [%tmp.58 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_12_266_37_begin] [%tmp.61 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_29_266_37_true] [%tmp.62 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_29_266_37_end];
+        bf %tmp.62 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_8_269_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_8_269_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_43_269_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 267 12 ]
+        %tmp.63 = lgetv %url.1;
+        symbol [ url %tmp.63 267 12 15 ];
+        %tmp.64 = "&t=";
+        %tmp.65 = lgetv %token.3;
+        symbol [ token %tmp.65 267 27 32 ];
+        %tmp.66 = as %tmp.65 { (!Null) };
+        %tmp.67 = add %tmp.64 %tmp.66;
+        %tmp.68 = add %tmp.63 %tmp.67;
+        lputv %url.1 %tmp.68;
+        symbol [ url %url.1 267 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 268 12 ]
+        %tmp.69 = lgetv %url.1;
+        symbol [ url %tmp.69 268 12 15 ];
+        %tmp.70 = "&s=";
+        %tmp.71 = lgetv %salt.4;
+        symbol [ salt %tmp.71 268 27 31 ];
+        %tmp.72 = as %tmp.71 { (!Null) };
+        %tmp.73 = add %tmp.70 %tmp.72;
+        %tmp.74 = add %tmp.69 %tmp.73;
+        lputv %url.1 %tmp.74;
+        symbol [ url %url.1 268 12 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_43_269_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_8_269_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_266_8_269_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 271 8 ]
+        %tmp.75 = lgetv %url.1;
+        symbol [ url %tmp.75 271 15 18 ];
+        ret %tmp.75;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_251_76_272_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 275; @symbol_functiondef = [scrobble,275,13,21]; @symbol_param<0> = [songId,275,22,28]; @symbol_param<0>_type<0> = [String,275,32,38]; @symbol_param<1> = [callback,275,40,48]; @symbol_param<1>_type<0> = [responseCode,275,59,71]; @symbol_param<1>_type<1> = [Number,275,75,81]; @symbol_param<1>_type<2> = [data,275,83,87]; @symbol_param<1>_type<3> = [Dictionary,275,91,101]; @symbol_param<1>_type<4> = [String,275,105,111]; @symbol_param<1>_type<5> = [PersistedContent,275,115,131]; @symbol_param<1>_type<6> = [Iterator,275,132,140]; ]
+    function scrobble(songId as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_275_167_285_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 276 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_275_167_285_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_275_167_285_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 276 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 276 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "scrobble";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&id=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %songId;
+        symbol [ songId %tmp.7 276 54 60 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 276 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 277 8 ]
+        %tmp.9 = lgetv %url.1;
+        symbol [ url %tmp.9 277 8 11 ];
+        %tmp.10 = "&submission=true";
+        %tmp.11 = add %tmp.9 %tmp.10;
+        lputv %url.1 %tmp.11;
+        symbol [ url %url.1 277 8 11 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 279 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_275_167_285_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_275_167_285_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 279 12 19 ];
+        %tmp.12 = newd 2;
+        %tmp.14 = const :method;
+        symbol [ method %tmp.14 280 13 19 const ];
+        symbol [ Communications %tmp.15 280 23 37 ];
+        %tmp.15 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.16 280 38 61 ];
+        %tmp.16 = getv %tmp.15 :HTTP_REQUEST_METHOD_GET;
+        %tmp.17 = dup %tmp.12;
+        %tmp.18 = aputv %tmp.17 %tmp.14 %tmp.16;
+        %tmp.20 = const :responseType;
+        symbol [ responseType %tmp.20 281 13 25 const ];
+        symbol [ Communications %tmp.21 281 29 43 ];
+        %tmp.21 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.22 281 44 75 ];
+        %tmp.22 = getv %tmp.21 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.23 = dup %tmp.18;
+        %tmp.24 = aputv %tmp.23 %tmp.20 %tmp.22;
+        lputv %options.2 %tmp.24;
+        symbol [ options %options.2 279 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 284 8 ]
+        symbol [ Communications %tmp.25 284 8 22 ];
+        %tmp.25 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.26 284 23 37 ];
+        %tmp.26 = getv function %tmp.25 :makeWebRequest;
+        %tmp.27 = lgetv %url.1;
+        symbol [ url %tmp.27 284 38 41 ];
+        %tmp.28 = null;
+        %tmp.29 = lgetv %options.2;
+        symbol [ options %tmp.29 284 49 56 ];
+        %tmp.30 = lgetv %callback;
+        symbol [ callback %tmp.30 284 58 66 ];
+        invoke %tmp.25 %tmp.26(%tmp.27, %tmp.28, %tmp.29, %tmp.30);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_275_167_285_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 288; @symbol_functiondef = [star,288,13,17]; @symbol_param<0> = [itemId,288,18,24]; @symbol_param<0>_type<0> = [String,288,28,34]; @symbol_param<1> = [callback,288,36,44]; @symbol_param<1>_type<0> = [responseCode,288,55,67]; @symbol_param<1>_type<1> = [Number,288,71,77]; @symbol_param<1>_type<2> = [data,288,79,83]; @symbol_param<1>_type<3> = [Dictionary,288,87,97]; @symbol_param<1>_type<4> = [String,288,101,107]; @symbol_param<1>_type<5> = [PersistedContent,288,111,127]; @symbol_param<1>_type<6> = [Iterator,288,128,136]; ]
+    function star(itemId as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_288_163_297_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 289 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_288_163_297_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_288_163_297_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 289 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 289 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "star";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&id=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %itemId;
+        symbol [ itemId %tmp.7 289 50 56 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 289 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 291 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_288_163_297_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_288_163_297_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 291 12 19 ];
+        %tmp.9 = newd 2;
+        %tmp.11 = const :method;
+        symbol [ method %tmp.11 292 13 19 const ];
+        symbol [ Communications %tmp.12 292 23 37 ];
+        %tmp.12 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.13 292 38 61 ];
+        %tmp.13 = getv %tmp.12 :HTTP_REQUEST_METHOD_GET;
+        %tmp.14 = dup %tmp.9;
+        %tmp.15 = aputv %tmp.14 %tmp.11 %tmp.13;
+        %tmp.17 = const :responseType;
+        symbol [ responseType %tmp.17 293 13 25 const ];
+        symbol [ Communications %tmp.18 293 29 43 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.19 293 44 75 ];
+        %tmp.19 = getv %tmp.18 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.20 = dup %tmp.15;
+        %tmp.21 = aputv %tmp.20 %tmp.17 %tmp.19;
+        lputv %options.2 %tmp.21;
+        symbol [ options %options.2 291 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 296 8 ]
+        symbol [ Communications %tmp.22 296 8 22 ];
+        %tmp.22 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.23 296 23 37 ];
+        %tmp.23 = getv function %tmp.22 :makeWebRequest;
+        %tmp.24 = lgetv %url.1;
+        symbol [ url %tmp.24 296 38 41 ];
+        %tmp.25 = null;
+        %tmp.26 = lgetv %options.2;
+        symbol [ options %tmp.26 296 49 56 ];
+        %tmp.27 = lgetv %callback;
+        symbol [ callback %tmp.27 296 58 66 ];
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.26, %tmp.27);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_288_163_297_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 300; @symbol_functiondef = [unstar,300,13,19]; @symbol_param<0> = [itemId,300,20,26]; @symbol_param<0>_type<0> = [String,300,30,36]; @symbol_param<1> = [callback,300,38,46]; @symbol_param<1>_type<0> = [responseCode,300,57,69]; @symbol_param<1>_type<1> = [Number,300,73,79]; @symbol_param<1>_type<2> = [data,300,81,85]; @symbol_param<1>_type<3> = [Dictionary,300,89,99]; @symbol_param<1>_type<4> = [String,300,103,109]; @symbol_param<1>_type<5> = [PersistedContent,300,113,129]; @symbol_param<1>_type<6> = [Iterator,300,130,138]; ]
+    function unstar(itemId as String, callback as (callback(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void)) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_300_165_309_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 301 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_300_165_309_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_300_165_309_4_stop" ]
+        %url.1 = local;
+        symbol [ url %url.1 301 12 15 ];
+        %tmp.1 = self;
+        symbol [ buildBaseUrl %tmp.2 301 18 30 ];
+        %tmp.2 = getv function %tmp.1 :buildBaseUrl;
+        %tmp.3 = "unstar";
+        %tmp.4 = invoke %tmp.1 %tmp.2(%tmp.3);
+        %tmp.5 = "&id=";
+        %tmp.6 = add %tmp.4 %tmp.5;
+        %tmp.7 = lgetv %itemId;
+        symbol [ itemId %tmp.7 301 52 58 ];
+        %tmp.8 = add %tmp.6 %tmp.7;
+        lputv %url.1 %tmp.8;
+        symbol [ url %url.1 301 12 15 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 303 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_300_165_309_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_300_165_309_4_stop" ]
+        %options.2 = local;
+        symbol [ options %options.2 303 12 19 ];
+        %tmp.9 = newd 2;
+        %tmp.11 = const :method;
+        symbol [ method %tmp.11 304 13 19 const ];
+        symbol [ Communications %tmp.12 304 23 37 ];
+        %tmp.12 = getm $.Toybox.Communications;
+        symbol [ HTTP_REQUEST_METHOD_GET %tmp.13 304 38 61 ];
+        %tmp.13 = getv %tmp.12 :HTTP_REQUEST_METHOD_GET;
+        %tmp.14 = dup %tmp.9;
+        %tmp.15 = aputv %tmp.14 %tmp.11 %tmp.13;
+        %tmp.17 = const :responseType;
+        symbol [ responseType %tmp.17 305 13 25 const ];
+        symbol [ Communications %tmp.18 305 29 43 ];
+        %tmp.18 = getm $.Toybox.Communications;
+        symbol [ HTTP_RESPONSE_CONTENT_TYPE_JSON %tmp.19 305 44 75 ];
+        %tmp.19 = getv %tmp.18 :HTTP_RESPONSE_CONTENT_TYPE_JSON;
+        %tmp.20 = dup %tmp.15;
+        %tmp.21 = aputv %tmp.20 %tmp.17 %tmp.19;
+        lputv %options.2 %tmp.21;
+        symbol [ options %options.2 303 12 19 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc" 308 8 ]
+        symbol [ Communications %tmp.22 308 8 22 ];
+        %tmp.22 = getm $.Toybox.Communications;
+        symbol [ makeWebRequest %tmp.23 308 23 37 ];
+        %tmp.23 = getv function %tmp.22 :makeWebRequest;
+        %tmp.24 = lgetv %url.1;
+        symbol [ url %tmp.24 308 38 41 ];
+        %tmp.25 = null;
+        %tmp.26 = lgetv %options.2;
+        symbol [ options %tmp.26 308 49 56 ];
+        %tmp.27 = lgetv %callback;
+        symbol [ callback %tmp.27 308 58 66 ];
+        invoke %tmp.22 %tmp.23(%tmp.24, %tmp.25, %tmp.26, %tmp.27);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicSubsonicAPI_mc_300_165_309_4_stop:
+    }
+}
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicSubsonicAPI.mc"; @line = 1; ]
+<init> {
+}

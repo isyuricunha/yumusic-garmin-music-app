@@ -42,7 +42,12 @@ class YuMusicContentIterator extends Media.ContentIterator {
             return null;
         }
         
-        return _library.createMediaContent(_songs[_currentIndex]);
+        var song = _songs[_currentIndex] as Dictionary?;
+        if (song == null) {
+            return null;
+        }
+        
+        return _library.createMediaContent(song);
     }
 
     // Get the current media content playback profile
@@ -89,7 +94,12 @@ class YuMusicContentIterator extends Media.ContentIterator {
             nextIndex = 0;
         }
         
-        return _library.createMediaContent(_songs[nextIndex]);
+        var song = _songs[nextIndex] as Dictionary?;
+        if (song == null) {
+            return null;
+        }
+        
+        return _library.createMediaContent(song);
     }
 
     // Get the previous media content object without decrementing the iterator.
@@ -105,7 +115,12 @@ class YuMusicContentIterator extends Media.ContentIterator {
             prevIndex = _songs.size() - 1;
         }
         
-        return _library.createMediaContent(_songs[prevIndex]);
+        var song = _songs[prevIndex] as Dictionary?;
+        if (song == null) {
+            return null;
+        }
+        
+        return _library.createMediaContent(song);
     }
 
     // Get the previous media content object.

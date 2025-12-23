@@ -17,14 +17,17 @@ class YuMusicServerConfigView extends WatchUi.View {
         
         // Load existing config if available
         var config = _serverConfig.getConfig();
-        if (config["serverUrl"] != null) {
-            _serverUrl = config["serverUrl"];
+        var serverUrl = config["serverUrl"] as String?;
+        if (serverUrl != null) {
+            _serverUrl = serverUrl;
         }
-        if (config["username"] != null) {
-            _username = config["username"];
+        var username = config["username"] as String?;
+        if (username != null) {
+            _username = username;
         }
-        if (config["password"] != null) {
-            _password = config["password"];
+        var password = config["password"] as String?;
+        if (password != null) {
+            _password = password;
         }
     }
 

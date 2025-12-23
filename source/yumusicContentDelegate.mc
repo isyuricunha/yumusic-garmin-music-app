@@ -1,5 +1,6 @@
 import Toybox.Lang;
 import Toybox.Media;
+import Toybox.PersistedContent;
 
 // This class handles events from the system's media
 // player. getContentIterator() returns an iterator
@@ -17,8 +18,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         
         // Configure API if server is set up
         var config = _serverConfig.getConfig();
-        if (config["serverUrl"] != null) {
-            _api.configure(config["serverUrl"], config["username"], config["password"]);
+        var serverUrl = config["serverUrl"] as String?;
+        var username = config["username"] as String?;
+        var password = config["password"] as String?;
+        if (serverUrl != null && username != null && password != null) {
+            _api.configure(serverUrl, username, password);
         }
     }
 
@@ -66,17 +70,17 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     }
 
     // Callback for star response
-    private function onStarResponse(responseCode as Number, data as Dictionary?) as Void {
+    function onStarResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         // Silent success/failure
     }
 
     // Callback for unstar response
-    private function onUnstarResponse(responseCode as Number, data as Dictionary?) as Void {
+    function onUnstarResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         // Silent success/failure
     }
 
     // Callback for scrobble response
-    private function onScrobbleResponse(responseCode as Number, data as Dictionary?) as Void {
+    function onScrobbleResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         // Silent success/failure
     }
 }

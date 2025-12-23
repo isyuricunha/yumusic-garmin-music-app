@@ -21,23 +21,23 @@ class YuMusicServerConfig {
 
     // Get server URL
     function getServerUrl() as String? {
-        return Storage.getValue(SERVER_URL_KEY);
+        return Storage.getValue(SERVER_URL_KEY) as String?;
     }
 
     // Get username
     function getUsername() as String? {
-        return Storage.getValue(USERNAME_KEY);
+        return Storage.getValue(USERNAME_KEY) as String?;
     }
 
     // Get password
     function getPassword() as String? {
-        return Storage.getValue(PASSWORD_KEY);
+        return Storage.getValue(PASSWORD_KEY) as String?;
     }
 
     // Check if server is configured
     function isConfigured() as Boolean {
-        var configured = Storage.getValue(CONFIGURED_KEY);
-        return configured != null && configured == true;
+        var configured = Storage.getValue(CONFIGURED_KEY) as Boolean?;
+        return configured != null && configured;
     }
 
     // Clear all configuration

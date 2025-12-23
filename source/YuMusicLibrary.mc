@@ -1,3 +1,4 @@
+import Toybox.Application;
 import Toybox.Application.Storage;
 import Toybox.Lang;
 import Toybox.Media;
@@ -14,12 +15,12 @@ class YuMusicLibrary {
 
     // Save songs to library
     function saveSongs(songs as Array) as Void {
-        Storage.setValue(SONGS_KEY, songs);
+        Storage.setValue(SONGS_KEY, songs as Array<Application.PropertyValueType>);
     }
 
     // Get all songs from library
     function getSongs() as Array {
-        var songs = Storage.getValue(SONGS_KEY);
+        var songs = Storage.getValue(SONGS_KEY) as Array?;
         if (songs == null) {
             return [];
         }
@@ -39,8 +40,13 @@ class YuMusicLibrary {
         var newSongs = [];
         
         for (var i = 0; i < songs.size(); i++) {
-            if (songs[i]["id"] != songId) {
-                newSongs.add(songs[i]);
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var id = song["id"] as String?;
+            if (id == null || !id.equals(songId)) {
+                newSongs.add(song);
             }
         }
         
@@ -57,8 +63,13 @@ class YuMusicLibrary {
         var songs = getSongs();
         
         for (var i = 0; i < songs.size(); i++) {
-            if (songs[i]["id"].equals(songId)) {
-                return songs[i];
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var id = song["id"] as String?;
+            if (id != null && id.equals(songId)) {
+                return song;
             }
         }
         
@@ -67,12 +78,12 @@ class YuMusicLibrary {
 
     // Save playlists
     function savePlaylists(playlists as Array) as Void {
-        Storage.setValue(PLAYLISTS_KEY, playlists);
+        Storage.setValue(PLAYLISTS_KEY, playlists as Array<Application.PropertyValueType>);
     }
 
     // Get all playlists
     function getPlaylists() as Array {
-        var playlists = Storage.getValue(PLAYLISTS_KEY);
+        var playlists = Storage.getValue(PLAYLISTS_KEY) as Array?;
         if (playlists == null) {
             return [];
         }
@@ -86,7 +97,7 @@ class YuMusicLibrary {
 
     // Get current playlist
     function getCurrentPlaylist() as String? {
-        return Storage.getValue(CURRENT_PLAYLIST_KEY);
+        return Storage.getValue(CURRENT_PLAYLIST_KEY) as String?;
     }
 
     // Set shuffle mode
@@ -96,32 +107,35 @@ class YuMusicLibrary {
 
     // Get shuffle mode
     function getShuffle() as Boolean {
-        var shuffle = Storage.getValue(SHUFFLE_KEY);
-        return shuffle != null && shuffle == true;
+        var shuffle = Storage.getValue(SHUFFLE_KEY) as Boolean?;
+        return shuffle != null && shuffle;
     }
 
     // Create Media.Content object from song data
     function createMediaContent(song as Dictionary) as Media.Content? {
-        if (song == null) {
+        // Create ContentRef with song ID
+        var id = song["id"] as String?;
+        if (id == null) {
             return null;
         }
-
-        // Create ContentRef with song ID
-        var contentRef = new Media.ContentRef(song["id"], Media.CONTENT_TYPE_AUDIO);
+        var contentRef = new Media.ContentRef(id, Media.CONTENT_TYPE_AUDIO);
         
         // Set metadata
         var metadata = new Media.ContentMetadata();
         
-        if (song.hasKey("title")) {
-            metadata.title = song["title"];
+        var title = song.hasKey("title") ? song["title"] as String? : null;
+        if (title != null) {
+            metadata.title = title;
         }
         
-        if (song.hasKey("artist")) {
-            metadata.artist = song["artist"];
+        var artist = song.hasKey("artist") ? song["artist"] as String? : null;
+        if (artist != null) {
+            metadata.artist = artist;
         }
         
-        if (song.hasKey("album")) {
-            metadata.album = song["album"];
+        var album = song.hasKey("album") ? song["album"] as String? : null;
+        if (album != null) {
+            metadata.album = album;
         }
         
         // Note: duration is not a property of ContentMetadata in this API version
@@ -148,8 +162,13 @@ class YuMusicLibrary {
         var totalDuration = 0;
         
         for (var i = 0; i < songs.size(); i++) {
-            if (songs[i].hasKey("duration")) {
-                totalDuration += songs[i]["duration"];
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var duration = song.hasKey("duration") ? song["duration"] as Number? : null;
+            if (duration != null) {
+                totalDuration += duration;
             }
         }
 
