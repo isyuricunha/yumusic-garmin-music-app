@@ -92,6 +92,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         var menu = new WatchUi.Menu2({:title => "YuMusic"});
         menu.addItem(new WatchUi.MenuItem("Select Playlist", null, :selectPlaylist, {}));
         menu.addItem(new WatchUi.MenuItem("Sync Now", null, :syncNow, {}));
+        menu.addItem(new WatchUi.MenuItem("Test Connection", null, :testConnection, {}));
 
         var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";
         menu.addItem(new WatchUi.MenuItem(shuffleText, null, :shuffle, {}));

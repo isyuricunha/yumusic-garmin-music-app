@@ -15,6 +15,7 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
 
         menu.addItem(new WatchUi.MenuItem("Select Playlist", null, :selectPlaylist, {}));
         menu.addItem(new WatchUi.MenuItem("Sync Now", null, :syncNow, {}));
+        menu.addItem(new WatchUi.MenuItem("Test Connection", null, :testConnection, {}));
         
         // Add shuffle toggle
         var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";

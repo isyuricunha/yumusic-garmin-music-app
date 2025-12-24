@@ -50,6 +50,11 @@ class YuMusicPlaybackMenuDelegate extends WatchUi.Menu2InputDelegate {
             var serverDelegate = new YuMusicServerConfigDelegate();
             serverDelegate.setView(serverView);
             WatchUi.pushView(serverView, serverDelegate, WatchUi.SLIDE_LEFT);
+        } else if (id == :testConnection) {
+            var view = new YuMusicConnectionTestView();
+            var delegate = new YuMusicConnectionTestDelegate();
+            delegate.setView(view);
+            WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
         }
     }
 
