@@ -18,7 +18,14 @@ class YuMusicContentIterator extends Media.ContentIterator {
             if (song == null) {
                 continue;
             }
-            var contentRefId = song.hasKey("contentRefId") ? song["contentRefId"] as Number? : null;
+            var contentRefId = null;
+            if (song.hasKey("contentRefId")) {
+                try {
+                    contentRefId = song["contentRefId"] as Number?;
+                } catch (ex) {
+                    contentRefId = null;
+                }
+            }
             if (contentRefId != null) {
                 _songs.add(song);
             }

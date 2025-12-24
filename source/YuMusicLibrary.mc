@@ -39,6 +39,14 @@ class YuMusicLibrary {
         return hashStringToNumber(songId);
     }
 
+    private function safe_number(value as Object) as Number? {
+        try {
+            return value as Number?;
+        } catch (ex) {
+            return null;
+        }
+    }
+
     // Save songs to library
     function saveSongs(songs as Array) as Void {
         Storage.setValue(SONGS_KEY, songs as Array<Application.PropertyValueType>);
@@ -56,6 +64,24 @@ class YuMusicLibrary {
             var song = songs[i] as Dictionary?;
             if (song == null) {
                 continue;
+            }
+
+            if (song.hasKey("contentRefId")) {
+                var rawContentRefId = song["contentRefId"];
+                if (rawContentRefId != null) {
+                    var contentRefIdNumber = safe_number(rawContentRefId);
+                    if (contentRefIdNumber != null) {
+                        // Valid numeric persisted id, keep as-is
+                    } else {
+                        song.remove("contentRefId");
+                        song["downloaded"] = false;
+                        changed = true;
+                    }
+                } else {
+                    song.remove("contentRefId");
+                    song["downloaded"] = false;
+                    changed = true;
+                }
             }
 
             if (song.hasKey("duration")) {
@@ -166,7 +192,13 @@ class YuMusicLibrary {
 
     // Create Media.Content object from song data
     function createMediaContent(song as Dictionary) as Media.Content? {
-        var contentRefId = song.hasKey("contentRefId") ? song["contentRefId"] as Number? : null;
+        var contentRefId = null;
+        if (song.hasKey("contentRefId")) {
+            var rawContentRefId = song["contentRefId"];
+            if (rawContentRefId != null) {
+                contentRefId = safe_number(rawContentRefId);
+            }
+        }
         if (contentRefId == null) {
             return null;
         }
@@ -200,8 +232,13 @@ class YuMusicLibrary {
 
     // Find a song by the ContentRef ID used by playback (typically the stream/download URL)
     function getSongByContentRefId(contentRefId as Object) as Dictionary? {
-        var contentRefNumber = contentRefId as Number?;
-        var contentRefString = contentRefId as String?;
+        var contentRefNumber = safe_number(contentRefId);
+        var contentRefString = null;
+        try {
+            contentRefString = contentRefId as String?;
+        } catch (ex) {
+            contentRefString = null;
+        }
         var songs = getSongs();
         for (var i = 0; i < songs.size(); i++) {
             var song = songs[i] as Dictionary?;
@@ -210,14 +247,27 @@ class YuMusicLibrary {
             }
 
             if (contentRefNumber != null) {
-                var storedNumber = song.hasKey("contentRefId") ? song["contentRefId"] as Number? : null;
+                var storedNumber = null;
+                if (song.hasKey("contentRefId")) {
+                    var rawStoredNumber = song["contentRefId"];
+                    if (rawStoredNumber != null) {
+                        storedNumber = safe_number(rawStoredNumber);
+                    }
+                }
                 if (storedNumber != null && storedNumber == contentRefNumber) {
                     return song;
                 }
             }
 
             if (contentRefString != null) {
-                var storedString = song.hasKey("contentRefId") ? song["contentRefId"] as String? : null;
+                var storedString = null;
+                if (song.hasKey("contentRefId")) {
+                    try {
+                        storedString = song["contentRefId"] as String?;
+                    } catch (ex) {
+                        storedString = null;
+                    }
+                }
                 if (storedString != null && storedString.equals(contentRefString)) {
                     return song;
                 }
