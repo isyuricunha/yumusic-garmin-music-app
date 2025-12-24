@@ -109,14 +109,25 @@ class YuMusicContentIterator extends Media.ContentIterator {
     function getPlaybackProfile() as PlaybackProfile? {
         var profile = new Media.PlaybackProfile();
         profile.attemptSkipAfterThumbsDown = false;
+
+        // Use Toybox.Media playback control constants. Using unqualified constants
+        // can lead to duplicated/incorrect controls in the native player UI.
         profile.playbackControls = [
-            PLAYBACK_CONTROL_SKIP_BACKWARD,
-            PLAYBACK_CONTROL_PLAYBACK,
-            PLAYBACK_CONTROL_SKIP_FORWARD
+            Media.PLAYBACK_CONTROL_PLAYBACK,
+            Media.PLAYBACK_CONTROL_PREVIOUS,
+            Media.PLAYBACK_CONTROL_NEXT,
+            Media.PLAYBACK_CONTROL_SKIP_BACKWARD,
+            Media.PLAYBACK_CONTROL_SKIP_FORWARD,
+            Media.PLAYBACK_CONTROL_VOLUME,
+            Media.PLAYBACK_CONTROL_LIBRARY
         ];
-        profile.playbackNotificationThreshold = 1;
+
+        profile.skipBackwardTimeDelta = 30;
+        profile.skipForwardTimeDelta = 30;
+
+        profile.playbackNotificationThreshold = 30;
         profile.requirePlaybackNotification = false;
-        profile.skipPreviousThreshold = null;
+        profile.skipPreviousThreshold = 4;
         return profile;
     }
 
