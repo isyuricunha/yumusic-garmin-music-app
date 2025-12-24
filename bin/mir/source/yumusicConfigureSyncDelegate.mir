@@ -1,58 +1,58 @@
-[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [WatchUi,1,14,21]; ]
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [WatchUi,1,14,21]; ]
 import Toybox.WatchUi;
-[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
 import Toybox.Lang;
-[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 4; @symbol_classdef = [YuMusicConfigureSyncDelegate,4,6,34]; @symbol_extends<0> = [WatchUi,4,43,50]; @symbol_extends<1> = [BehaviorDelegate,4,51,67]; ]
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 4; @symbol_classdef = [YuMusicConfigureSyncDelegate,4,6,34]; @symbol_extends<0> = [WatchUi,4,43,50]; @symbol_extends<1> = [BehaviorDelegate,4,51,67]; ]
 class YuMusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 4; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 4; ]
     <init> {
     }
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 4; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 4; ]
     static
     <init> {
     }
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 5; @position = 16; @symbol_vardef = [_view,5,16,21]; @symbol_type<0> = [YuMusicConfigureSyncView,5,25,49]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 5; @position = 16; @symbol_vardef = [_view,5,16,21]; @symbol_type<0> = [YuMusicConfigureSyncView,5,25,49]; ]
     private
     var _view as YuMusicConfigureSyncView or Null;
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 7; @symbol_functiondef = [initialize,7,13,23]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 7; @symbol_functiondef = [initialize,7,13,23]; ]
     function initialize() as Void {
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_7_26_10_4_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 8 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_7_26_10_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 8 8 ]
         symbol [ BehaviorDelegate %tmp.2 8 8 24 ];
         %tmp.2 = getv ? :BehaviorDelegate;
         symbol [ initialize %tmp.3 8 25 35 ];
         %tmp.3 = getv function %tmp.2 :initialize;
         invoke %tmp.2 %tmp.3();
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 9 8 ]
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 9 8 ]
         %tmp.4 = null;
         symbol [ _view ? 9 8 13 ];
         putv self :_view %tmp.4;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_7_26_10_4_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_7_26_10_4_stop:
     }
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 13; @symbol_functiondef = [setView,13,13,20]; @symbol_param<0> = [view,13,21,25]; @symbol_param<0>_type<0> = [YuMusicConfigureSyncView,13,29,53]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 13; @symbol_functiondef = [setView,13,13,20]; @symbol_param<0> = [view,13,21,25]; @symbol_param<0>_type<0> = [YuMusicConfigureSyncView,13,29,53]; ]
     function setView(view as YuMusicConfigureSyncView) as Void {
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_13_63_15_4_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 14 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_13_63_15_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 14 8 ]
         %tmp.1 = lgetv %view;
         symbol [ view %tmp.1 14 16 20 ];
         symbol [ _view ? 14 8 13 ];
         putv self :_view %tmp.1;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_13_63_15_4_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_13_63_15_4_stop:
     }
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 18; @symbol_functiondef = [onSelect,18,13,21]; @symbol_return<0> = [Boolean,18,27,34]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 18; @symbol_functiondef = [onSelect,18,13,21]; @symbol_return<0> = [Boolean,18,27,34]; ]
     function onSelect() as Boolean {
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_18_35_42_4_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 19 8 ]
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_40_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_18_35_47_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 19 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_45_8_if_stmt:
         symbol [ _view %tmp.2 19 12 17 ];
         %tmp.2 = getv ? :_view;
         %tmp.3 = null;
         %tmp.4 = ne %tmp.2 %tmp.3;
-        bf %tmp.4 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_40_8_if_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_40_8_if_true:
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_40_8_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 20 12 ]
-        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_40_8_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_40_8_stop" ]
+        bf %tmp.4 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_45_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_45_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_45_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 20 12 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_45_8_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_45_8_stop" ]
         %playlists.1 = local;
         symbol [ playlists %playlists.1 20 16 25 ];
         symbol [ _view %tmp.6 20 28 33 ];
@@ -63,15 +63,15 @@ C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSy
         %tmp.9 = invoke %tmp.7 %tmp.8();
         lputv %playlists.1 %tmp.9;
         symbol [ playlists %playlists.1 20 16 25 ];
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 21 12 ]
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_39_12_if_stmt:
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_16_21_56_begin:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 21 12 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_44_12_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_16_21_56_begin:
         %tmp.10 = lgetv %playlists.1;
         symbol [ playlists %tmp.10 21 16 25 ];
         %tmp.11 = null;
         %tmp.12 = ne %tmp.10 %tmp.11;
-        bf %tmp.12 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_39_12_if_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_true:
+        bf %tmp.12 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_44_12_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_true:
         %tmp.13 = lgetv %playlists.1;
         symbol [ playlists %tmp.13 21 37 46 ];
         %tmp.14 = as %tmp.13 { (!Null) };
@@ -81,13 +81,13 @@ C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSy
         %tmp.17 = 0;
         %tmp.18 = gt %tmp.16 %tmp.17;
         push %tmp.18;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_end:
-        %tmp.19 = phi [%tmp.12 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_16_21_56_begin] [%tmp.18 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_true] [%tmp.19 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_end];
-        bf %tmp.19 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_39_12_if_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_39_12_if_true:
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_39_12_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 23 16 ]
-        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_39_12_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_39_12_stop" ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_end:
+        %tmp.19 = phi [%tmp.12 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_16_21_56_begin] [%tmp.18 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_true] [%tmp.19 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_37_21_56_end];
+        bf %tmp.19 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_44_12_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_44_12_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_44_12_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 23 16 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_44_12_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_44_12_stop" ]
         %menu.2 = local;
         symbol [ menu %menu.2 23 20 24 ];
         symbol [ WatchUi %tmp.22 23 31 38 ];
@@ -103,16 +103,16 @@ C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSy
         %tmp.20 = newc %tmp.23 (%tmp.29);
         lputv %menu.2 %tmp.20;
         symbol [ menu %menu.2 23 20 24 ];
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 25 16 ]
-        for @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_test @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_incr @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_init:
-        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_begin" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_end" ]
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 25 16 ]
+        for @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_test @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_incr @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_init:
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_begin" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_end" ]
         %i.3 = local;
         symbol [ i %i.3 25 25 26 ];
         %tmp.30 = 0;
         lputv %i.3 %tmp.30;
         symbol [ i %i.3 25 25 26 ];
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_test:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_test:
         %tmp.31 = lgetv %i.3;
         symbol [ i %tmp.31 25 32 33 ];
         %tmp.32 = lgetv %playlists.1;
@@ -122,11 +122,11 @@ C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSy
         %tmp.34 = getv function %tmp.33 :size;
         %tmp.35 = invoke %tmp.33 %tmp.34();
         %tmp.36 = lt %tmp.31 %tmp.35;
-        bf %tmp.36 @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_begin:
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_35_16_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 26 20 ]
-        [ "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_35_16_start" "C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_35_16_stop" ]
+        bf %tmp.36 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_begin:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 26 20 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_stop" ]
         %playlist.4 = local;
         symbol [ playlist %playlist.4 26 24 32 ];
         %tmp.37 = lgetv %playlists.1;
@@ -135,92 +135,199 @@ C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSy
         %tmp.39 = lgetv %i.3;
         symbol [ i %tmp.39 26 45 46 ];
         %tmp.40 = agetv %tmp.38 %tmp.39;
-        lputv %playlist.4 %tmp.40;
+        %tmp.41 = as %tmp.40 Dictionary or Null;
+        symbol [ Dictionary %tmp.41 26 51 61 ];
+        lputv %playlist.4 %tmp.41;
         symbol [ playlist %playlist.4 26 24 32 ];
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 27 20 ]
-        %tmp.41 = lgetv %menu.2;
-        symbol [ menu %tmp.41 27 20 24 ];
-        symbol [ addItem %tmp.42 27 25 32 ];
-        %tmp.42 = getv function %tmp.41 :addItem;
-        symbol [ WatchUi %tmp.45 28 28 35 ];
-        %tmp.45 = getm $.Toybox.WatchUi;
-        symbol [ MenuItem %tmp.46 28 36 44 ];
-        %tmp.46 = getv function ? %tmp.45 :MenuItem;
-        %tmp.47 = lgetv %playlist.4;
-        symbol [ playlist %tmp.47 29 28 36 ];
-        %tmp.48 = "name";
-        %tmp.49 = agetv %tmp.47 %tmp.48;
-        %tmp.50 = lgetv %playlist.4;
-        symbol [ playlist %tmp.50 30 28 36 ];
-        %tmp.51 = "songCount";
-        %tmp.52 = agetv %tmp.50 %tmp.51;
-        %tmp.53 = " songs";
-        %tmp.54 = add %tmp.52 %tmp.53;
-        %tmp.55 = lgetv %playlist.4;
-        symbol [ playlist %tmp.55 31 28 36 ];
-        %tmp.56 = "id";
-        %tmp.57 = agetv %tmp.55 %tmp.56;
-        %tmp.58 = newd 0;
-        %tmp.43 = newc %tmp.46 (%tmp.49, %tmp.54, %tmp.57, %tmp.58);
-        invoke %tmp.41 %tmp.42(%tmp.43);
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_35_16_stop:
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_incr:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 25 ]
-        %tmp.61 = lgetv %i.3;
-        symbol [ i %tmp.61 25 54 55 ];
-        %tmp.62 = add %tmp.61 1;
-        lputv %i.3 %tmp.62;
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 27 20 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_20_29_20_if_stmt:
+        %tmp.42 = lgetv %playlist.4;
+        symbol [ playlist %tmp.42 27 24 32 ];
+        %tmp.43 = null;
+        %tmp.44 = eq %tmp.42 %tmp.43;
+        bf %tmp.44 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_20_29_20_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_20_29_20_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_42_29_20_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 28 24 ]
+        goto break @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_incr;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_42_29_20_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_20_29_20_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_27_20_29_20_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 31 20 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_stop" ]
+        %name.5 = local;
+        symbol [ name %name.5 31 24 28 ];
+        %tmp.45 = lgetv %playlist.4;
+        symbol [ playlist %tmp.45 31 31 39 ];
+        %tmp.46 = "name";
+        %tmp.47 = agetv %tmp.45 %tmp.46;
+        %tmp.48 = as %tmp.47 String or Null;
+        symbol [ String %tmp.48 31 51 57 ];
+        lputv %name.5 %tmp.48;
+        symbol [ name %name.5 31 24 28 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 32 20 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_stop" ]
+        %id.6 = local;
+        symbol [ id %id.6 32 24 26 ];
+        %tmp.49 = lgetv %playlist.4;
+        symbol [ playlist %tmp.49 32 29 37 ];
+        %tmp.50 = "id";
+        %tmp.51 = agetv %tmp.49 %tmp.50;
+        %tmp.52 = as %tmp.51 String or Null;
+        symbol [ String %tmp.52 32 47 53 ];
+        lputv %id.6 %tmp.52;
+        symbol [ id %id.6 32 24 26 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 33 20 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_stop" ]
+        %songCount.7 = local;
+        symbol [ songCount %songCount.7 33 24 33 ];
+        %tmp.53 = lgetv %playlist.4;
+        symbol [ playlist %tmp.53 33 36 44 ];
+        %tmp.54 = "songCount";
+        %tmp.55 = agetv %tmp.53 %tmp.54;
+        %tmp.56 = as %tmp.55 Number or Null;
+        symbol [ Number %tmp.56 33 61 67 ];
+        lputv %songCount.7 %tmp.56;
+        symbol [ songCount %songCount.7 33 24 33 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 34 20 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_20_36_20_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_24_34_46_begin:
+        %tmp.57 = lgetv %name.5;
+        symbol [ name %tmp.57 34 24 28 ];
+        %tmp.58 = null;
+        %tmp.59 = eq %tmp.57 %tmp.58;
+        bt %tmp.59 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_20_36_20_if_true;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_40_34_46_false:
+        %tmp.60 = lgetv %id.6;
+        symbol [ id %tmp.60 34 40 42 ];
+        %tmp.61 = null;
+        %tmp.62 = eq %tmp.60 %tmp.61;
+        push %tmp.62;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_40_34_46_end:
+        %tmp.63 = phi [%tmp.59 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_24_34_46_begin] [%tmp.62 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_40_34_46_false] [%tmp.63 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_40_34_46_end];
+        bf %tmp.63 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_20_36_20_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_20_36_20_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_52_36_20_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 35 24 ]
+        goto break @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_incr;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_52_36_20_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_20_36_20_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_34_20_36_20_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 38 20 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_stop" ]
+        %subtitle.8 = local;
+        symbol [ subtitle %subtitle.8 38 24 32 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_begin:
+        %tmp.64 = lgetv %songCount.7;
+        symbol [ songCount %tmp.64 38 36 45 ];
+        %tmp.65 = null;
+        %tmp.66 = ne %tmp.64 %tmp.65;
+        bf %tmp.66 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_else_false;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_true:
+        %tmp.67 = lgetv %songCount.7;
+        symbol [ songCount %tmp.67 38 56 65 ];
+        %tmp.68 = as %tmp.67 { (!Null) };
+        symbol [ toString %tmp.69 38 66 74 ];
+        %tmp.69 = getv function %tmp.68 :toString;
+        %tmp.70 = invoke %tmp.68 %tmp.69();
+        push %tmp.70;
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_else_false:
+        %tmp.71 = "0";
+        push %tmp.71;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_end:
+        %tmp.72 = phi [%tmp.66 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_begin] [%tmp.70 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_true] [%tmp.71 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_else_false] [%tmp.72 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_38_36_38_79_end];
+        %tmp.73 = " songs";
+        %tmp.74 = add %tmp.72 %tmp.73;
+        lputv %subtitle.8 %tmp.74;
+        symbol [ subtitle %subtitle.8 38 24 32 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 39 20 ]
+        %tmp.75 = lgetv %menu.2;
+        symbol [ menu %tmp.75 39 20 24 ];
+        symbol [ addItem %tmp.76 39 25 32 ];
+        %tmp.76 = getv function %tmp.75 :addItem;
+        symbol [ WatchUi %tmp.79 39 37 44 ];
+        %tmp.79 = getm $.Toybox.WatchUi;
+        symbol [ MenuItem %tmp.80 39 45 53 ];
+        %tmp.80 = getv function ? %tmp.79 :MenuItem;
+        %tmp.81 = lgetv %name.5;
+        symbol [ name %tmp.81 39 54 58 ];
+        %tmp.82 = lgetv %subtitle.8;
+        symbol [ subtitle %tmp.82 39 60 68 ];
+        %tmp.83 = lgetv %id.6;
+        symbol [ id %tmp.83 39 70 72 ];
+        %tmp.84 = newd 0;
+        %tmp.77 = newc %tmp.80 (%tmp.81, %tmp.82, %tmp.83, %tmp.84);
+        invoke %tmp.75 %tmp.76(%tmp.77);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_59_40_16_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_incr:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 25 ]
+        %tmp.87 = lgetv %i.3;
+        symbol [ i %tmp.87 25 54 55 ];
+        %tmp.88 = add %tmp.87 1;
+        lputv %i.3 %tmp.88;
         symbol [ i %i.3 25 54 55 ];
-        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_test;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_35_16_for_end:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 37 16 ]
-        symbol [ WatchUi %tmp.63 37 16 23 ];
-        %tmp.63 = getm $.Toybox.WatchUi;
-        symbol [ pushView %tmp.64 37 24 32 ];
-        %tmp.64 = getv function %tmp.63 :pushView;
-        %tmp.65 = lgetv %menu.2;
-        symbol [ menu %tmp.65 37 33 37 ];
-        symbol [ YuMusicPlaylistMenuDelegate %tmp.69 37 43 70 ];
-        %tmp.69 = getv ? :YuMusicPlaylistMenuDelegate;
-        %tmp.66 = newc %tmp.69 ();
-        symbol [ WatchUi %tmp.70 37 74 81 ];
-        %tmp.70 = getm $.Toybox.WatchUi;
-        symbol [ SLIDE_LEFT %tmp.71 37 82 92 ];
-        %tmp.71 = getv %tmp.70 :SLIDE_LEFT;
-        invoke %tmp.63 %tmp.64(%tmp.65, %tmp.66, %tmp.71);
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 38 16 ]
-        %tmp.72 = true;
-        ret %tmp.72;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_39_12_stop:
-        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_39_12_if_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_39_12_if_end:
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_40_8_stop:
-        goto @C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_40_8_if_end;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_40_8_if_end:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 41 8 ]
-        %tmp.73 = false;
-        ret %tmp.73;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_18_35_42_4_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_test;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_25_16_40_16_for_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 42 16 ]
+        symbol [ WatchUi %tmp.89 42 16 23 ];
+        %tmp.89 = getm $.Toybox.WatchUi;
+        symbol [ pushView %tmp.90 42 24 32 ];
+        %tmp.90 = getv function %tmp.89 :pushView;
+        %tmp.91 = lgetv %menu.2;
+        symbol [ menu %tmp.91 42 33 37 ];
+        symbol [ YuMusicPlaylistMenuDelegate %tmp.95 42 43 70 ];
+        %tmp.95 = getv ? :YuMusicPlaylistMenuDelegate;
+        %tmp.92 = newc %tmp.95 ();
+        symbol [ WatchUi %tmp.96 42 74 81 ];
+        %tmp.96 = getm $.Toybox.WatchUi;
+        symbol [ SLIDE_LEFT %tmp.97 42 82 92 ];
+        %tmp.97 = getv %tmp.96 :SLIDE_LEFT;
+        invoke %tmp.89 %tmp.90(%tmp.91, %tmp.92, %tmp.97);
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 43 16 ]
+        %tmp.98 = true;
+        ret %tmp.98;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_59_44_12_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_44_12_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_21_12_44_12_if_end:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_27_45_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_45_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_19_8_45_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 46 8 ]
+        %tmp.99 = false;
+        ret %tmp.99;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_18_35_47_4_stop:
     }
-    [ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 45; @symbol_functiondef = [onBack,45,13,19]; @symbol_return<0> = [Boolean,45,25,32]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 50; @symbol_functiondef = [onTap,50,13,18]; @symbol_param<0> = [clickEvent,50,19,29]; @symbol_param<0>_type<0> = [WatchUi,50,33,40]; @symbol_param<0>_type<1> = [ClickEvent,50,41,51]; @symbol_return<0> = [Boolean,50,56,63]; ]
+    function onTap(clickEvent as WatchUi.ClickEvent) as Boolean {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_50_64_52_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 51 8 ]
+        %tmp.1 = self;
+        symbol [ onSelect %tmp.2 51 15 23 ];
+        %tmp.2 = getv function %tmp.1 :onSelect;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        ret %tmp.3;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_50_64_52_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 55; @symbol_functiondef = [onBack,55,13,19]; @symbol_return<0> = [Boolean,55,25,32]; ]
     function onBack() as Boolean {
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_45_33_48_4_start:
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 46 8 ]
-        symbol [ WatchUi %tmp.1 46 8 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_55_33_58_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 56 8 ]
+        symbol [ WatchUi %tmp.1 56 8 15 ];
         %tmp.1 = getm $.Toybox.WatchUi;
-        symbol [ popView %tmp.2 46 16 23 ];
+        symbol [ popView %tmp.2 56 16 23 ];
         %tmp.2 = getv function %tmp.1 :popView;
-        symbol [ WatchUi %tmp.3 46 24 31 ];
+        symbol [ WatchUi %tmp.3 56 24 31 ];
         %tmp.3 = getm $.Toybox.WatchUi;
-        symbol [ SLIDE_RIGHT %tmp.4 46 32 43 ];
+        symbol [ SLIDE_RIGHT %tmp.4 56 32 43 ];
         %tmp.4 = getv %tmp.3 :SLIDE_RIGHT;
         invoke %tmp.1 %tmp.2(%tmp.4);
-[ "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 47 8 ]
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc" 57 8 ]
         %tmp.5 = true;
         ret %tmp.5;
-C__Users_isy_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_45_33_48_4_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigureSyncDelegate_mc_55_33_58_4_stop:
     }
 }
-[ @file = "C:\Users\isy\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 1; ]
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicConfigureSyncDelegate.mc"; @line = 1; ]
 <init> {
 }

@@ -80,16 +80,21 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                         }
 
                         var coverArtId = song.hasKey("coverArt") ? song["coverArt"] as String? : null;
+                        var streamUrl = _api.getStreamUrl(songId);
                         var processedSong = {
                             "id" => songId,
+                            "contentRefId" => streamUrl,
                             "title" => title,
                             "artist" => artist,
                             "album" => album,
                             "duration" => duration != null ? duration : 0,
-                            "url" => _api.getDownloadUrl(songId),
-                            "streamUrl" => _api.getStreamUrl(songId),
-                            "coverArtUrl" => coverArtId != null ? _api.getCoverArtUrl(coverArtId, 200) : null
+                            "url" => streamUrl,
+                            "streamUrl" => streamUrl
                         };
+
+                        if (coverArtId != null) {
+                            processedSong["coverArtUrl"] = _api.getCoverArtUrl(coverArtId, 200);
+                        }
                         processedSongs.add(processedSong);
                     }
                     
@@ -105,7 +110,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                         "Ready to Sync",
                         processedSongs.size().toString() + " songs selected"
                     );
-                    WatchUi.pushView(confirmView, new YuMusicConfirmDelegate(), WatchUi.SLIDE_LEFT);
+                    WatchUi.pushView(confirmView, new YuMusicConfirmDelegate(true), WatchUi.SLIDE_LEFT);
                 } else {
                     showError("Playlist is empty");
                 }

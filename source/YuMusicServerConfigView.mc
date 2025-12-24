@@ -58,9 +58,18 @@ class YuMusicServerConfigView extends WatchUi.View {
             y += 30;
             
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: " + _serverUrl, Graphics.TEXT_JUSTIFY_CENTER);
-            y += 25;
-            dc.drawText(centerX, y, Graphics.FONT_TINY, "User: " + _username, Graphics.TEXT_JUSTIFY_CENTER);
+            if (_currentField == 0) {
+                dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: " + _serverUrl, Graphics.TEXT_JUSTIFY_CENTER);
+            } else if (_currentField == 1) {
+                dc.drawText(centerX, y, Graphics.FONT_TINY, "User: " + _username, Graphics.TEXT_JUSTIFY_CENTER);
+            } else {
+                var passwordStatus = _password.length() > 0 ? "(set)" : "(empty)";
+                dc.drawText(centerX, y, Graphics.FONT_TINY, "Password: " + passwordStatus, Graphics.TEXT_JUSTIFY_CENTER);
+            }
+            y += 35;
+
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(centerX, y, Graphics.FONT_TINY, "Press select to cycle", Graphics.TEXT_JUSTIFY_CENTER);
         } else {
             dc.setColor(Graphics.COLOR_YELLOW, Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX, y, Graphics.FONT_SMALL, "Not Configured", Graphics.TEXT_JUSTIFY_CENTER);
@@ -82,6 +91,11 @@ class YuMusicServerConfigView extends WatchUi.View {
 
     function setMessage(message as String) as Void {
         _message = message;
+        WatchUi.requestUpdate();
+    }
+
+    function cycleField() as Void {
+        _currentField = (_currentField + 1) % 3;
         WatchUi.requestUpdate();
     }
 

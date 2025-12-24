@@ -1,0 +1,13 @@
+<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <setting propertyKey="@Properties.serverUrl" title="Server URL">
+        <settingConfig type="url" />
+    </setting>
+
+    <setting propertyKey="@Properties.username" title="Username">
+        <settingConfig type="alphaNumeric" />
+    </setting>
+
+    <setting propertyKey="@Properties.password" title="Password">
+        <settingConfig type="alphaNumeric" />
+    </setting>
+</settings>

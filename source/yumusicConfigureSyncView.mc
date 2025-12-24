@@ -2,6 +2,7 @@ import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.PersistedContent;
+import Toybox.System;
 
 // This is the View that is used to configure the songs
 // to sync. New pages may be pushed as needed to complete
@@ -47,6 +48,9 @@ class YuMusicConfigureSyncView extends WatchUi.View {
             WatchUi.requestUpdate();
             return;
         }
+
+        System.println("serverUrl: " + serverUrl);
+        System.println("username: " + username);
         _api.configure(serverUrl, username, password);
         
         _loading = true;
@@ -59,6 +63,12 @@ class YuMusicConfigureSyncView extends WatchUi.View {
     // Callback when playlists are received
     function onPlaylistsReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         _loading = false;
+
+        System.println("getPlaylists responseCode: " + responseCode.toString());
+        var dataString = data as String?;
+        if (dataString != null) {
+            System.println("getPlaylists data (string): " + dataString);
+        }
  
         var dict = data as Dictionary?;
         if (responseCode == 200 && dict != null) {
@@ -77,7 +87,7 @@ class YuMusicConfigureSyncView extends WatchUi.View {
                 _error = "Invalid response";
             }
         } else {
-            _error = "Failed to load playlists";
+            _error = "Failed to load playlists (" + responseCode.toString() + ")";
         }
         
         WatchUi.requestUpdate();

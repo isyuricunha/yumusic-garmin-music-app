@@ -9,7 +9,6 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _serverConfig as YuMusicServerConfig;
     private var _songsToDownload as Array = [];
     private var _currentDownloadIndex as Number = 0;
-    private var _syncInProgress as Boolean = false;
 
     function initialize() {
         SyncDelegate.initialize();
@@ -22,14 +21,12 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     // The app should begin to download songs chosen in the configure
     // sync view.
     function onStartSync() as Void {
-        _syncInProgress = true;
         _songsToDownload = _library.getSongs();
         _currentDownloadIndex = 0;
 
         if (_songsToDownload.size() == 0) {
             // No songs to download
             Communications.notifySyncComplete(null);
-            _syncInProgress = false;
             return;
         }
 
@@ -43,7 +40,6 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         } else {
             // Server not configured
             Communications.notifySyncComplete("Server not configured");
-            _syncInProgress = false;
             return;
         }
 
@@ -56,7 +52,6 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         if (_currentDownloadIndex >= _songsToDownload.size()) {
             // All songs downloaded
             Communications.notifySyncComplete(null);
-            _syncInProgress = false;
             return;
         }
 
@@ -74,10 +69,16 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        // Download options
+        var streamUrl = song.hasKey("streamUrl") ? song["streamUrl"] as String? : null;
+        if (streamUrl != null) {
+            url = streamUrl;
+        }
+
+        // Download options (audio content provider expects audio responses)
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_URL_ENCODED
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO,
+            :mediaEncoding => Media.ENCODING_MP3
         };
 
         // Make the download request
@@ -101,7 +102,9 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             if (song != null) {
                 song["downloaded"] = true;
             }
-            
+
+            _library.saveSongs(_songsToDownload);
+
             // Move to next song
             _currentDownloadIndex++;
             downloadNextSong();
@@ -137,7 +140,6 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
     // Called when the user chooses to cancel an active sync.
     function onStopSync() as Void {
-        _syncInProgress = false;
         Communications.cancelAllRequests();
         Communications.notifySyncComplete("Sync cancelled");
     }

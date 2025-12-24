@@ -76,7 +76,38 @@ class YuMusicSubsonicAPI {
     
     // Convert string to byte array for MD5 hashing
     private function stringToByteArray(str as String) as ByteArray {
-        return str.toUtf8Array() as ByteArray;
+        try {
+            var converted = StringUtil.convertEncodedString(
+                str,
+                {
+                    :fromRepresentation => StringUtil.REPRESENTATION_STRING_PLAIN_TEXT,
+                    :toRepresentation => StringUtil.REPRESENTATION_BYTE_ARRAY,
+                    :encoding => StringUtil.CHAR_ENCODING_UTF8
+                }
+            );
+
+            var bytes = converted as ByteArray?;
+            if (bytes != null) {
+                return bytes;
+            }
+        } catch(ex) {
+            System.println(ex);
+        }
+
+        var utf8 = str.toUtf8Array();
+        var bytes = new ByteArray();
+        for (var i = 0; i < utf8.size(); i++) {
+            var b = utf8[i] as Number?;
+            if (b == null) {
+                b = utf8[i].toString().toNumber();
+            }
+
+            if (b != null) {
+                bytes.add(b);
+            }
+        }
+
+        return bytes;
     }
 
     // Build base URL with authentication parameters
@@ -85,8 +116,16 @@ class YuMusicSubsonicAPI {
             return "";
         }
 
-        var url = _serverUrl + "/rest/" + endpoint + ".view?";
-        url += "u=" + _username;
+        // Coerce nullable fields into non-null strings after the null guard
+        // and normalize the server URL to avoid a double slash before /rest.
+        var serverUrl = _serverUrl + "";
+        if (serverUrl.length() > 0 && serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) == "/") {
+            serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
+        }
+
+        var username = _username + "";
+        var url = serverUrl + "/rest/" + endpoint + ".view?";
+        url += "u=" + username;
         url += "&v=" + _apiVersion;
         url += "&c=" + _clientName;
         url += "&f=json";
@@ -105,6 +144,11 @@ class YuMusicSubsonicAPI {
     // Test server connection
     function ping(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("ping");
+        System.println("ping url: " + url);
+        if (url.length() == 0) {
+            callback.invoke(0, null);
+            return;
+        }
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -117,6 +161,11 @@ class YuMusicSubsonicAPI {
     // Get all playlists
     function getPlaylists(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPlaylists");
+        System.println("getPlaylists url: " + url);
+        if (url.length() == 0) {
+            callback.invoke(0, null);
+            return;
+        }
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,

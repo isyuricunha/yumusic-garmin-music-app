@@ -46,6 +46,11 @@ class YuMusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
         return false;
     }
 
+    // Handle touch tap (Venu 2 is primarily touch)
+    function onTap(clickEvent as WatchUi.ClickEvent) as Boolean {
+        return onSelect();
+    }
+
     // Handle back button
     function onBack() as Boolean {
         WatchUi.popView(WatchUi.SLIDE_RIGHT);

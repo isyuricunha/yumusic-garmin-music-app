@@ -3,11 +3,12 @@ import Toybox.Lang;
 
 // Delegate for server configuration view
 class YuMusicServerConfigDelegate extends WatchUi.BehaviorDelegate {
-    private var _view as YuMusicServerConfigView?;
+    private var _view as YuMusicServerConfigView;
     private var _serverConfig as YuMusicServerConfig;
 
     function initialize() {
         BehaviorDelegate.initialize();
+        _view = new YuMusicServerConfigView();
         _serverConfig = new YuMusicServerConfig();
     }
 
@@ -17,9 +18,9 @@ class YuMusicServerConfigDelegate extends WatchUi.BehaviorDelegate {
 
     // Handle select button
     function onSelect() as Boolean {
-        // In a real implementation, this would open text input
-        // For now, show a message about using Garmin Connect
-        if (_view != null) {
+        if (_serverConfig.isConfigured()) {
+            _view.cycleField();
+        } else {
             _view.setMessage("Use Garmin Connect app");
         }
         return true;

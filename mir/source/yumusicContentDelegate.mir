@@ -1,0 +1,295 @@
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 1; @symbol_importdef<0> = [Toybox,1,7,13]; @symbol_importdef<1> = [Lang,1,14,18]; ]
+import Toybox.Lang;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Media,2,14,19]; ]
+import Toybox.Media;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [PersistedContent,3,14,30]; ]
+import Toybox.PersistedContent;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 8; @symbol_classdef = [YuMusicContentDelegate,8,6,28]; @symbol_extends<0> = [Media,8,37,42]; @symbol_extends<1> = [ContentDelegate,8,43,58]; ]
+class YuMusicContentDelegate extends Media.ContentDelegate {
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 8; ]
+    <init> {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 8; ]
+    static
+    <init> {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 9; @position = 16; @symbol_vardef = [_library,9,16,24]; @symbol_type<0> = [YuMusicLibrary,9,28,42]; ]
+    private
+    var _library as YuMusicLibrary;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 10; @position = 16; @symbol_vardef = [_api,10,16,20]; @symbol_type<0> = [YuMusicSubsonicAPI,10,24,42]; ]
+    private
+    var _api as YuMusicSubsonicAPI;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 11; @position = 16; @symbol_vardef = [_serverConfig,11,16,29]; @symbol_type<0> = [YuMusicServerConfig,11,33,52]; ]
+    private
+    var _serverConfig as YuMusicServerConfig;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 13; @symbol_functiondef = [initialize,13,13,23]; ]
+    function initialize() as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 14 8 ]
+        symbol [ ContentDelegate %tmp.2 14 8 23 ];
+        %tmp.2 = getv ? :ContentDelegate;
+        symbol [ initialize %tmp.3 14 24 34 ];
+        %tmp.3 = getv function %tmp.2 :initialize;
+        invoke %tmp.2 %tmp.3();
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 15 8 ]
+        symbol [ YuMusicLibrary %tmp.7 15 23 37 ];
+        %tmp.7 = getv ? :YuMusicLibrary;
+        %tmp.4 = newc %tmp.7 ();
+        symbol [ _library ? 15 8 16 ];
+        putv self :_library %tmp.4;
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 16 8 ]
+        symbol [ YuMusicSubsonicAPI %tmp.11 16 19 37 ];
+        %tmp.11 = getv ? :YuMusicSubsonicAPI;
+        %tmp.8 = newc %tmp.11 ();
+        symbol [ _api ? 16 8 12 ];
+        putv self :_api %tmp.8;
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 17 8 ]
+        symbol [ YuMusicServerConfig %tmp.15 17 28 47 ];
+        %tmp.15 = getv ? :YuMusicServerConfig;
+        %tmp.12 = newc %tmp.15 ();
+        symbol [ _serverConfig ? 17 8 21 ];
+        putv self :_serverConfig %tmp.12;
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 20 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_stop" ]
+        %config.1 = local;
+        symbol [ config %config.1 20 12 18 ];
+        symbol [ _serverConfig %tmp.17 20 21 34 ];
+        %tmp.17 = getv ? :_serverConfig;
+        symbol [ getConfig %tmp.18 20 35 44 ];
+        %tmp.18 = getv function %tmp.17 :getConfig;
+        %tmp.19 = invoke %tmp.17 %tmp.18();
+        lputv %config.1 %tmp.19;
+        symbol [ config %config.1 20 12 18 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 21 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_stop" ]
+        %serverUrl.2 = local;
+        symbol [ serverUrl %serverUrl.2 21 12 21 ];
+        %tmp.20 = lgetv %config.1;
+        symbol [ config %tmp.20 21 24 30 ];
+        %tmp.21 = "serverUrl";
+        %tmp.22 = agetv %tmp.20 %tmp.21;
+        %tmp.23 = as %tmp.22 String or Null;
+        symbol [ String %tmp.23 21 47 53 ];
+        lputv %serverUrl.2 %tmp.23;
+        symbol [ serverUrl %serverUrl.2 21 12 21 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 22 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_stop" ]
+        %username.3 = local;
+        symbol [ username %username.3 22 12 20 ];
+        %tmp.24 = lgetv %config.1;
+        symbol [ config %tmp.24 22 23 29 ];
+        %tmp.25 = "username";
+        %tmp.26 = agetv %tmp.24 %tmp.25;
+        %tmp.27 = as %tmp.26 String or Null;
+        symbol [ String %tmp.27 22 45 51 ];
+        lputv %username.3 %tmp.27;
+        symbol [ username %username.3 22 12 20 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 23 8 ]
+        [ "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_start" "C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_stop" ]
+        %password.4 = local;
+        symbol [ password %password.4 23 12 20 ];
+        %tmp.28 = lgetv %config.1;
+        symbol [ config %tmp.28 23 23 29 ];
+        %tmp.29 = "password";
+        %tmp.30 = agetv %tmp.28 %tmp.29;
+        %tmp.31 = as %tmp.30 String or Null;
+        symbol [ String %tmp.31 23 45 51 ];
+        lputv %password.4 %tmp.31;
+        symbol [ password %password.4 23 12 20 ];
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 24 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_stmt:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_12_24_65_begin:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_12_24_45_begin:
+        %tmp.32 = lgetv %serverUrl.2;
+        symbol [ serverUrl %tmp.32 24 12 21 ];
+        %tmp.33 = null;
+        %tmp.34 = ne %tmp.32 %tmp.33;
+        bf %tmp.34 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_33_24_45_true:
+        %tmp.35 = lgetv %username.3;
+        symbol [ username %tmp.35 24 33 41 ];
+        %tmp.36 = null;
+        %tmp.37 = ne %tmp.35 %tmp.36;
+        push %tmp.37;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_33_24_45_end:
+        %tmp.38 = phi [%tmp.34 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_12_24_45_begin] [%tmp.37 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_33_24_45_true] [%tmp.38 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_33_24_45_end];
+        bf %tmp.38 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_53_24_65_true:
+        %tmp.39 = lgetv %password.4;
+        symbol [ password %tmp.39 24 53 61 ];
+        %tmp.40 = null;
+        %tmp.41 = ne %tmp.39 %tmp.40;
+        push %tmp.41;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_53_24_65_end:
+        %tmp.42 = phi [%tmp.38 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_12_24_65_begin] [%tmp.41 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_53_24_65_true] [%tmp.42 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_53_24_65_end];
+        bf %tmp.42 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_71_26_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 25 12 ]
+        symbol [ _api %tmp.44 25 12 16 ];
+        %tmp.44 = getv ? :_api;
+        symbol [ configure %tmp.45 25 17 26 ];
+        %tmp.45 = getv function %tmp.44 :configure;
+        %tmp.46 = lgetv %serverUrl.2;
+        symbol [ serverUrl %tmp.46 25 27 36 ];
+        %tmp.47 = as %tmp.46 { (!Null) };
+        %tmp.48 = lgetv %username.3;
+        symbol [ username %tmp.48 25 38 46 ];
+        %tmp.49 = as %tmp.48 { (!Null) };
+        %tmp.50 = lgetv %password.4;
+        symbol [ password %tmp.50 25 48 56 ];
+        %tmp.51 = as %tmp.50 { (!Null) };
+        invoke %tmp.44 %tmp.45(%tmp.47, %tmp.49, %tmp.51);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_71_26_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_24_8_26_8_if_end:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_13_26_27_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 32; @symbol_functiondef = [getContentIterator,32,13,31]; @symbol_return<0> = [ContentIterator,32,37,52]; ]
+    function getContentIterator() as ContentIterator or Null {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_32_54_34_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 33 8 ]
+        symbol [ YuMusicContentIterator %tmp.4 33 19 41 ];
+        %tmp.4 = getv ? :YuMusicContentIterator;
+        %tmp.1 = newc %tmp.4 ();
+        ret %tmp.1;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_32_54_34_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 37; @symbol_functiondef = [onAdAction,37,13,23]; @symbol_param<0> = [adContext,37,24,33]; @symbol_param<0>_type<0> = [Object,37,37,43]; ]
+    function onAdAction(adContext as Object) as Void {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 41; @symbol_functiondef = [onThumbsUp,41,13,23]; @symbol_param<0> = [contentRefId,41,24,36]; @symbol_param<0>_type<0> = [Object,41,40,46]; ]
+    function onThumbsUp(contentRefId as Object) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_41_56_46_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 43 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_8_45_8_if_stmt:
+        %tmp.1 = lgetv %contentRefId;
+        symbol [ contentRefId %tmp.1 43 12 24 ];
+        %tmp.2 = null;
+        %tmp.3 = ne %tmp.1 %tmp.2;
+        bf %tmp.3 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_8_45_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_8_45_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_34_45_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 44 12 ]
+        symbol [ _api %tmp.5 44 12 16 ];
+        %tmp.5 = getv ? :_api;
+        symbol [ star %tmp.6 44 17 21 ];
+        %tmp.6 = getv function %tmp.5 :star;
+        %tmp.7 = lgetv %contentRefId;
+        symbol [ contentRefId %tmp.7 44 22 34 ];
+        %tmp.8 = as %tmp.7 { (!Null) };
+        symbol [ toString %tmp.9 44 35 43 ];
+        %tmp.9 = getv function %tmp.8 :toString;
+        %tmp.10 = invoke %tmp.8 %tmp.9();
+        %tmp.11 = self;
+        symbol [ method %tmp.12 44 47 53 ];
+        %tmp.12 = getv function %tmp.11 :method;
+        %tmp.14 = const :onStarResponse;
+        symbol [ onStarResponse %tmp.14 44 55 69 const ];
+        %tmp.15 = invoke %tmp.11 %tmp.12(%tmp.14);
+        invoke %tmp.5 %tmp.6(%tmp.10, %tmp.15);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_34_45_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_8_45_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_43_8_45_8_if_end:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_41_56_46_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 49; @symbol_functiondef = [onThumbsDown,49,13,25]; @symbol_param<0> = [contentRefId,49,26,38]; @symbol_param<0>_type<0> = [Object,49,42,48]; ]
+    function onThumbsDown(contentRefId as Object) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_49_58_54_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 51 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_8_53_8_if_stmt:
+        %tmp.1 = lgetv %contentRefId;
+        symbol [ contentRefId %tmp.1 51 12 24 ];
+        %tmp.2 = null;
+        %tmp.3 = ne %tmp.1 %tmp.2;
+        bf %tmp.3 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_8_53_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_8_53_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_34_53_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 52 12 ]
+        symbol [ _api %tmp.5 52 12 16 ];
+        %tmp.5 = getv ? :_api;
+        symbol [ unstar %tmp.6 52 17 23 ];
+        %tmp.6 = getv function %tmp.5 :unstar;
+        %tmp.7 = lgetv %contentRefId;
+        symbol [ contentRefId %tmp.7 52 24 36 ];
+        %tmp.8 = as %tmp.7 { (!Null) };
+        symbol [ toString %tmp.9 52 37 45 ];
+        %tmp.9 = getv function %tmp.8 :toString;
+        %tmp.10 = invoke %tmp.8 %tmp.9();
+        %tmp.11 = self;
+        symbol [ method %tmp.12 52 49 55 ];
+        %tmp.12 = getv function %tmp.11 :method;
+        %tmp.14 = const :onUnstarResponse;
+        symbol [ onUnstarResponse %tmp.14 52 57 73 const ];
+        %tmp.15 = invoke %tmp.11 %tmp.12(%tmp.14);
+        invoke %tmp.5 %tmp.6(%tmp.10, %tmp.15);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_34_53_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_8_53_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_51_8_53_8_if_end:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_49_58_54_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 57; @symbol_functiondef = [onShuffle,57,13,22]; ]
+    function onShuffle() as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_57_33_60_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 59 8 ]
+        symbol [ _library %tmp.2 59 8 16 ];
+        %tmp.2 = getv ? :_library;
+        symbol [ setShuffle %tmp.3 59 17 27 ];
+        %tmp.3 = getv function %tmp.2 :setShuffle;
+        symbol [ _library %tmp.5 59 29 37 ];
+        %tmp.5 = getv ? :_library;
+        symbol [ getShuffle %tmp.6 59 38 48 ];
+        %tmp.6 = getv function %tmp.5 :getShuffle;
+        %tmp.7 = invoke %tmp.5 %tmp.6();
+        %tmp.8 = not %tmp.7;
+        invoke %tmp.2 %tmp.3(%tmp.8);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_57_33_60_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 64; @symbol_functiondef = [onSong,64,13,19]; @symbol_param<0> = [contentRefId,64,20,32]; @symbol_param<0>_type<0> = [Object,64,36,42]; @symbol_param<1> = [songEvent,64,44,53]; @symbol_param<1>_type<0> = [SongEvent,64,57,66]; @symbol_param<2> = [playbackPosition,64,68,84]; @symbol_param<2>_type<0> = [Number,64,88,94]; @symbol_param<2>_type<1> = [PlaybackPosition,64,98,114]; ]
+    function onSong(contentRefId as Object, songEvent as SongEvent, playbackPosition as Number or PlaybackPosition) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_64_124_70_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 67 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_8_69_8_if_stmt:
+        %tmp.1 = lgetv %contentRefId;
+        symbol [ contentRefId %tmp.1 67 12 24 ];
+        %tmp.2 = null;
+        %tmp.3 = ne %tmp.1 %tmp.2;
+        bf %tmp.3 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_8_69_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_8_69_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_34_69_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc" 68 12 ]
+        symbol [ _api %tmp.5 68 12 16 ];
+        %tmp.5 = getv ? :_api;
+        symbol [ scrobble %tmp.6 68 17 25 ];
+        %tmp.6 = getv function %tmp.5 :scrobble;
+        %tmp.7 = lgetv %contentRefId;
+        symbol [ contentRefId %tmp.7 68 26 38 ];
+        %tmp.8 = as %tmp.7 { (!Null) };
+        symbol [ toString %tmp.9 68 39 47 ];
+        %tmp.9 = getv function %tmp.8 :toString;
+        %tmp.10 = invoke %tmp.8 %tmp.9();
+        %tmp.11 = self;
+        symbol [ method %tmp.12 68 51 57 ];
+        %tmp.12 = getv function %tmp.11 :method;
+        %tmp.14 = const :onScrobbleResponse;
+        symbol [ onScrobbleResponse %tmp.14 68 59 77 const ];
+        %tmp.15 = invoke %tmp.11 %tmp.12(%tmp.14);
+        invoke %tmp.5 %tmp.6(%tmp.10, %tmp.15);
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_34_69_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_8_69_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_67_8_69_8_if_end:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicContentDelegate_mc_64_124_70_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 73; @symbol_functiondef = [onStarResponse,73,13,27]; @symbol_param<0> = [responseCode,73,28,40]; @symbol_param<0>_type<0> = [Number,73,44,50]; @symbol_param<1> = [data,73,52,56]; @symbol_param<1>_type<0> = [Dictionary,73,60,70]; @symbol_param<1>_type<1> = [String,73,74,80]; @symbol_param<1>_type<2> = [PersistedContent,73,84,100]; @symbol_param<1>_type<3> = [Iterator,73,101,109]; ]
+    function onStarResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 78; @symbol_functiondef = [onUnstarResponse,78,13,29]; @symbol_param<0> = [responseCode,78,30,42]; @symbol_param<0>_type<0> = [Number,78,46,52]; @symbol_param<1> = [data,78,54,58]; @symbol_param<1>_type<0> = [Dictionary,78,62,72]; @symbol_param<1>_type<1> = [String,78,76,82]; @symbol_param<1>_type<2> = [PersistedContent,78,86,102]; @symbol_param<1>_type<3> = [Iterator,78,103,111]; ]
+    function onUnstarResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 83; @symbol_functiondef = [onScrobbleResponse,83,13,31]; @symbol_param<0> = [responseCode,83,32,44]; @symbol_param<0>_type<0> = [Number,83,48,54]; @symbol_param<1> = [data,83,56,60]; @symbol_param<1>_type<0> = [Dictionary,83,64,74]; @symbol_param<1>_type<1> = [String,83,78,84]; @symbol_param<1>_type<2> = [PersistedContent,83,88,104]; @symbol_param<1>_type<3> = [Iterator,83,105,113]; ]
+    function onScrobbleResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    }
+}
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\yumusicContentDelegate.mc"; @line = 1; ]
+<init> {
+}

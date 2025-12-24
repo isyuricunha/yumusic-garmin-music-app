@@ -1,3 +1,3 @@
 {
-    "monkeyC.developerKeyPath": "c:/Users/isy/Documents/GitHub/yurounded-garmin-watchface/developer_key"
+    "monkeyC.developerKeyPath": "./developer_key"
 }

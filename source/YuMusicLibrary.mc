@@ -113,12 +113,15 @@ class YuMusicLibrary {
 
     // Create Media.Content object from song data
     function createMediaContent(song as Dictionary) as Media.Content? {
-        // Create ContentRef with song ID
-        var id = song["id"] as String?;
-        if (id == null) {
+        // Create ContentRef with stable ID (prefer the download/stream URL)
+        var contentRefId = song.hasKey("contentRefId") ? song["contentRefId"] as String? : null;
+        if (contentRefId == null) {
+            contentRefId = song["id"] as String?;
+        }
+        if (contentRefId == null) {
             return null;
         }
-        var contentRef = new Media.ContentRef(id, Media.CONTENT_TYPE_AUDIO);
+        var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
         
         // Set metadata
         var metadata = new Media.ContentMetadata();
@@ -144,6 +147,26 @@ class YuMusicLibrary {
         var content = new Media.Content(contentRef, metadata);
 
         return content;
+    }
+
+    // Find a song by the ContentRef ID used by playback (typically the stream/download URL)
+    function getSongByContentRefId(contentRefId as String) as Dictionary? {
+        var songs = getSongs();
+        for (var i = 0; i < songs.size(); i++) {
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var stored = song.hasKey("contentRefId") ? song["contentRefId"] as String? : null;
+            if (stored != null && stored.equals(contentRefId)) {
+                return song;
+            }
+            var url = song.hasKey("url") ? song["url"] as String? : null;
+            if (url != null && url.equals(contentRefId)) {
+                return song;
+            }
+        }
+        return null;
     }
 
     // Get total library size

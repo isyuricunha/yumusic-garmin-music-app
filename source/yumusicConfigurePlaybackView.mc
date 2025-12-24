@@ -65,7 +65,7 @@ class YuMusicConfigurePlaybackView extends WatchUi.View {
         // Show server status
         if (_serverConfig.isConfigured()) {
             dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
-            dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: Connected", Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: Configured", Graphics.TEXT_JUSTIFY_CENTER);
         } else {
             dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: Not configured", Graphics.TEXT_JUSTIFY_CENTER);

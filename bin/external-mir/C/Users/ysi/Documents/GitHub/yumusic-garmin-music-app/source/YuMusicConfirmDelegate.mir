@@ -2,61 +2,118 @@
 import Toybox.WatchUi;
 [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 2; @symbol_importdef<0> = [Toybox,2,7,13]; @symbol_importdef<1> = [Lang,2,14,18]; ]
 import Toybox.Lang;
-[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 5; @symbol_classdef = [YuMusicConfirmDelegate,5,6,28]; @symbol_extends<0> = [WatchUi,5,37,44]; @symbol_extends<1> = [BehaviorDelegate,5,45,61]; ]
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 3; @symbol_importdef<0> = [Toybox,3,7,13]; @symbol_importdef<1> = [Media,3,14,19]; ]
+import Toybox.Media;
+[ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 6; @symbol_classdef = [YuMusicConfirmDelegate,6,6,28]; @symbol_extends<0> = [WatchUi,6,37,44]; @symbol_extends<1> = [BehaviorDelegate,6,45,61]; ]
 class YuMusicConfirmDelegate extends WatchUi.BehaviorDelegate {
-    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 5; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 6; ]
     <init> {
     }
-    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 5; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 6; ]
     static
     <init> {
     }
-    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 7; @symbol_functiondef = [initialize,7,13,23]; ]
-    function initialize() as Void {
-C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_7_26_9_4_start:
-[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 8 8 ]
-        symbol [ BehaviorDelegate %tmp.2 8 8 24 ];
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 8; @position = 16; @symbol_vardef = [_startSyncOnSelect,8,16,34]; @symbol_type<0> = [Boolean,8,38,45]; ]
+    private
+    var _startSyncOnSelect as Boolean;
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 10; @symbol_functiondef = [initialize,10,13,23]; @symbol_param<0> = [startSyncOnSelect,10,24,41]; @symbol_param<0>_type<0> = [Boolean,10,45,52]; ]
+    function initialize(startSyncOnSelect as Boolean or Null) as Void {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_10_55_18_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 11 8 ]
+        symbol [ BehaviorDelegate %tmp.2 11 8 24 ];
         %tmp.2 = getv ? :BehaviorDelegate;
-        symbol [ initialize %tmp.3 8 25 35 ];
+        symbol [ initialize %tmp.3 11 25 35 ];
         %tmp.3 = getv function %tmp.2 :initialize;
         invoke %tmp.2 %tmp.3();
-C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_7_26_9_4_stop:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 13 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_8_17_8_if_stmt:
+        %tmp.4 = lgetv %startSyncOnSelect;
+        symbol [ startSyncOnSelect %tmp.4 13 12 29 ];
+        %tmp.5 = null;
+        %tmp.6 = ne %tmp.4 %tmp.5;
+        bf %tmp.6 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_8_17_8_if_else_false;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_8_17_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_39_15_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 14 12 ]
+        %tmp.7 = lgetv %startSyncOnSelect;
+        symbol [ startSyncOnSelect %tmp.7 14 33 50 ];
+        %tmp.8 = as %tmp.7 { (!Null) };
+        symbol [ _startSyncOnSelect ? 14 12 30 ];
+        putv self :_startSyncOnSelect %tmp.8;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_39_15_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_8_17_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_8_17_8_if_else_false:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_15_15_17_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 16 12 ]
+        %tmp.9 = false;
+        symbol [ _startSyncOnSelect ? 16 12 30 ];
+        putv self :_startSyncOnSelect %tmp.9;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_15_15_17_8_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_13_8_17_8_if_end:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_10_55_18_4_stop:
     }
-    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 12; @symbol_functiondef = [onBack,12,13,19]; @symbol_return<0> = [Boolean,12,25,32]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 21; @symbol_functiondef = [onBack,21,13,19]; @symbol_return<0> = [Boolean,21,25,32]; ]
     function onBack() as Boolean {
-C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_12_33_16_4_start:
-[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 14 8 ]
-        symbol [ WatchUi %tmp.1 14 8 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_21_33_25_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 23 8 ]
+        symbol [ WatchUi %tmp.1 23 8 15 ];
         %tmp.1 = getm $.Toybox.WatchUi;
-        symbol [ popView %tmp.2 14 16 23 ];
+        symbol [ popView %tmp.2 23 16 23 ];
         %tmp.2 = getv function %tmp.1 :popView;
-        symbol [ WatchUi %tmp.3 14 24 31 ];
+        symbol [ WatchUi %tmp.3 23 24 31 ];
         %tmp.3 = getm $.Toybox.WatchUi;
-        symbol [ SLIDE_RIGHT %tmp.4 14 32 43 ];
+        symbol [ SLIDE_RIGHT %tmp.4 23 32 43 ];
         %tmp.4 = getv %tmp.3 :SLIDE_RIGHT;
         invoke %tmp.1 %tmp.2(%tmp.4);
-[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 15 8 ]
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 24 8 ]
         %tmp.5 = true;
         ret %tmp.5;
-C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_12_33_16_4_stop:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_21_33_25_4_stop:
     }
-    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 19; @symbol_functiondef = [onSelect,19,13,21]; @symbol_return<0> = [Boolean,19,27,34]; ]
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 28; @symbol_functiondef = [onSelect,28,13,21]; @symbol_return<0> = [Boolean,28,27,34]; ]
     function onSelect() as Boolean {
-C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_19_35_22_4_start:
-[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 20 8 ]
-        symbol [ WatchUi %tmp.1 20 8 15 ];
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_28_35_35_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 29 8 ]
+        symbol [ WatchUi %tmp.1 29 8 15 ];
         %tmp.1 = getm $.Toybox.WatchUi;
-        symbol [ popView %tmp.2 20 16 23 ];
+        symbol [ popView %tmp.2 29 16 23 ];
         %tmp.2 = getv function %tmp.1 :popView;
-        symbol [ WatchUi %tmp.3 20 24 31 ];
+        symbol [ WatchUi %tmp.3 29 24 31 ];
         %tmp.3 = getm $.Toybox.WatchUi;
-        symbol [ SLIDE_RIGHT %tmp.4 20 32 43 ];
+        symbol [ SLIDE_RIGHT %tmp.4 29 32 43 ];
         %tmp.4 = getv %tmp.3 :SLIDE_RIGHT;
         invoke %tmp.1 %tmp.2(%tmp.4);
-[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 21 8 ]
-        %tmp.5 = true;
-        ret %tmp.5;
-C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_19_35_22_4_stop:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 31 8 ]
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_8_33_8_if_stmt:
+        symbol [ _startSyncOnSelect %tmp.6 31 12 30 ];
+        %tmp.6 = getv ? :_startSyncOnSelect;
+        bf %tmp.6 @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_8_33_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_8_33_8_if_true:
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_32_33_8_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 32 12 ]
+        symbol [ Media %tmp.7 32 12 17 ];
+        %tmp.7 = getm $.Toybox.Media;
+        symbol [ startSync %tmp.8 32 18 27 ];
+        %tmp.8 = getv function %tmp.7 :startSync;
+        invoke %tmp.7 %tmp.8();
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_32_33_8_stop:
+        goto @C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_8_33_8_if_end;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_31_8_33_8_if_end:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 34 8 ]
+        %tmp.9 = true;
+        ret %tmp.9;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_28_35_35_4_stop:
+    }
+    [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 38; @symbol_functiondef = [onTap,38,13,18]; @symbol_param<0> = [clickEvent,38,19,29]; @symbol_param<0>_type<0> = [WatchUi,38,33,40]; @symbol_param<0>_type<1> = [ClickEvent,38,41,51]; @symbol_return<0> = [Boolean,38,56,63]; ]
+    function onTap(clickEvent as WatchUi.ClickEvent) as Boolean {
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_38_64_40_4_start:
+[ "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc" 39 8 ]
+        %tmp.1 = self;
+        symbol [ onSelect %tmp.2 39 15 23 ];
+        %tmp.2 = getv function %tmp.1 :onSelect;
+        %tmp.3 = invoke %tmp.1 %tmp.2();
+        ret %tmp.3;
+C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_YuMusicConfirmDelegate_mc_38_64_40_4_stop:
     }
 }
 [ @file = "C:\Users\ysi\Documents\GitHub\yumusic-garmin-music-app\source\YuMusicConfirmDelegate.mc"; @line = 1; ]

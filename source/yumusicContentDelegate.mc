@@ -41,7 +41,9 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     function onThumbsUp(contentRefId as Object) as Void {
         // Star the song on the server
         if (contentRefId != null) {
-            _api.star(contentRefId.toString(), method(:onStarResponse));
+            var song = _library.getSongByContentRefId(contentRefId.toString());
+            var songId = song != null ? song["id"] as String? : null;
+            _api.star(songId != null ? songId : contentRefId.toString(), method(:onStarResponse));
         }
     }
 
@@ -49,7 +51,9 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     function onThumbsDown(contentRefId as Object) as Void {
         // Unstar the song on the server
         if (contentRefId != null) {
-            _api.unstar(contentRefId.toString(), method(:onUnstarResponse));
+            var song = _library.getSongByContentRefId(contentRefId.toString());
+            var songId = song != null ? song["id"] as String? : null;
+            _api.unstar(songId != null ? songId : contentRefId.toString(), method(:onUnstarResponse));
         }
     }
 
@@ -65,7 +69,9 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         // Scrobble the song when it's played
         // Note: We scrobble on any song event to ensure tracking
         if (contentRefId != null) {
-            _api.scrobble(contentRefId.toString(), method(:onScrobbleResponse));
+            var song = _library.getSongByContentRefId(contentRefId.toString());
+            var songId = song != null ? song["id"] as String? : null;
+            _api.scrobble(songId != null ? songId : contentRefId.toString(), method(:onScrobbleResponse));
         }
     }
 

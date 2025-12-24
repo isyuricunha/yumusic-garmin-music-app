@@ -397,10 +397,10 @@ C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePl
         %tmp.127 = getm $.Toybox.Graphics;
         symbol [ FONT_TINY %tmp.128 68 45 54 ];
         %tmp.128 = getv %tmp.127 :FONT_TINY;
-        %tmp.129 = "Server: Connected";
-        symbol [ Graphics %tmp.130 68 77 85 ];
+        %tmp.129 = "Server: Configured";
+        symbol [ Graphics %tmp.130 68 78 86 ];
         %tmp.130 = getm $.Toybox.Graphics;
-        symbol [ TEXT_JUSTIFY_CENTER %tmp.131 68 86 105 ];
+        symbol [ TEXT_JUSTIFY_CENTER %tmp.131 68 87 106 ];
         %tmp.131 = getv %tmp.130 :TEXT_JUSTIFY_CENTER;
         invoke %tmp.123 %tmp.124(%tmp.125, %tmp.126, %tmp.128, %tmp.129, %tmp.131);
 C__Users_ysi_Documents_GitHub_yumusic_garmin_music_app_source_yumusicConfigurePlaybackView_mc_66_42_69_8_stop:
