@@ -1,6 +1,8 @@
 import Toybox.Lang;
+import Toybox.Graphics;
 import Toybox.Media;
 import Toybox.System;
+import Toybox.WatchUi;
 
 class YuMusicContentIterator extends Media.ContentIterator {
     private var _library as YuMusicLibrary;
@@ -113,17 +115,13 @@ class YuMusicContentIterator extends Media.ContentIterator {
         // Use Toybox.Media playback control constants. Using unqualified constants
         // can lead to duplicated/incorrect controls in the native player UI.
         profile.playbackControls = [
-            Media.PLAYBACK_CONTROL_PLAYBACK,
             Media.PLAYBACK_CONTROL_PREVIOUS,
             Media.PLAYBACK_CONTROL_NEXT,
             Media.PLAYBACK_CONTROL_SKIP_BACKWARD,
             Media.PLAYBACK_CONTROL_SKIP_FORWARD,
             Media.PLAYBACK_CONTROL_VOLUME,
-            Media.PLAYBACK_CONTROL_LIBRARY
+            new YuMusicMenuButton()
         ];
-
-        profile.skipBackwardTimeDelta = 30;
-        profile.skipForwardTimeDelta = 30;
 
         profile.playbackNotificationThreshold = 30;
         profile.requirePlaybackNotification = false;
@@ -202,4 +200,22 @@ class YuMusicContentIterator extends Media.ContentIterator {
         return _shuffle;
     }
 
+}
+
+class YuMusicMenuButton extends Media.CustomButton {
+    function initialize() {
+        CustomButton.initialize();
+    }
+
+    function getState() as Media.ButtonState {
+        return Media.BUTTON_STATE_DEFAULT;
+    }
+
+    function getText(state as Media.ButtonState) as String? {
+        return "menu";
+    }
+
+    function getImage(image as Media.ButtonImage, highlighted as Boolean) as WatchUi.BitmapResource or Graphics.BitmapReference or Null {
+        return null;
+    }
 }

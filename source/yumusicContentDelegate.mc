@@ -1,6 +1,7 @@
 import Toybox.Lang;
 import Toybox.Media;
 import Toybox.PersistedContent;
+import Toybox.WatchUi;
 
 // This class handles events from the system's media
 // player. getContentIterator() returns an iterator
@@ -80,6 +81,28 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     function onShuffle() as Void {
         // Toggle shuffle mode
         _library.setShuffle(!_library.getShuffle());
+    }
+
+    function onCustomButton(button as Media.CustomButton) as Void {
+        var text = button.getText(Media.BUTTON_STATE_DEFAULT);
+        if (text == null || !text.equals("menu")) {
+            return;
+        }
+
+        var menu = new WatchUi.Menu2({:title => "YuMusic"});
+        menu.addItem(new WatchUi.MenuItem("Select Playlist", null, :selectPlaylist, {}));
+        menu.addItem(new WatchUi.MenuItem("Sync Now", null, :syncNow, {}));
+
+        var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";
+        menu.addItem(new WatchUi.MenuItem(shuffleText, null, :shuffle, {}));
+
+        if (_library.getLibrarySize() > 0) {
+            menu.addItem(new WatchUi.MenuItem("Clear Library", null, :clear, {}));
+        }
+
+        menu.addItem(new WatchUi.MenuItem("Configure Server", null, :server, {}));
+
+        WatchUi.pushView(menu, new YuMusicPlaybackMenuDelegate(), WatchUi.SLIDE_UP);
     }
 
     // Handles a notification from the system that an event has
