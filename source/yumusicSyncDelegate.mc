@@ -10,6 +10,9 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _serverConfig as YuMusicServerConfig;
     private var _songsToDownload as Array = [];
     private var _currentDownloadIndex as Number = 0;
+    private var _downloadedCount as Number = 0;
+    private var _failedCount as Number = 0;
+    private var _firstFailureCode as Number? = null;
 
     function initialize() {
         SyncDelegate.initialize();
@@ -24,12 +27,15 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     function onStartSync() as Void {
         _songsToDownload = _library.getSongs();
         _currentDownloadIndex = 0;
+        _downloadedCount = 0;
+        _failedCount = 0;
+        _firstFailureCode = null;
 
         System.println("sync onStartSync songs: " + _songsToDownload.size().toString());
 
         if (_songsToDownload.size() == 0) {
             // No songs to download
-            Communications.notifySyncComplete(null);
+            Communications.notifySyncComplete("No songs selected");
             return;
         }
 
@@ -53,8 +59,18 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     // Download the next song in the queue
     private function downloadNextSong() as Void {
         if (_currentDownloadIndex >= _songsToDownload.size()) {
-            // All songs downloaded
-            Communications.notifySyncComplete(null);
+            // All songs processed
+            if (_downloadedCount == 0 && _failedCount > 0) {
+                var message = "Sync failed";
+                if (_firstFailureCode != null) {
+                    message += " (" + _firstFailureCode.toString() + ")";
+                }
+                Communications.notifySyncComplete(message);
+            } else if (_failedCount > 0) {
+                Communications.notifySyncComplete("Sync finished with errors (" + _failedCount.toString() + " failed)");
+            } else {
+                Communications.notifySyncComplete(null);
+            }
             return;
         }
 
@@ -123,11 +139,17 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
             _library.saveSongs(_songsToDownload);
 
+            _downloadedCount++;
+
             // Move to next song
             _currentDownloadIndex++;
             downloadNextSong();
         } else {
             System.println("sync download failed responseCode: " + responseCode.toString());
+            if (_firstFailureCode == null) {
+                _firstFailureCode = responseCode;
+            }
+            _failedCount++;
             // Download failed, try next song
             _currentDownloadIndex++;
             downloadNextSong();
