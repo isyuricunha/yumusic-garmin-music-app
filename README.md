@@ -158,7 +158,7 @@ yumusic-garmin-music-app/
 
 ## License
 
-MIT. See `LICENSE.txt`.
+AGPL-3.0 license. See `LICENSE.txt`.
 
 ## Disclaimer
 
