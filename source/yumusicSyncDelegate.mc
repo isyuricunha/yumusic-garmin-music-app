@@ -2,6 +2,7 @@ import Toybox.Communications;
 import Toybox.Lang;
 import Toybox.Media;
 import Toybox.PersistedContent;
+import Toybox.System;
 
 class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _library as YuMusicLibrary;
@@ -23,6 +24,8 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     function onStartSync() as Void {
         _songsToDownload = _library.getSongs();
         _currentDownloadIndex = 0;
+
+        System.println("sync onStartSync songs: " + _songsToDownload.size().toString());
 
         if (_songsToDownload.size() == 0) {
             // No songs to download
@@ -74,6 +77,8 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             url = streamUrl;
         }
 
+        System.println("sync download song index " + _currentDownloadIndex.toString() + ": " + url);
+
         // Download options (audio content provider expects audio responses)
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -109,7 +114,10 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
                     var persistedIdNumber = persistedContent.getId() as Number?;
                     if (persistedIdNumber != null) {
                         song["contentRefId"] = persistedIdNumber;
+                        System.println("sync downloaded persisted id: " + persistedIdNumber.toString());
                     }
+                } else {
+                    System.println("sync download response had no persisted content object");
                 }
             }
 
@@ -119,6 +127,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             _currentDownloadIndex++;
             downloadNextSong();
         } else {
+            System.println("sync download failed responseCode: " + responseCode.toString());
             // Download failed, try next song
             _currentDownloadIndex++;
             downloadNextSong();
