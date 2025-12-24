@@ -96,11 +96,21 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
     // Callback when a song is downloaded
     function onSongDownloaded(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        if (responseCode == 200 && data != null) {
+        if (responseCode == 200) {
             // Song downloaded successfully
             var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
             if (song != null) {
                 song["downloaded"] = true;
+
+                // For HTTP_RESPONSE_CONTENT_TYPE_AUDIO, the response object can provide
+                // the persisted media id used by the system media cache.
+                var persistedContent = data as PersistedContent.Content?;
+                if (persistedContent != null) {
+                    var persistedIdNumber = persistedContent.getId() as Number?;
+                    if (persistedIdNumber != null) {
+                        song["contentRefId"] = persistedIdNumber;
+                    }
+                }
             }
 
             _library.saveSongs(_songsToDownload);

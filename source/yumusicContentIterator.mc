@@ -11,8 +11,34 @@ class YuMusicContentIterator extends Media.ContentIterator {
     function initialize() {
         ContentIterator.initialize();
         _library = new YuMusicLibrary();
-        _songs = _library.getSongs();
+        var allSongs = _library.getSongs();
+        _songs = [];
+        for (var i = 0; i < allSongs.size(); i++) {
+            var song = allSongs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var contentRefId = song.hasKey("contentRefId") ? song["contentRefId"] as Number? : null;
+            if (contentRefId != null) {
+                _songs.add(song);
+            }
+        }
         _shuffle = _library.getShuffle();
+
+        System.println("contentIterator songs: " + _songs.size().toString());
+        if (_songs.size() > 0) {
+            var firstSong = _songs[0] as Dictionary?;
+            if (firstSong != null) {
+                var firstContentRefId = firstSong.hasKey("contentRefId") ? firstSong["contentRefId"] : null;
+                if (firstContentRefId != null) {
+                    System.println("contentIterator first contentRefId: " + firstContentRefId.toString());
+                }
+                var firstUrl = firstSong.hasKey("url") ? firstSong["url"] as String? : null;
+                if (firstUrl != null) {
+                    System.println("contentIterator first url: " + firstUrl);
+                }
+            }
+        }
         
         // If shuffle is enabled, randomize the song order
         if (_shuffle && _songs.size() > 0) {

@@ -33,6 +33,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         return new YuMusicContentIterator();
     }
 
+    // Reset the iterator to the beginning of the current playlist.
+    function resetContentIterator() as ContentIterator? {
+        return new YuMusicContentIterator();
+    }
+
     // Respond to a user ad click
     function onAdAction(adContext as Object) as Void {
     }
@@ -41,9 +46,16 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     function onThumbsUp(contentRefId as Object) as Void {
         // Star the song on the server
         if (contentRefId != null) {
-            var song = _library.getSongByContentRefId(contentRefId.toString());
+            var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
-            _api.star(songId != null ? songId : contentRefId.toString(), method(:onStarResponse));
+            if (songId != null) {
+                _api.star(songId, method(:onStarResponse));
+            } else {
+                var contentRefString = contentRefId as String?;
+                if (contentRefString != null) {
+                    _api.star(contentRefString, method(:onStarResponse));
+                }
+            }
         }
     }
 
@@ -51,9 +63,16 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     function onThumbsDown(contentRefId as Object) as Void {
         // Unstar the song on the server
         if (contentRefId != null) {
-            var song = _library.getSongByContentRefId(contentRefId.toString());
+            var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
-            _api.unstar(songId != null ? songId : contentRefId.toString(), method(:onUnstarResponse));
+            if (songId != null) {
+                _api.unstar(songId, method(:onUnstarResponse));
+            } else {
+                var contentRefString = contentRefId as String?;
+                if (contentRefString != null) {
+                    _api.unstar(contentRefString, method(:onUnstarResponse));
+                }
+            }
         }
     }
 
@@ -69,9 +88,16 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         // Scrobble the song when it's played
         // Note: We scrobble on any song event to ensure tracking
         if (contentRefId != null) {
-            var song = _library.getSongByContentRefId(contentRefId.toString());
+            var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
-            _api.scrobble(songId != null ? songId : contentRefId.toString(), method(:onScrobbleResponse));
+            if (songId != null) {
+                _api.scrobble(songId, method(:onScrobbleResponse));
+            } else {
+                var contentRefString = contentRefId as String?;
+                if (contentRefString != null) {
+                    _api.scrobble(contentRefString, method(:onScrobbleResponse));
+                }
+            }
         }
     }
 

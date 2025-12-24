@@ -115,7 +115,7 @@ class YuMusicConfigureSyncView extends WatchUi.View {
             dc.setColor(Graphics.COLOR_RED, Graphics.COLOR_TRANSPARENT);
             dc.drawText(centerX, height / 2, Graphics.FONT_SMALL, _error, Graphics.TEXT_JUSTIFY_CENTER);
         } else if (_playlists != null && _playlists.size() > 0) {
-            dc.drawText(centerX, y, Graphics.FONT_SMALL, _playlists.size() + " playlists", Graphics.TEXT_JUSTIFY_CENTER);
+            dc.drawText(centerX, y, Graphics.FONT_SMALL, _playlists.size().toString() + " playlists", Graphics.TEXT_JUSTIFY_CENTER);
             y += 30;
             dc.drawText(centerX, y, Graphics.FONT_TINY, "Tap to select", Graphics.TEXT_JUSTIFY_CENTER);
         } else {

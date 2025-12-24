@@ -68,7 +68,19 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                             continue;
                         }
 
-                        var duration = song.hasKey("duration") ? song["duration"] as Number? : null;
+                        var duration = null;
+                        if (song.hasKey("duration")) {
+                            var rawDuration = song["duration"];
+                            if (rawDuration != null) {
+                                duration = rawDuration as Number?;
+                                if (duration == null) {
+                                    var durationString = rawDuration as String?;
+                                    if (durationString != null) {
+                                        duration = durationString.toNumber();
+                                    }
+                                }
+                            }
+                        }
                         var artist = song.hasKey("artist") ? song["artist"] as String? : null;
                         if (artist == null) {
                             artist = "Unknown";
@@ -83,7 +95,6 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                         var streamUrl = _api.getStreamUrl(songId);
                         var processedSong = {
                             "id" => songId,
-                            "contentRefId" => streamUrl,
                             "title" => title,
                             "artist" => artist,
                             "album" => album,

@@ -13,6 +13,32 @@ class YuMusicLibrary {
     function initialize() {
     }
 
+    private function hashStringToNumber(value as String) as Number {
+        var bytes = value.toUtf8Array();
+        var hash = 0;
+
+        for (var i = 0; i < bytes.size(); i++) {
+            var b = bytes[i] as Number?;
+            if (b == null) {
+                b = bytes[i].toString().toNumber();
+            }
+
+            if (b != null) {
+                hash = ((hash * 31) + b) & 0x7FFFFFFF;
+            }
+        }
+
+        if (hash == 0) {
+            hash = 1;
+        }
+
+        return hash;
+    }
+
+    function computeContentRefId(songId as String) as Number {
+        return hashStringToNumber(songId);
+    }
+
     // Save songs to library
     function saveSongs(songs as Array) as Void {
         Storage.setValue(SONGS_KEY, songs as Array<Application.PropertyValueType>);
@@ -23,6 +49,33 @@ class YuMusicLibrary {
         var songs = Storage.getValue(SONGS_KEY) as Array?;
         if (songs == null) {
             return [];
+        }
+
+        var changed = false;
+        for (var i = 0; i < songs.size(); i++) {
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+
+            if (song.hasKey("duration")) {
+                var rawDuration = song["duration"];
+                if (rawDuration != null) {
+                    var durationNumber = rawDuration as Number?;
+                    if (durationNumber == null) {
+                        var durationString = rawDuration as String?;
+                        if (durationString != null) {
+                            durationNumber = durationString.toNumber();
+                            song["duration"] = durationNumber;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (changed) {
+            saveSongs(songs);
         }
         return songs;
     }
@@ -113,11 +166,7 @@ class YuMusicLibrary {
 
     // Create Media.Content object from song data
     function createMediaContent(song as Dictionary) as Media.Content? {
-        // Create ContentRef with stable ID (prefer the download/stream URL)
-        var contentRefId = song.hasKey("contentRefId") ? song["contentRefId"] as String? : null;
-        if (contentRefId == null) {
-            contentRefId = song["id"] as String?;
-        }
+        var contentRefId = song.hasKey("contentRefId") ? song["contentRefId"] as Number? : null;
         if (contentRefId == null) {
             return null;
         }
@@ -150,20 +199,32 @@ class YuMusicLibrary {
     }
 
     // Find a song by the ContentRef ID used by playback (typically the stream/download URL)
-    function getSongByContentRefId(contentRefId as String) as Dictionary? {
+    function getSongByContentRefId(contentRefId as Object) as Dictionary? {
+        var contentRefNumber = contentRefId as Number?;
+        var contentRefString = contentRefId as String?;
         var songs = getSongs();
         for (var i = 0; i < songs.size(); i++) {
             var song = songs[i] as Dictionary?;
             if (song == null) {
                 continue;
             }
-            var stored = song.hasKey("contentRefId") ? song["contentRefId"] as String? : null;
-            if (stored != null && stored.equals(contentRefId)) {
-                return song;
+
+            if (contentRefNumber != null) {
+                var storedNumber = song.hasKey("contentRefId") ? song["contentRefId"] as Number? : null;
+                if (storedNumber != null && storedNumber == contentRefNumber) {
+                    return song;
+                }
             }
-            var url = song.hasKey("url") ? song["url"] as String? : null;
-            if (url != null && url.equals(contentRefId)) {
-                return song;
+
+            if (contentRefString != null) {
+                var storedString = song.hasKey("contentRefId") ? song["contentRefId"] as String? : null;
+                if (storedString != null && storedString.equals(contentRefString)) {
+                    return song;
+                }
+                var url = song.hasKey("url") ? song["url"] as String? : null;
+                if (url != null && url.equals(contentRefString)) {
+                    return song;
+                }
             }
         }
         return null;
