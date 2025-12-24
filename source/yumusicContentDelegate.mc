@@ -88,6 +88,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         // Scrobble the song when it's played
         // Note: We scrobble on any song event to ensure tracking
         if (contentRefId != null) {
+            _library.setLastPlayedContentRefId(contentRefId);
             var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
             if (songId != null) {

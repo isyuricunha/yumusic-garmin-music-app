@@ -9,6 +9,7 @@ class YuMusicLibrary {
     private const PLAYLISTS_KEY = "playlists";
     private const CURRENT_PLAYLIST_KEY = "currentPlaylist";
     private const SHUFFLE_KEY = "shuffle";
+    private const LAST_PLAYED_CONTENT_REF_ID_KEY = "lastPlayedContentRefId";
 
     function initialize() {
     }
@@ -50,6 +51,60 @@ class YuMusicLibrary {
     // Save songs to library
     function saveSongs(songs as Array) as Void {
         Storage.setValue(SONGS_KEY, songs as Array<Application.PropertyValueType>);
+    }
+
+    function saveSelectedSongsPreservingDownloads(selectedSongs as Array) as Void {
+        var existingSongs = Storage.getValue(SONGS_KEY) as Array?;
+        if (existingSongs == null) {
+            saveSongs(selectedSongs);
+            return;
+        }
+
+        var existingById = {};
+        for (var i = 0; i < existingSongs.size(); i++) {
+            var existingSong = existingSongs[i] as Dictionary?;
+            if (existingSong == null) {
+                continue;
+            }
+            var existingId = existingSong["id"] as String?;
+            if (existingId == null) {
+                continue;
+            }
+            existingById[existingId] = existingSong;
+        }
+
+        var mergedSongs = [];
+        for (var j = 0; j < selectedSongs.size(); j++) {
+            var song = selectedSongs[j] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var songId = song["id"] as String?;
+            if (songId == null) {
+                continue;
+            }
+
+            var existing = existingById.hasKey(songId) ? existingById[songId] as Dictionary? : null;
+            if (existing != null) {
+                if (existing.hasKey("downloaded")) {
+                    song["downloaded"] = existing["downloaded"];
+                }
+
+                if (existing.hasKey("contentRefId")) {
+                    var rawExistingContentRefId = existing["contentRefId"];
+                    if (rawExistingContentRefId != null) {
+                        var existingContentRefIdNumber = safe_number(rawExistingContentRefId);
+                        if (existingContentRefIdNumber != null) {
+                            song["contentRefId"] = rawExistingContentRefId;
+                        }
+                    }
+                }
+            }
+
+            mergedSongs.add(song);
+        }
+
+        saveSongs(mergedSongs);
     }
 
     // Get all songs from library
@@ -197,6 +252,22 @@ class YuMusicLibrary {
         return shuffle != null && shuffle;
     }
 
+    function setLastPlayedContentRefId(contentRefId as Object) as Void {
+        var number = safe_number(contentRefId);
+        if (number == null) {
+            return;
+        }
+        Storage.setValue(LAST_PLAYED_CONTENT_REF_ID_KEY, number);
+    }
+
+    function getLastPlayedContentRefId() as Number? {
+        var raw = Storage.getValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
+        if (raw == null) {
+            return null;
+        }
+        return safe_number(raw);
+    }
+
     // Create Media.Content object from song data
     function createMediaContent(song as Dictionary) as Media.Content? {
         var contentRefId = null;
@@ -210,29 +281,28 @@ class YuMusicLibrary {
             return null;
         }
         var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
-        
-        // Set metadata
-        var metadata = new Media.ContentMetadata();
-        
-        var title = song.hasKey("title") ? song["title"] as String? : null;
-        if (title != null) {
-            metadata.title = title;
+        var content = Media.getCachedContentObj(contentRef);
+        if (content == null) {
+            return null;
         }
-        
-        var artist = song.hasKey("artist") ? song["artist"] as String? : null;
-        if (artist != null) {
-            metadata.artist = artist;
+
+        var metadata = content.getMetadata();
+        if (metadata != null) {
+            var title = song.hasKey("title") ? song["title"] as String? : null;
+            if (title != null) {
+                metadata.title = title;
+            }
+
+            var artist = song.hasKey("artist") ? song["artist"] as String? : null;
+            if (artist != null) {
+                metadata.artist = artist;
+            }
+
+            var album = song.hasKey("album") ? song["album"] as String? : null;
+            if (album != null) {
+                metadata.album = album;
+            }
         }
-        
-        var album = song.hasKey("album") ? song["album"] as String? : null;
-        if (album != null) {
-            metadata.album = album;
-        }
-        
-        // Note: duration is not a property of ContentMetadata in this API version
-        
-        // Create Content with ContentRef and metadata
-        var content = new Media.Content(contentRef, metadata);
 
         return content;
     }

@@ -50,6 +50,28 @@ class YuMusicContentIterator extends Media.ContentIterator {
         // If shuffle is enabled, randomize the song order
         if (_shuffle && _songs.size() > 0) {
             shuffleSongs();
+        } else {
+            var lastPlayed = _library.getLastPlayedContentRefId();
+            if (lastPlayed != null && _songs.size() > 0) {
+                for (var j = 0; j < _songs.size(); j++) {
+                    var s = _songs[j] as Dictionary?;
+                    if (s == null) {
+                        continue;
+                    }
+                    var id = null;
+                    if (s.hasKey("contentRefId")) {
+                        try {
+                            id = s["contentRefId"] as Number?;
+                        } catch (ex) {
+                            id = null;
+                        }
+                    }
+                    if (id != null && id == lastPlayed) {
+                        _currentIndex = j;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -103,15 +125,13 @@ class YuMusicContentIterator extends Media.ContentIterator {
         if (_songs.size() == 0) {
             return null;
         }
-        
-        _currentIndex++;
-        
-        // Loop back to beginning if at end
-        if (_currentIndex >= _songs.size()) {
-            _currentIndex = 0;
+
+        if (_currentIndex < (_songs.size() - 1)) {
+            _currentIndex++;
+            return get();
         }
-        
-        return get();
+
+        return null;
     }
 
     // Get the next media content object without incrementing the iterator.
@@ -121,10 +141,8 @@ class YuMusicContentIterator extends Media.ContentIterator {
         }
         
         var nextIndex = _currentIndex + 1;
-        
-        // Loop back to beginning if at end
         if (nextIndex >= _songs.size()) {
-            nextIndex = 0;
+            return null;
         }
         
         var song = _songs[nextIndex] as Dictionary?;
@@ -142,10 +160,8 @@ class YuMusicContentIterator extends Media.ContentIterator {
         }
         
         var prevIndex = _currentIndex - 1;
-        
-        // Loop to end if at beginning
         if (prevIndex < 0) {
-            prevIndex = _songs.size() - 1;
+            return null;
         }
         
         var song = _songs[prevIndex] as Dictionary?;
@@ -161,15 +177,13 @@ class YuMusicContentIterator extends Media.ContentIterator {
         if (_songs.size() == 0) {
             return null;
         }
-        
-        _currentIndex--;
-        
-        // Loop to end if at beginning
-        if (_currentIndex < 0) {
-            _currentIndex = _songs.size() - 1;
+
+        if (_currentIndex > 0) {
+            _currentIndex--;
+            return get();
         }
-        
-        return get();
+
+        return null;
     }
 
     // Determine if playback is currently set to shuffle.
