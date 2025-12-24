@@ -8,6 +8,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
     private var _api as YuMusicSubsonicAPI;
     private var _library as YuMusicLibrary;
     private var _serverConfig as YuMusicServerConfig;
+    private var _loadingPushed as Boolean = false;
 
     function initialize() {
         Menu2InputDelegate.initialize();
@@ -32,19 +33,31 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         if (playlistId == null) {
             return;
         }
-        
-        // Load playlist songs
-        _api.getPlaylist(playlistId.toString(), method(:onPlaylistReceived));
-        
-        // Show loading view
+
+        // Show loading view first. On some devices/network failures the web request can
+        // invoke the callback very quickly; pushing first avoids popping the wrong view.
+        _loadingPushed = true;
         var loadingView = new YuMusicLoadingView("Loading playlist...");
         WatchUi.pushView(loadingView, new WatchUi.BehaviorDelegate(), WatchUi.SLIDE_LEFT);
+
+        // Load playlist songs
+        _api.getPlaylist(playlistId.toString(), method(:onPlaylistReceived));
     }
 
     // Callback when playlist details are received
     function onPlaylistReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        // Pop loading view
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        System.println("getPlaylist responseCode: " + responseCode.toString());
+
+        // Pop loading view (if it was pushed). Guard against popping the menu view
+        // in case the callback fires before the view stack updates.
+        if (_loadingPushed) {
+            _loadingPushed = false;
+            try {
+                WatchUi.popView(WatchUi.SLIDE_RIGHT);
+            } catch (ex) {
+                System.println("pop loading view failed: " + ex.toString());
+            }
+        }
         
         var dict = data as Dictionary?;
         if (responseCode == 200 && dict != null) {

@@ -61,20 +61,29 @@ class YuMusicConfigureSyncView extends WatchUi.View {
     }
 
     function onWifiChecked(result as { :wifiAvailable as Boolean, :errorCode as Communications.WifiConnectionStatus }) as Void {
-        var wifiAvailable = result[:wifiAvailable];
-        var errorCode = result[:errorCode];
-        System.println("wifiAvailable: " + wifiAvailable.toString());
-        System.println("wifiErrorCode: " + errorCode.toString());
+        try {
+            var wifiAvailable = result[:wifiAvailable];
+            var errorCode = result[:errorCode];
 
-        if (!wifiAvailable) {
+            System.println("wifiAvailable: " + wifiAvailable.toString());
+            var errorCodeNumber = errorCode as Number;
+            System.println("wifiErrorCode: " + errorCodeNumber.toString());
+
+            if (!wifiAvailable) {
+                _loading = false;
+                _error = "Wi-Fi not available (" + errorCodeNumber.toString() + ")";
+                WatchUi.requestUpdate();
+                return;
+            }
+
+            // Load playlists from server
+            _api.getPlaylists(method(:onPlaylistsReceived));
+        } catch (ex) {
+            System.println("wifi check exception: " + ex.toString());
             _loading = false;
-            _error = "Wi-Fi not available (" + errorCode.toString() + ")";
+            _error = "Wi-Fi check failed";
             WatchUi.requestUpdate();
-            return;
         }
-
-        // Load playlists from server
-        _api.getPlaylists(method(:onPlaylistsReceived));
     }
 
     // Callback when playlists are received
