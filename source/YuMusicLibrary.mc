@@ -69,6 +69,19 @@ class YuMusicLibrary {
             if (song.hasKey("contentRefId")) {
                 var rawContentRefId = song["contentRefId"];
                 if (rawContentRefId != null) {
+                    // Persisted media ids must be numeric. Any String stored here is legacy/invalid.
+                    var contentRefIdString = null;
+                    try {
+                        contentRefIdString = rawContentRefId as String?;
+                    } catch (ex) {
+                        contentRefIdString = null;
+                    }
+                    if (contentRefIdString != null) {
+                        song.remove("contentRefId");
+                        song["downloaded"] = false;
+                        changed = true;
+                    }
+
                     var contentRefIdNumber = safe_number(rawContentRefId);
                     if (contentRefIdNumber != null) {
                         // Valid numeric persisted id, keep as-is
