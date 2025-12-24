@@ -1,6 +1,7 @@
 import Toybox.Graphics;
 import Toybox.WatchUi;
 import Toybox.Lang;
+import Toybox.Communications;
 import Toybox.PersistedContent;
 import Toybox.System;
 
@@ -55,7 +56,23 @@ class YuMusicConfigureSyncView extends WatchUi.View {
         
         _loading = true;
         WatchUi.requestUpdate();
-        
+
+        Communications.checkWifiConnection(method(:onWifiChecked));
+    }
+
+    function onWifiChecked(result as { :wifiAvailable as Boolean, :errorCode as Communications.WifiConnectionStatus }) as Void {
+        var wifiAvailable = result[:wifiAvailable];
+        var errorCode = result[:errorCode];
+        System.println("wifiAvailable: " + wifiAvailable.toString());
+        System.println("wifiErrorCode: " + errorCode.toString());
+
+        if (!wifiAvailable) {
+            _loading = false;
+            _error = "Wi-Fi not available (" + errorCode.toString() + ")";
+            WatchUi.requestUpdate();
+            return;
+        }
+
         // Load playlists from server
         _api.getPlaylists(method(:onPlaylistsReceived));
     }

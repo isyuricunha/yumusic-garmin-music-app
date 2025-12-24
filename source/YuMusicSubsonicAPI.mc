@@ -178,6 +178,7 @@ class YuMusicSubsonicAPI {
     // Get playlist details with songs
     function getPlaylist(playlistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPlaylist") + "&id=" + playlistId;
+        System.println("getPlaylist url: " + url);
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
