@@ -34,6 +34,6 @@ class YuMusicConfirmView extends WatchUi.View {
 
         // Draw instruction
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y, Graphics.FONT_TINY, "Press back to continue", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y, Graphics.FONT_TINY, "Press back to stop or touch/select to continue", Graphics.TEXT_JUSTIFY_CENTER);
     }
 }
