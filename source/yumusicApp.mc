@@ -121,7 +121,6 @@ class YuMusicApp extends Application.AudioContentProviderApp {
     function getSyncConfigurationView() as [WatchUi.Views] or [WatchUi.Views, WatchUi.InputDelegates] {
         var view = new YuMusicConfigureSyncView();
         var delegate = new YuMusicConfigureSyncDelegate();
-        delegate.setView(view);
         return [ view, delegate ];
     }
 

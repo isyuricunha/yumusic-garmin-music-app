@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Media;
+import Toybox.Communications;
 
 // Delegate for playback settings menu
 class YuMusicPlaybackMenuDelegate extends WatchUi.Menu2InputDelegate {
@@ -26,7 +27,6 @@ class YuMusicPlaybackMenuDelegate extends WatchUi.Menu2InputDelegate {
 
             var view = new YuMusicConfigureSyncView();
             var delegate = new YuMusicConfigureSyncDelegate();
-            delegate.setView(view);
             WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
         } else if (id == :syncNow) {
             if (!_serverConfig.isConfigured()) {
@@ -35,7 +35,7 @@ class YuMusicPlaybackMenuDelegate extends WatchUi.Menu2InputDelegate {
                 return;
             }
 
-            Media.startSync();
+            Communications.startSync();
         } else if (id == :shuffle) {
             // Toggle shuffle
             _library.setShuffle(!_library.getShuffle());

@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Media;
+import Toybox.Communications;
 
 // Delegate for confirmation view
 class YuMusicConfirmDelegate extends WatchUi.BehaviorDelegate {
@@ -29,7 +30,7 @@ class YuMusicConfirmDelegate extends WatchUi.BehaviorDelegate {
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
 
         if (_startSyncOnSelect) {
-            Media.startSync();
+            Communications.startSync();
         }
         return true;
     }

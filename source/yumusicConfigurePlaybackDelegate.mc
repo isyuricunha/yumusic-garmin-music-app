@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Media;
+import Toybox.Communications;
 
 class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
     private var _library as YuMusicLibrary;
@@ -27,7 +28,6 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
 
             var view = new YuMusicConfigureSyncView();
             var delegate = new YuMusicConfigureSyncDelegate();
-            delegate.setView(view);
             WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
         } else if (id.equals("syncNow")) {
             if (!_serverConfig.isConfigured()) {
@@ -36,7 +36,7 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
                 return;
             }
 
-            Media.startSync();
+            Communications.startSync();
         } else if (id.equals("shuffle")) {
             _library.setShuffle(!_library.getShuffle());
             var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";

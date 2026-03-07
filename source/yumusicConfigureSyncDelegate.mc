@@ -2,15 +2,8 @@ import Toybox.WatchUi;
 import Toybox.Lang;
 
 class YuMusicConfigureSyncDelegate extends WatchUi.Menu2InputDelegate {
-    private var _view as YuMusicConfigureSyncView?;
-
     function initialize() {
         Menu2InputDelegate.initialize();
-        _view = null;
-    }
-
-    function setView(view as YuMusicConfigureSyncView) as Void {
-        _view = view;
     }
 
     function onSelect(item as MenuItem) as Void {

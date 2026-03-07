@@ -282,9 +282,6 @@ class YuMusicLibrary {
         }
         var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
         var content = Media.getCachedContentObj(contentRef);
-        if (content == null) {
-            return null;
-        }
 
         var metadata = content.getMetadata();
         if (metadata != null) {
