@@ -19,7 +19,8 @@ class YuMusicLocalPlaylistsDelegate extends WatchUi.Menu2InputDelegate {
         var playlistId = id as String;
         _library.setCurrentPlaylist(playlistId);
         
-        // Pop back to the previous menu
+        // Pop back to the previous menu, and then pop that menu to return to the player
+        WatchUi.popView(WatchUi.SLIDE_RIGHT);
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 
