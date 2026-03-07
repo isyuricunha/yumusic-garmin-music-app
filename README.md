@@ -7,7 +7,7 @@ YuMusic is a sleek, Spotify-like music player for Garmin watches that seamlessly
 ## Description
 YuMusic transforms your Garmin watch into a powerful, standalone music player. Designed with a clean and intuitive interface, it allows you to connect directly to any Subsonic-compatible media server (such as Navidrome, Gonic, or Airsonic). 
 
-Once connected via the Garmin Connect phone app, you can browse your favorite playlists directly on your watch, download the tracks over Wi-Fi, and enjoy your music offline while running or working out—allowing you to completely leave your phone behind.
+Once connected via the Garmin Connect phone app, you can browse your favorite playlists directly on your watch, download the tracks over Wi-Fi, and enjoy your music offline while running or working out, allowing you to completely leave your phone behind.
 
 **Key Features:**
 - **Direct Server Sync:** Wirelessly download your playlists straight from your home server to your wrist.
