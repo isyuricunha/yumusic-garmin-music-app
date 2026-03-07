@@ -5,7 +5,7 @@
         Use "Monkey C: Edit Application" from the Visual Studio Code command palette
         to update the application attributes.
     -->
-    <iq:application id="266566f5-f9ce-4022-8260-b9516af46651" type="audio-content-provider-app" name="@Strings.AppName" entry="YuMusicApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="5.0.0">
+    <iq:application id="cddb60e3-11dc-44b4-845c-13ebc3915f32" type="audio-content-provider-app" name="@Strings.AppName" entry="YuMusicApp" launcherIcon="@Drawables.LauncherIcon" minApiLevel="5.0.0">
         <!--
             Use the following from the Visual Studio Code comand palette to edit
             the build targets:
