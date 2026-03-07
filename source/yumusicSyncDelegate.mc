@@ -105,7 +105,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         // Make the download request
         Communications.makeWebRequest(
             url,
-            null,
+            {},
             options,
             method(:onSongDownloaded)
         );

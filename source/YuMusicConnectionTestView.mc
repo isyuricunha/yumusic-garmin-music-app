@@ -81,10 +81,10 @@ class YuMusicConnectionTestView extends WatchUi.View {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_TEXT_PLAIN
         };
 
-        Communications.makeWebRequest(url, null, options, method(:onPublicHttpsResponse));
+        Communications.makeWebRequest(url, {}, options, method(:onPublicHttpsResponse));
     }
 
-    private function onPublicHttpsResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    function onPublicHttpsResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         System.println("connection test: public responseCode=" + responseCode.toString());
 
         if (responseCode >= 0) {
@@ -136,7 +136,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
         _api.ping(method(:onPingResponse));
     }
 
-    private function onPingResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    function onPingResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         System.println("connection test: ping responseCode=" + responseCode.toString());
 
         if (responseCode == 200) {
@@ -156,7 +156,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
         _api.getPlaylists(method(:onGetPlaylistsResponse));
     }
 
-    private function onGetPlaylistsResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    function onGetPlaylistsResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         System.println("connection test: getPlaylists responseCode=" + responseCode.toString());
 
         if (responseCode == 200) {

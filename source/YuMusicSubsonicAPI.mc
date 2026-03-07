@@ -155,7 +155,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Get all playlists
@@ -172,7 +172,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Get playlist details with songs
@@ -185,7 +185,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Get random songs
@@ -197,7 +197,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Get all artists
@@ -209,7 +209,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Get artist albums
@@ -221,7 +221,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Get album songs
@@ -233,7 +233,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Search for songs, albums, artists
@@ -246,7 +246,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Ensure a value is an Array (useful for Subsonic JSON which returns an object if there's only 1 item)
@@ -344,7 +344,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Star a song/album/artist
@@ -356,7 +356,7 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 
     // Unstar a song/album/artist
@@ -368,6 +368,6 @@ class YuMusicSubsonicAPI {
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
 
-        Communications.makeWebRequest(url, null, options, callback);
+        Communications.makeWebRequest(url, {}, options, callback);
     }
 }
