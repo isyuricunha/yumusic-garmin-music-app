@@ -1,0 +1,4 @@
+# IGNORE THIS FILE. THIS IS ONLY TO ME (YURI)
+
+Dev Publish Test UUID: cddb60e3-11dc-44b4-845c-13ebc3915f32
+Public Publish UUID: 716a6ef1-f242-4857-ab2d-d6c5c281d994
