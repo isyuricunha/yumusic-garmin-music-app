@@ -46,7 +46,9 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         _fetching = true;
         addSingleItem("Loading...", "Please wait", "loading");
 
-        Communications.checkWifiConnection(method(:onWifiChecked));
+        // Communications.checkWifiConnection() can crash with Invalid Value on some devices/SDKs
+        // We skip it and rely on makeWebRequest (which handles connections natively)
+        _api.getPlaylists(method(:onPlaylistsReceived));
     }
 
     private function addSingleItem(label as String, subLabel as String, id as String) as Void {
@@ -59,25 +61,6 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         while(_itemCount > 0) {
             deleteItem(0);
             _itemCount--;
-        }
-    }
-
-    function onWifiChecked(result as { :wifiAvailable as Boolean, :errorCode as Communications.WifiConnectionStatus }) as Void {
-        try {
-            var wifiAvailable = result[:wifiAvailable];
-            if (!wifiAvailable) {
-                _fetching = false;
-                var errorCode = result[:errorCode] as Number;
-                addSingleItem("Error", "Wi-Fi not available (" + errorCode.toString() + ")", "error");
-                WatchUi.requestUpdate();
-                return;
-            }
-
-            _api.getPlaylists(method(:onPlaylistsReceived));
-        } catch (ex) {
-            _fetching = false;
-            addSingleItem("Error", "Wi-Fi check failed", "error");
-            WatchUi.requestUpdate();
         }
     }
 

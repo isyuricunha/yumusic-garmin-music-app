@@ -32,7 +32,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
         _running = true;
         _results = [];
 
-        addResult("Wi-Fi", "pending", null);
+        addResult("Wi-Fi Check", "skipped", "auto via webReq");
         addResult("Public HTTPS", "pending", null);
         addResult("Subsonic ping", "pending", null);
         addResult("Get playlists", "pending", null);
@@ -40,7 +40,11 @@ class YuMusicConnectionTestView extends WatchUi.View {
         WatchUi.requestUpdate();
 
         System.println("connection test: starting");
-        Communications.checkWifiConnection(method(:onWifiChecked));
+        
+        // Communications.checkWifiConnection() can crash with Invalid Value on some devices/SDKs if listener is missing 
+        // or app is not an audio-provider type in the current context. We skip it and rely on makeWebRequest to 
+        // initialize the network connection.
+        testPublicHttps();
     }
 
     private function addResult(label as String, status as String, detail as String?) as Void {
@@ -66,33 +70,6 @@ class YuMusicConnectionTestView extends WatchUi.View {
         _running = false;
         WatchUi.requestUpdate();
         System.println("connection test: finished");
-    }
-
-    private function onWifiChecked(result as { :wifiAvailable as Boolean, :errorCode as Communications.WifiConnectionStatus }) as Void {
-        try {
-            var wifiAvailable = result[:wifiAvailable];
-            var errorCode = result[:errorCode];
-            var errorCodeNumber = errorCode as Number;
-
-            System.println("connection test: wifiAvailable=" + wifiAvailable.toString());
-            System.println("connection test: wifiErrorCode=" + errorCodeNumber.toString());
-
-            if (wifiAvailable) {
-                setResult(0, "ok", null);
-                WatchUi.requestUpdate();
-                testPublicHttps();
-            } else {
-                setResult(0, "fail", "(" + errorCodeNumber.toString() + ")");
-                setResult(1, "skipped", "no wifi");
-                setResult(2, "skipped", "no wifi");
-                setResult(3, "skipped", "no wifi");
-                finish();
-            }
-        } catch (ex) {
-            System.println("connection test: wifi exception=" + ex.toString());
-            setResult(0, "fail", "exception");
-            finish();
-        }
     }
 
     private function testPublicHttps() as Void {
