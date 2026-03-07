@@ -8,3 +8,5 @@ mir/
 
 *.prg
 *.prg.debug.xml
+developer_key.der
+developer_key.pem
