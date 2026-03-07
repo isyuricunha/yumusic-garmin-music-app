@@ -19,6 +19,10 @@ class YuMusicPlaybackMenuDelegate extends WatchUi.Menu2InputDelegate {
         var id = item.getId();
         
         if (id == :selectPlaylist) {
+            var view = new YuMusicLocalPlaylistsView();
+            var delegate = new YuMusicLocalPlaylistsDelegate();
+            WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
+        } else if (id == :addMusic) {
             if (!_serverConfig.isConfigured()) {
                 var errorView = new YuMusicConfirmView("Error", "Server not configured");
                 WatchUi.pushView(errorView, new YuMusicConfirmDelegate(false), WatchUi.SLIDE_LEFT);

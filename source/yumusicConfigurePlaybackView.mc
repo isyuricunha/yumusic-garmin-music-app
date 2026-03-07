@@ -17,6 +17,7 @@ class YuMusicConfigurePlaybackView extends WatchUi.Menu2 {
 
         _playlistItem = new WatchUi.MenuItem("Select Playlist", "", "selectPlaylist", {});
         addItem(_playlistItem);
+        addItem(new WatchUi.MenuItem("Add Music", "Browse server", "addMusic", {}));
         addItem(new WatchUi.MenuItem("Sync Now", null, "syncNow", {}));
         addItem(new WatchUi.MenuItem("Test Connection", null, "testConnection", {}));
         
