@@ -64,8 +64,8 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             var response = dict["subsonic-response"] as Dictionary?;
             var playlist = response != null ? response["playlist"] as Dictionary? : null;
             if (playlist != null) {
-                var songs = playlist["entry"] as Array?;
-                if (songs != null) {
+                    var songs = _api.ensureArray(playlist["entry"]);
+                if (songs != null && songs.size() > 0) {
                     
                     // Process songs and prepare for download
                     var processedSongs = [];

@@ -1,59 +1,31 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 
-class YuMusicConfigureSyncDelegate extends WatchUi.BehaviorDelegate {
+class YuMusicConfigureSyncDelegate extends WatchUi.Menu2InputDelegate {
     private var _view as YuMusicConfigureSyncView?;
 
     function initialize() {
-        BehaviorDelegate.initialize();
+        Menu2InputDelegate.initialize();
         _view = null;
     }
 
-    // Set the view reference
     function setView(view as YuMusicConfigureSyncView) as Void {
         _view = view;
     }
 
-    // Handle select button press
-    function onSelect() as Boolean {
-        if (_view != null) {
-            var playlists = _view.getPlaylists();
-            if (playlists != null && playlists.size() > 0) {
-                // Push playlist selection menu
-                var menu = new WatchUi.Menu2({:title => "Playlists"});
-                
-                for (var i = 0; i < playlists.size(); i++) {
-                    var playlist = playlists[i] as Dictionary?;
-                    if (playlist == null) {
-                        continue;
-                    }
-
-                    var name = playlist["name"] as String?;
-                    var id = playlist["id"] as String?;
-                    var songCount = playlist["songCount"] as Number?;
-                    if (name == null || id == null) {
-                        continue;
-                    }
-
-                    var subtitle = (songCount != null ? songCount.toString() : "0") + " songs";
-                    menu.addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
-                }
-                
-                WatchUi.pushView(menu, new YuMusicPlaylistMenuDelegate(), WatchUi.SLIDE_LEFT);
-                return true;
-            }
+    function onSelect(item as MenuItem) as Void {
+        var playlistId = item.getId();
+        if (playlistId == null || playlistId.equals("loading") || playlistId.equals("error") || playlistId.equals("empty")) {
+            return;
         }
-        return false;
+
+        // When a playlist is selected, load the songs via the existing playlist menu logic.
+        // We will just create a mock menu item to trigger YuMusicPlaylistMenuDelegate correctly.
+        var playlistDelegate = new YuMusicPlaylistMenuDelegate();
+        playlistDelegate.onSelect(item);
     }
 
-    // Handle touch tap (Venu 2 is primarily touch)
-    function onTap(clickEvent as WatchUi.ClickEvent) as Boolean {
-        return onSelect();
-    }
-
-    // Handle back button
-    function onBack() as Boolean {
+    function onBack() as Void {
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
-        return true;
     }
 }

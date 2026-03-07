@@ -249,6 +249,17 @@ class YuMusicSubsonicAPI {
         Communications.makeWebRequest(url, null, options, callback);
     }
 
+    // Ensure a value is an Array (useful for Subsonic JSON which returns an object if there's only 1 item)
+    function ensureArray(value as Object?) as Array {
+        if (value == null) {
+            return [];
+        }
+        if (value instanceof Toybox.Lang.Array) {
+            return value as Array;
+        }
+        return [value];
+    }
+
     // Get download URL for a song
     function getDownloadUrl(songId as String) as String {
         if (_serverUrl == null || _username == null) {
@@ -274,11 +285,13 @@ class YuMusicSubsonicAPI {
 
     // Get stream URL for a song
     function getStreamUrl(songId as String) as String {
+        // Use download.view instead of stream.view to ensure Content-Length header is present,
+        // which is required for Media.makeWebRequest / AudioContentProvider downlaods on Garmin.
         if (_serverUrl == null || _username == null) {
             return "";
         }
 
-        var url = _serverUrl + "/rest/stream.view?";
+        var url = _serverUrl + "/rest/download.view?";
         url += "id=" + songId;
         url += "&u=" + _username;
         url += "&v=" + _apiVersion;

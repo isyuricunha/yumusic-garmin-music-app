@@ -1,46 +1,63 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
+import Toybox.Media;
 
-class YuMusicConfigurePlaybackDelegate extends WatchUi.BehaviorDelegate {
+class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
     private var _library as YuMusicLibrary;
+    private var _serverConfig as YuMusicServerConfig;
 
     function initialize() {
-        BehaviorDelegate.initialize();
+        Menu2InputDelegate.initialize();
         _library = new YuMusicLibrary();
+        _serverConfig = new YuMusicServerConfig();
     }
 
-    // Handle select button - toggle shuffle or show menu
-    function onSelect() as Boolean {
-        var menu = new WatchUi.Menu2({:title => "Playback"});
-
-        menu.addItem(new WatchUi.MenuItem("Select Playlist", null, :selectPlaylist, {}));
-        menu.addItem(new WatchUi.MenuItem("Sync Now", null, :syncNow, {}));
-        menu.addItem(new WatchUi.MenuItem("Test Connection", null, :testConnection, {}));
-        
-        // Add shuffle toggle
-        var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";
-        menu.addItem(new WatchUi.MenuItem(shuffleText, null, :shuffle, {}));
-        
-        // Add clear library option
-        if (_library.getLibrarySize() > 0) {
-            menu.addItem(new WatchUi.MenuItem("Clear Library", null, :clear, {}));
+    function onSelect(item as MenuItem) as Void {
+        var id = item.getId();
+        if (id == null) {
+            return;
         }
         
-        // Add server configuration option
-        menu.addItem(new WatchUi.MenuItem("Configure Server", null, :server, {}));
-        
-        WatchUi.pushView(menu, new YuMusicPlaybackMenuDelegate(), WatchUi.SLIDE_LEFT);
-        return true;
+        if (id.equals("selectPlaylist")) {
+            if (!_serverConfig.isConfigured()) {
+                var errorView = new YuMusicConfirmView("Error", "Server not configured");
+                WatchUi.pushView(errorView, new YuMusicConfirmDelegate(false), WatchUi.SLIDE_LEFT);
+                return;
+            }
+
+            var view = new YuMusicConfigureSyncView();
+            var delegate = new YuMusicConfigureSyncDelegate();
+            delegate.setView(view);
+            WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
+        } else if (id.equals("syncNow")) {
+            if (!_serverConfig.isConfigured()) {
+                var errorView = new YuMusicConfirmView("Error", "Server not configured");
+                WatchUi.pushView(errorView, new YuMusicConfirmDelegate(false), WatchUi.SLIDE_LEFT);
+                return;
+            }
+
+            Media.startSync();
+        } else if (id.equals("shuffle")) {
+            _library.setShuffle(!_library.getShuffle());
+            var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";
+            item.setLabel(shuffleText);
+        } else if (id.equals("clear")) {
+            _library.clearSongs();
+            WatchUi.popView(WatchUi.SLIDE_RIGHT);
+        } else if (id.equals("server")) {
+            var serverView = new YuMusicServerConfigView();
+            var serverDelegate = new YuMusicServerConfigDelegate();
+            serverDelegate.setView(serverView);
+            WatchUi.pushView(serverView, serverDelegate, WatchUi.SLIDE_LEFT);
+        } else if (id.equals("testConnection")) {
+            var view = new YuMusicConnectionTestView();
+            var delegate = new YuMusicConnectionTestDelegate();
+            delegate.setView(view);
+            WatchUi.pushView(view, delegate, WatchUi.SLIDE_LEFT);
+        }
     }
 
-    // Handle touch tap (Venu 2 is primarily touch)
-    function onTap(clickEvent as WatchUi.ClickEvent) as Boolean {
-        return onSelect();
-    }
-
-    // Handle back button
-    function onBack() as Boolean {
+    function onBack() as Void {
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
-        return true;
     }
 }
