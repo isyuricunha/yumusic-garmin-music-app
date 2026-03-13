@@ -16,5 +16,8 @@ Once connected via the Garmin Connect phone app, you can browse your favorite pl
 - **Instant Local Playback:** Swap between your downloaded playlists in seconds without needing an internet connection.
 - **Auto-Tracking:** Supports automatic scrobbling to keep your server's listening history updated.
 
+**Links**:
+- Connect IQ/Garmin Store: https://apps.garmin.com/apps/cdb7dbb1-66d9-4bd3-8894-f44e507cdd01
+
 ## License
 YuMusic is open-source software licensed under the **AGPL-3.0 License**. See the `LICENSE.txt` file for complete details.
