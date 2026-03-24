@@ -104,8 +104,11 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                             album = "Unknown";
                         }
 
-                        var coverArtId = song.hasKey("coverArt") ? song["coverArt"] as String? : null;
                         var streamUrl = _api.getStreamUrl(songId);
+                        // Keep only the essential fields to minimise the in-memory
+                        // footprint. Garmin limits JSON response body sizes and large
+                        // playlists can overflow that limit (-402) if extra fields like
+                        // coverArtUrl are retained per song.
                         var processedSong = {
                             "id" => songId,
                             "title" => title,
@@ -115,10 +118,6 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                             "url" => streamUrl,
                             "streamUrl" => streamUrl
                         };
-
-                        if (coverArtId != null) {
-                            processedSong["coverArtUrl"] = _api.getCoverArtUrl(coverArtId, 200);
-                        }
                         processedSongs.add(processedSong);
                     }
                     
@@ -150,8 +149,12 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             } else {
                 showError("Invalid playlist data");
             }
+        } else if (responseCode == -402) {
+            // Garmin response-too-large error: the playlist JSON exceeded the device
+            // memory limit. Instruct the user to use fewer songs.
+            showError("Playlist too large. Try syncing fewer than 30 songs at a time.");
         } else {
-            showError("Failed to load playlist");
+            showError("Failed to load playlist (" + responseCode.toString() + ")");
         }
     }
 
