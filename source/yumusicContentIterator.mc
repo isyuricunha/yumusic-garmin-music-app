@@ -115,8 +115,10 @@ class YuMusicContentIterator extends Media.ContentIterator {
         // Use Toybox.Media playback control constants. Using unqualified constants
         // can lead to duplicated/incorrect controls in the native player UI.
         profile.playbackControls = [
-            Media.PLAYBACK_CONTROL_SHUFFLE,
+            Media.PLAYBACK_CONTROL_PREVIOUS,
+            Media.PLAYBACK_CONTROL_NEXT,
             Media.PLAYBACK_CONTROL_VOLUME,
+            Media.PLAYBACK_CONTROL_SHUFFLE,
             Media.PLAYBACK_CONTROL_LIBRARY
         ];
 
