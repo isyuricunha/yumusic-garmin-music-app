@@ -1,0 +1,64 @@
+{
+  "settings" : [ {
+    "key" : "serverUrl",
+    "valueType" : "string",
+    "defaultValue" : "",
+    "configTitle" : "$literal0$",
+    "configPrompt" : null,
+    "configType" : "url",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : null,
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
+  }, {
+    "key" : "username",
+    "valueType" : "string",
+    "defaultValue" : "",
+    "configTitle" : "$literal1$",
+    "configPrompt" : null,
+    "configType" : "alphaNumeric",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : null,
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
+  }, {
+    "key" : "password",
+    "valueType" : "string",
+    "defaultValue" : "",
+    "configTitle" : "$literal2$",
+    "configPrompt" : null,
+    "configType" : "alphaNumeric",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : null,
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
+  } ],
+  "supportsLiveValidation" : false,
+  "languages" : {
+    "valyrian" : {
+      "noSongs" : "No songs available",
+      "$literal1$" : "Username",
+      "configurePlaybackMessage" : "Playback Settings",
+      "$literal0$" : "Server URL",
+      "syncFailed" : "Sync failed",
+      "$literal2$" : "Password",
+      "loading" : "Loading...",
+      "serverNotConfigured" : "Server not configured",
+      "configureSyncMessage" : "Select Music to Sync",
+      "syncComplete" : "Sync complete!",
+      "AppName" : "YuMusic"
+    }
+  }
+}
