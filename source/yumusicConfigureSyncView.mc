@@ -4,6 +4,7 @@ import Toybox.Lang;
 import Toybox.Communications;
 import Toybox.PersistedContent;
 import Toybox.System;
+import Toybox.Timer;
 
 // Native Menu2 for configuring songs to sync.
 class YuMusicConfigureSyncView extends WatchUi.Menu2 {
@@ -11,6 +12,10 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
     private var _api as YuMusicSubsonicAPI;
     private var _playlists as Array?;
     private var _fetching as Boolean = false;
+    private var _retryTimer as Timer.Timer?;
+    private var _retryCount as Number = 0;
+    private const MAX_RETRIES = 3;
+    private const RETRY_DELAY_MS = 2000;
 
     private var _itemCount as Number = 0;
 
@@ -40,13 +45,26 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         }
 
         _api.configure(serverUrl, username, password);
-        
+        _retryCount = 0;
+        fetchPlaylists();
+    }
+
+    private function fetchPlaylists() as Void {
         _fetching = true;
         addSingleItem("Loading...", "Please wait", "loading");
-
-        // Communications.checkWifiConnection() can crash with Invalid Value on some devices/SDKs
-        // We skip it and rely on makeWebRequest (which handles connections natively)
         _api.getPlaylists(method(:onPlaylistsReceived));
+    }
+
+    private function scheduleRetry() as Void {
+        addSingleItem("Retrying...", "Please wait", "loading");
+        WatchUi.requestUpdate();
+        _retryTimer = new Timer.Timer();
+        _retryTimer.start(method(:onRetryTimer), RETRY_DELAY_MS, false);
+    }
+
+    function onRetryTimer() as Void {
+        _retryTimer = null;
+        fetchPlaylists();
     }
 
     private function addSingleItem(label as String, subLabel as String, id as String) as Void {
@@ -97,9 +115,14 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
                 addSingleItem("Error", "Invalid response", "error");
             }
         } else if (responseCode == -1004 || responseCode == -1003 || responseCode == -1001) {
-            // Transient BLE/WiFi connection error — common right after a sync.
-            // _fetching is already reset, so the user just needs to re-open this screen.
-            addSingleItem("Connection busy", "Go back & try again", "error");
+            // Transient BLE/WiFi error — auto-retry up to MAX_RETRIES times.
+            _retryCount++;
+            if (_retryCount <= MAX_RETRIES) {
+                System.println("getPlaylists transient error " + responseCode.toString() + ", retry " + _retryCount.toString());
+                scheduleRetry();
+                return;
+            }
+            addSingleItem("Connection error", "Go back & try again", "error");
         } else {
             addSingleItem("Error", "Failed to load (" + responseCode.toString() + ")", "error");
         }
@@ -111,3 +134,4 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         return _playlists;
     }
 }
+
