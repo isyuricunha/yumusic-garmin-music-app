@@ -96,6 +96,10 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
             } else {
                 addSingleItem("Error", "Invalid response", "error");
             }
+        } else if (responseCode == -1004 || responseCode == -1003 || responseCode == -1001) {
+            // Transient BLE/WiFi connection error — common right after a sync.
+            // _fetching is already reset, so the user just needs to re-open this screen.
+            addSingleItem("Connection busy", "Go back & try again", "error");
         } else {
             addSingleItem("Error", "Failed to load (" + responseCode.toString() + ")", "error");
         }
