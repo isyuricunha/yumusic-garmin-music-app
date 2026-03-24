@@ -9,7 +9,6 @@ import Toybox.System;
 class YuMusicConfigureSyncView extends WatchUi.Menu2 {
     private var _serverConfig as YuMusicServerConfig;
     private var _api as YuMusicSubsonicAPI;
-    private var _library as YuMusicLibrary;
     private var _playlists as Array?;
     private var _fetching as Boolean = false;
 
@@ -19,7 +18,6 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         Menu2.initialize({:title => "Add Music"});
         _serverConfig = new YuMusicServerConfig();
         _api = new YuMusicSubsonicAPI();
-        _library = new YuMusicLibrary();
     }
 
     function onShow() as Void {
@@ -75,7 +73,6 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
                 var playlists = playlistsContainer != null ? _api.ensureArray(playlistsContainer["playlist"]) : null;
                 if (playlists != null && playlists.size() > 0) {
                     _playlists = playlists;
-                    _library.savePlaylists(playlists);
                     
                     // Populate menu items
                     clearItems();

@@ -53,9 +53,15 @@ class YuMusicLibrary {
         Storage.setValue(SONGS_KEY, songs as Array<Application.PropertyValueType>);
     }
 
-    function saveSelectedSongsPreservingDownloads(selectedSongs as Array) as Void {
+    function saveSelectedSongsPreservingDownloads(selectedSongs as Array, playlistId as String) as Void {
         var existingSongs = Storage.getValue(SONGS_KEY) as Array?;
         if (existingSongs == null) {
+            for (var i = 0; i < selectedSongs.size(); i++) {
+                var s = selectedSongs[i] as Dictionary?;
+                if (s != null) {
+                    s["playlistId"] = playlistId;
+                }
+            }
             saveSongs(selectedSongs);
             return;
         }
@@ -84,6 +90,8 @@ class YuMusicLibrary {
                 continue;
             }
 
+            song["playlistId"] = playlistId;
+
             var existing = existingById.hasKey(songId) ? existingById[songId] as Dictionary? : null;
             if (existing != null) {
                 if (existing.hasKey("downloaded")) {
@@ -102,6 +110,19 @@ class YuMusicLibrary {
             }
 
             mergedSongs.add(song);
+            existingById.remove(songId);
+        }
+
+        var keys = existingById.keys();
+        for (var k = 0; k < keys.size(); k++) {
+            var key = keys[k];
+            var oldSong = existingById[key] as Dictionary?;
+            if (oldSong != null) {
+                var pId = oldSong["playlistId"] as String?;
+                if (pId != null && !pId.equals(playlistId)) {
+                    mergedSongs.add(oldSong);
+                }
+            }
         }
 
         saveSongs(mergedSongs);
@@ -220,6 +241,25 @@ class YuMusicLibrary {
     // Save playlists
     function savePlaylists(playlists as Array) as Void {
         Storage.setValue(PLAYLISTS_KEY, playlists as Array<Application.PropertyValueType>);
+    }
+
+    // Save a newly downloaded playlist metadata, keeping old ones
+    function saveDownloadedPlaylist(playlist as Dictionary) as Void {
+        var playlists = getPlaylists();
+        var newPlaylists = [];
+        var playlistId = playlist["id"] as String?;
+        
+        for (var i = 0; i < playlists.size(); i++) {
+            var p = playlists[i] as Dictionary?;
+            if (p != null) {
+                var pId = p["id"] as String?;
+                if (pId != null && !pId.equals(playlistId)) {
+                    newPlaylists.add(p);
+                }
+            }
+        }
+        newPlaylists.add(playlist);
+        savePlaylists(newPlaylists);
     }
 
     // Get all playlists

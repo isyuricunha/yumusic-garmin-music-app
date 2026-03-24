@@ -9,17 +9,39 @@ class YuMusicContentIterator extends Media.ContentIterator {
     private var _songs as Array;
     private var _currentIndex as Number = 0;
     private var _shuffle as Boolean = false;
+    private var _activePlaylistId as String?;
 
     function initialize() {
         ContentIterator.initialize();
         _library = new YuMusicLibrary();
-        var allSongs = _library.getSongs();
         _songs = [];
+        _activePlaylistId = _library.getCurrentPlaylist();
+        loadSongs();
+    }
+
+    // Load (or reload) songs that belong to the currently active playlist.
+    private function loadSongs() as Void {
+        var playlistId = _library.getCurrentPlaylist();
+        _activePlaylistId = playlistId;
+        _shuffle = _library.getShuffle();
+
+        var allSongs = _library.getSongs();
+        var filtered = [];
         for (var i = 0; i < allSongs.size(); i++) {
             var song = allSongs[i] as Dictionary?;
             if (song == null) {
                 continue;
             }
+
+            // Only include songs that belong to the active playlist (if one is set).
+            if (playlistId != null) {
+                var pId = song.hasKey("playlistId") ? song["playlistId"] as String? : null;
+                if (pId == null || !pId.equals(playlistId)) {
+                    continue;
+                }
+            }
+
+            // Only expose songs that have been downloaded (have a numeric contentRefId).
             var contentRefId = null;
             if (song.hasKey("contentRefId")) {
                 try {
@@ -29,27 +51,15 @@ class YuMusicContentIterator extends Media.ContentIterator {
                 }
             }
             if (contentRefId != null) {
-                _songs.add(song);
+                filtered.add(song);
             }
         }
-        _shuffle = _library.getShuffle();
 
-        System.println("contentIterator songs: " + _songs.size().toString());
-        if (_songs.size() > 0) {
-            var firstSong = _songs[0] as Dictionary?;
-            if (firstSong != null) {
-                var firstContentRefId = firstSong.hasKey("contentRefId") ? firstSong["contentRefId"] : null;
-                if (firstContentRefId != null) {
-                    System.println("contentIterator first contentRefId: " + firstContentRefId.toString());
-                }
-                var firstUrl = firstSong.hasKey("url") ? firstSong["url"] as String? : null;
-                if (firstUrl != null) {
-                    System.println("contentIterator first url: " + firstUrl);
-                }
-            }
-        }
-        
-        // If shuffle is enabled, randomize the song order
+        _songs = filtered;
+        _currentIndex = 0;
+
+        System.println("loadSongs: playlist=" + (playlistId != null ? playlistId : "any") + " count=" + _songs.size().toString());
+
         if (_shuffle && _songs.size() > 0) {
             shuffleSongs();
         } else {
@@ -57,16 +67,10 @@ class YuMusicContentIterator extends Media.ContentIterator {
             if (lastPlayed != null && _songs.size() > 0) {
                 for (var j = 0; j < _songs.size(); j++) {
                     var s = _songs[j] as Dictionary?;
-                    if (s == null) {
-                        continue;
-                    }
+                    if (s == null) { continue; }
                     var id = null;
                     if (s.hasKey("contentRefId")) {
-                        try {
-                            id = s["contentRefId"] as Number?;
-                        } catch (ex) {
-                            id = null;
-                        }
+                        try { id = s["contentRefId"] as Number?; } catch (ex) { id = null; }
                     }
                     if (id != null && id == lastPlayed) {
                         _currentIndex = j;
@@ -74,6 +78,22 @@ class YuMusicContentIterator extends Media.ContentIterator {
                     }
                 }
             }
+        }
+    }
+
+    // If the user changed the playlist from the Library menu, reload songs.
+    private function checkPlaylistChange() as Void {
+        var current = _library.getCurrentPlaylist();
+        var changed = false;
+        if (current == null && _activePlaylistId != null) {
+            changed = true;
+        } else if (current != null && _activePlaylistId == null) {
+            changed = true;
+        } else if (current != null && _activePlaylistId != null && !current.equals(_activePlaylistId)) {
+            changed = true;
+        }
+        if (changed) {
+            loadSongs();
         }
     }
 
@@ -95,6 +115,7 @@ class YuMusicContentIterator extends Media.ContentIterator {
 
     // Get the current media content object.
     function get() as Content? {
+        checkPlaylistChange();
         if (_songs.size() == 0 || _currentIndex >= _songs.size()) {
             return null;
         }
@@ -130,6 +151,7 @@ class YuMusicContentIterator extends Media.ContentIterator {
 
     // Get the next media content object.
     function next() as Content? {
+        checkPlaylistChange();
         if (_songs.size() == 0) {
             return null;
         }
@@ -144,6 +166,7 @@ class YuMusicContentIterator extends Media.ContentIterator {
 
     // Get the next media content object without incrementing the iterator.
     function peekNext() as Content? {
+        checkPlaylistChange();
         if (_songs.size() == 0) {
             return null;
         }
@@ -163,6 +186,7 @@ class YuMusicContentIterator extends Media.ContentIterator {
 
     // Get the previous media content object without decrementing the iterator.
     function peekPrevious() as Content? {
+        checkPlaylistChange();
         if (_songs.size() == 0) {
             return null;
         }
@@ -182,6 +206,7 @@ class YuMusicContentIterator extends Media.ContentIterator {
 
     // Get the previous media content object.
     function previous() as Content? {
+        checkPlaylistChange();
         if (_songs.size() == 0) {
             return null;
         }

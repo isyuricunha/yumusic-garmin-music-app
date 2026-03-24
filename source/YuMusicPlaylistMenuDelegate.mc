@@ -122,10 +122,19 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                         processedSongs.add(processedSong);
                     }
                     
-                    // Save songs to library
-                    _library.saveSelectedSongsPreservingDownloads(processedSongs);
                     var playlistId = playlist["id"] as String?;
                     if (playlistId != null) {
+                        // Clean up the playlist object to keep only essential metadata for the list
+                        var savedPlaylist = {
+                            "id" => playlistId,
+                            "name" => playlist.hasKey("name") ? playlist["name"] : "Unnamed",
+                            "songCount" => processedSongs.size()
+                        };
+                        _library.saveDownloadedPlaylist(savedPlaylist);
+
+                        // Save songs to library with the tagged playlistId
+                        _library.saveSelectedSongsPreservingDownloads(processedSongs, playlistId);
+                        
                         _library.setCurrentPlaylist(playlistId);
                     }
                     
