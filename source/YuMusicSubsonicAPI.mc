@@ -342,6 +342,38 @@ class YuMusicSubsonicAPI {
     // Scrobble a song (mark as played)
     function scrobble(songId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("scrobble") + "&id=" + songId;
+        url += "&time=" + Toybox.Time.now().value().toString() + "000"; // Subsonic expects milliseconds
+        url += "&submission=true";
+        
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+
+        Communications.makeWebRequest(url, {}, options, callback);
+    }
+
+    // Batch scrobble for offline playback sync
+    function scrobbleQueue(scrobbles as Array, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+        if (scrobbles.size() == 0) {
+            return;
+        }
+
+        var url = buildBaseUrl("scrobble");
+        
+        for (var i = 0; i < scrobbles.size(); i++) {
+            var item = scrobbles[i] as Dictionary?;
+            if (item != null) {
+                var id = item["id"] as String?;
+                var time = item["time"] as Number?;
+                if (id != null && time != null) {
+                    url += "&id=" + id;
+                    // Subsonic expects milliseconds since 1970
+                    url += "&time=" + time.toString() + "000"; 
+                }
+            }
+        }
+        
         url += "&submission=true";
         
         var options = {

@@ -52,7 +52,28 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        // Start downloading songs
+        // Flush offline scrobbles before downloading songs
+        var scrobbles = _library.getScrobbleQueue();
+        if (scrobbles.size() > 0) {
+            System.println("sync flushing " + scrobbles.size().toString() + " offline scrobbles");
+            _api.scrobbleQueue(scrobbles, method(:onScrobbleQueueSyncResponse));
+        } else {
+            // Start downloading songs directly
+            downloadNextSong();
+        }
+    }
+
+    // Callback when the offline scrobble flush completes
+    function onScrobbleQueueSyncResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        if (responseCode == 200) {
+            System.println("sync offline scrobble flush successful");
+            _library.clearScrobbleQueue();
+        } else {
+            System.println("sync offline scrobble flush failed: " + responseCode.toString());
+            // We do not clear the queue so it can be retried next sync
+        }
+        
+        // Proceed to download songs regardless of scrobble success/failure
         downloadNextSong();
     }
 

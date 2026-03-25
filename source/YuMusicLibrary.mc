@@ -10,6 +10,7 @@ class YuMusicLibrary {
     private const CURRENT_PLAYLIST_KEY = "currentPlaylist";
     private const SHUFFLE_KEY = "shuffle";
     private const LAST_PLAYED_CONTENT_REF_ID_KEY = "lastPlayedContentRefId";
+    private const SCROBBLES_KEY = "scrobbles";
 
     function initialize() {
     }
@@ -425,5 +426,31 @@ class YuMusicLibrary {
             "totalDuration" => totalDuration,
             "playlistCount" => getPlaylists().size()
         };
+    }
+
+    // --- Offline Scrobble Queue ---
+
+    // Get all pending scrobbles
+    function getScrobbleQueue() as Array {
+        var scrobbles = Storage.getValue(SCROBBLES_KEY) as Array?;
+        if (scrobbles == null) {
+            return [];
+        }
+        return scrobbles;
+    }
+
+    // Add a scrobble to the offline queue
+    function queueScrobble(songId as String, timestamp as Number) as Void {
+        var queue = getScrobbleQueue();
+        queue.add({
+            "id" => songId,
+            "time" => timestamp
+        });
+        Storage.setValue(SCROBBLES_KEY, queue as Array<Application.PropertyValueType>);
+    }
+
+    // Clear the offline scrobble queue (usually called after successful upload)
+    function clearScrobbleQueue() as Void {
+        Storage.deleteValue(SCROBBLES_KEY);
     }
 }

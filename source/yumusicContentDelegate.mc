@@ -89,18 +89,21 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     // Handles a notification from the system that an event has
     // been triggered for the given song
     function onSong(contentRefId as Object, songEvent as SongEvent, playbackPosition as Number or PlaybackPosition) as Void {
-        // Scrobble the song when it's played
-        // Note: We scrobble on any song event to ensure tracking
         if (contentRefId != null) {
             _library.setLastPlayedContentRefId(contentRefId);
             var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
-            if (songId != null) {
-                _api.scrobble(songId, method(:onScrobbleResponse));
-            } else {
-                var contentRefString = contentRefId as String?;
-                if (contentRefString != null) {
-                    _api.scrobble(contentRefString, method(:onScrobbleResponse));
+            var targetId = songId != null ? songId : (contentRefId as String?);
+
+            if (targetId != null) {
+                // Queue scrobble locally to support offline playback
+                if (songEvent == Media.SONG_EVENT_COMPLETE) {
+                    _library.queueScrobble(targetId, Toybox.Time.now().value());
+                    
+                    var queue = _library.getScrobbleQueue();
+                    if (queue.size() > 0) {
+                        _api.scrobbleQueue(queue, method(:onScrobbleQueueResponse));
+                    }
                 }
             }
         }
@@ -116,8 +119,15 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         // Silent success/failure
     }
 
-    // Callback for scrobble response
+    // Callback for scrobble response (legacy single scrobble)
     function onScrobbleResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         // Silent success/failure
+    }
+
+    // Callback for batch scrobble response
+    function onScrobbleQueueResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        if (responseCode == 200) {
+            _library.clearScrobbleQueue();
+        }
     }
 }
