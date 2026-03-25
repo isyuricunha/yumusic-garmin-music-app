@@ -19,6 +19,7 @@ class YuMusicConfigurePlaybackView extends WatchUi.Menu2 {
         addItem(_playlistItem);
         addItem(new WatchUi.MenuItem("Add Music", "Browse server", "addMusic", {}));
         addItem(new WatchUi.MenuItem("Sync Now", null, "syncNow", {}));
+        addItem(new WatchUi.MenuItem("Sync Scrobbles", "Upload offline plays", "syncScrobbles", {}));
         addItem(new WatchUi.MenuItem("Test Connection", null, "testConnection", {}));
         
         _shuffleItem = new WatchUi.MenuItem("Enable Shuffle", null, "shuffle", {});
