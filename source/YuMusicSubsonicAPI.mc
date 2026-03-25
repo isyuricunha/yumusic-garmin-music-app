@@ -181,7 +181,7 @@ class YuMusicSubsonicAPI {
     }
 
     // Get specific podcast channel episodes
-    function getPodcastEpisodes(channelId as String, offset as Number, count as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+    function getPodcastEpisodes(channelId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPodcasts");
         if (url.length() == 0) {
             callback.invoke(0, null);
@@ -190,11 +190,6 @@ class YuMusicSubsonicAPI {
         
         url += "&includeEpisodes=true";
         url += "&id=" + channelId;
-        
-        // Experimental: Subsonic API doesn't officially paginate getPodcasts, 
-        // but some forks/extensions might respect these bounds.
-        url += "&count=" + count.toString();
-        url += "&offset=" + offset.toString();
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
