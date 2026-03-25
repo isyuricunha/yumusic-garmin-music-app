@@ -68,7 +68,7 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
                 _api.configure(serverUrl, username, password, maxBitRate);
                 var loadingView = new YuMusicLoadingView("Syncing scrobbles...");
                 WatchUi.pushView(loadingView, null, WatchUi.SLIDE_LEFT);
-                _api.scrobbleQueue(queue, method(:onScrobbleSyncResponse));
+                flushNextScrobble();
             }
         } else if (id.equals("shuffle")) {
             _library.setShuffle(!_library.getShuffle());
@@ -94,14 +94,36 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
     }
 
-    function onScrobbleSyncResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // Remove loading view
-        if (responseCode == 200) {
-            _library.clearScrobbleQueue();
+    function flushNextScrobble() as Void {
+        var queue = _library.getScrobbleQueue();
+        if (queue.size() > 0) {
+            var item = queue[0] as Dictionary;
+            var id = item["id"] as String?;
+            var time = item["time"] as Number?;
+            if (id != null) {
+                _api.scrobble(id, time, method(:onScrobbleFlushed));
+            } else {
+                _library.removeFirstScrobble();
+                flushNextScrobble();
+            }
+        } else {
+            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // Remove loading view
             var successView = new YuMusicConfirmView("Success", "Scrobbles uploaded");
             WatchUi.pushView(successView, new YuMusicConfirmDelegate(false), WatchUi.SLIDE_LEFT);
+        }
+    }
+
+    function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        if (responseCode == 200) {
+            _library.removeFirstScrobble();
+            flushNextScrobble();
         } else {
-            var errorView = new YuMusicConfirmView("Error", "Sync failed (" + responseCode.toString() + ")");
+            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // Remove loading view
+            var msg = "Sync failed (" + responseCode.toString() + ")";
+            if (responseCode == -104) {
+                msg = "BLE Disconnected";
+            }
+            var errorView = new YuMusicConfirmView("Error", msg);
             WatchUi.pushView(errorView, new YuMusicConfirmDelegate(false), WatchUi.SLIDE_LEFT);
         }
     }

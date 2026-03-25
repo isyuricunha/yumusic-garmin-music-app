@@ -54,28 +54,44 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         }
 
         // Flush offline scrobbles before downloading songs
+        // Flush offline scrobbles sequentially before downloading songs
+        flushNextScrobble();
+    }
+
+    // Sequentially flush the next offline scrobble
+    private function flushNextScrobble() as Void {
         var scrobbles = _library.getScrobbleQueue();
         if (scrobbles.size() > 0) {
-            System.println("sync flushing " + scrobbles.size().toString() + " offline scrobbles");
-            _api.scrobbleQueue(scrobbles, method(:onScrobbleQueueSyncResponse));
+            System.println("sync flushing offline scrobble, " + scrobbles.size().toString() + " remaining");
+            var item = scrobbles[0] as Dictionary;
+            var id = item["id"] as String?;
+            var time = item["time"] as Number?;
+            if (id != null) {
+                _api.scrobble(id, time, method(:onScrobbleFlushed));
+            } else {
+                // Invalid data, just remove it and continue
+                _library.removeFirstScrobble();
+                flushNextScrobble();
+            }
         } else {
-            // Start downloading songs directly
+            // Queue empty, proceed to download songs
             downloadNextSong();
         }
     }
 
-    // Callback when the offline scrobble flush completes
-    function onScrobbleQueueSyncResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    // Callback when a single offline scrobble flush completes
+    function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200) {
-            System.println("sync offline scrobble flush successful");
-            _library.clearScrobbleQueue();
+            System.println("sync scrobble flush successful");
+            // Remove the successfully uploaded scrobble
+            _library.removeFirstScrobble();
+            // Process the next one
+            flushNextScrobble();
         } else {
-            System.println("sync offline scrobble flush failed: " + responseCode.toString());
-            // We do not clear the queue so it can be retried next sync
+            System.println("sync scrobble flush failed: " + responseCode.toString());
+            // Give up for now, proceed to download songs to not block sync
+            downloadNextSong();
         }
-        
-        // Proceed to download songs regardless of scrobble success/failure
-        downloadNextSong();
     }
 
     // Download the next song in the queue

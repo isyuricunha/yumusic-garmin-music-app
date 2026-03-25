@@ -100,11 +100,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
                 // Queue scrobble locally to support offline playback
                 if (songEvent == Media.SONG_EVENT_COMPLETE) {
                     _library.queueScrobble(targetId, Toybox.Time.now().value());
-                    
-                    var queue = _library.getScrobbleQueue();
-                    if (queue.size() > 0) {
-                        _api.scrobbleQueue(queue, method(:onScrobbleQueueResponse));
-                    }
+                    flushNextScrobble();
                 }
             }
         }
@@ -120,15 +116,26 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         // Silent success/failure
     }
 
-    // Callback for scrobble response (legacy single scrobble)
-    function onScrobbleResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        // Silent success/failure
+    function flushNextScrobble() as Void {
+        var queue = _library.getScrobbleQueue();
+        if (queue.size() > 0) {
+            var item = queue[0] as Dictionary;
+            var id = item["id"] as String?;
+            var time = item["time"] as Number?;
+            if (id != null) {
+                _api.scrobble(id, time, method(:onScrobbleFlushed));
+            } else {
+                _library.removeFirstScrobble();
+                flushNextScrobble();
+            }
+        }
     }
 
-    // Callback for batch scrobble response
-    function onScrobbleQueueResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200) {
-            _library.clearScrobbleQueue();
+            _library.removeFirstScrobble();
+            flushNextScrobble();
         }
+        // If it fails (like offline -104), queue is left alone for later.
     }
 }

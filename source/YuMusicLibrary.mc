@@ -449,8 +449,17 @@ class YuMusicLibrary {
         Storage.setValue(SCROBBLES_KEY, queue as Array<Application.PropertyValueType>);
     }
 
-    // Clear the offline scrobble queue (usually called after successful upload)
+    // Clear the offline scrobble queue (usually called after completely successful upload)
     function clearScrobbleQueue() as Void {
         Storage.deleteValue(SCROBBLES_KEY);
+    }
+
+    // Remove only the first item from the queue (for sequential processing)
+    function removeFirstScrobble() as Void {
+        var queue = getScrobbleQueue();
+        if (queue.size() > 0) {
+            queue = queue.slice(1, null);
+            Storage.setValue(SCROBBLES_KEY, queue as Array<Application.PropertyValueType>);
+        }
     }
 }
