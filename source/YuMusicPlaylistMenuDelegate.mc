@@ -74,7 +74,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         
         if (_isPodcast) {
             System.println("fetchNextPage (podcast) id=" + _pendingPlaylistId);
-            _api.getPodcastEpisodes(_pendingPlaylistId, method(:onPodcastEpisodesReceived));
+            _api.getPodcastEpisodes(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPodcastEpisodesReceived));
         } else {
             System.println("fetchNextPage offset=" + _fetchOffset.toString());
             _api.getPlaylist(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPageReceived));
@@ -176,7 +176,11 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         if (responseCode != 200) {
             popLoadingView();
-            showError("Failed (" + responseCode.toString() + ")");
+            if (responseCode == -402) {
+                showError("Too many episodes.\nReduce retention\nin server.");
+            } else {
+                showError("Failed (" + responseCode.toString() + ")");
+            }
             return;
         }
 
@@ -242,6 +246,15 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                 "url"       => streamUrl,
                 "streamUrl" => streamUrl
             });
+        }
+
+        var pageCount = episodes.size();
+        
+        // If the server actually honored the experimental pagination.
+        if (pageCount == PLAYLIST_PAGE_SIZE) {
+            _fetchOffset += PLAYLIST_PAGE_SIZE;
+            fetchNextPage();
+            return;
         }
 
         // Pass an object masquerading as a playlist metadata block
