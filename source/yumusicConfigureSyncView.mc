@@ -123,11 +123,6 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
                 } else {
                     addSingleItem("No playlists", "No playlists found on server", "empty");
                 }
-                
-                // Playlists loaded (or empty). Let's natively fetch podcasts now.
-                // It will append to the current Menu2 if supported.
-                fetchPodcasts();
-                return;
             } else {
                 addSingleItem("Error", "Invalid response", "error");
             }
@@ -149,63 +144,6 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
 
     function getPlaylists() as Array? {
         return _playlists;
-    }
-
-    private function fetchPodcasts() as Void {
-        _fetching = true;
-        _api.getPodcasts(method(:onPodcastsReceived));
-    }
-
-    function onPodcastsReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        _fetching = false;
-        
-        // Graceful Fallback: If podcasts fail (e.g., Navidrome doesn't support them 
-        // and returns 404, 70, or malformed JSON), we swallow the error entirely.
-        // The Playlists are already in the menu, so the app remains fully functional!
-        if (responseCode == 200) {
-            var dict = data as Dictionary?;
-            if (dict != null) {
-                var subsonic = dict["subsonic-response"] as Dictionary?;
-                if (subsonic != null) {
-                    var podcastsContainer = subsonic["podcasts"] as Dictionary?;
-                    if (podcastsContainer != null) {
-                        var channels = _api.ensureArray(podcastsContainer["channel"]);
-                        if (channels != null && channels.size() > 0) {
-                            
-                            // Remove the "No playlists" filler if podcasts exist
-                            if (_itemCount == 1) {
-                                var firstItem = getItem(0);
-                                if (firstItem != null && firstItem.getId().equals("empty")) {
-                                    clearItems();
-                                }
-                            }
-
-                            for (var i = 0; i < channels.size(); i++) {
-                                var channel = channels[i] as Dictionary?;
-                                if (channel == null) { continue; }
-                                
-                                var title = channel["title"] as String?;
-                                var id = channel["id"] as String?;
-                                
-                                if (title != null && id != null) {
-                                  
-                                    // Prefix with podcast_ so the delegate knows it's
-                                    // a podcast channel and not a playlist!
-                                    var prefixedId = "podcast_" + id;
-                                    
-                                    // Add [P] before the title to differentiate visually
-                                    addItem(new WatchUi.MenuItem("[P] " + title, "Podcast Channel", prefixedId, {}));
-                                    _itemCount++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Finally update the screen with Playlists + Podcasts (if any)
-        WatchUi.requestUpdate();
     }
 }
 
