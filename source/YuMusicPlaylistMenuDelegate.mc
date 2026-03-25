@@ -2,6 +2,12 @@ import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Communications;
 import Toybox.PersistedContent;
+import Toybox.System;
+
+// Number of songs to fetch per paginated request.
+// Kept small so the JSON response fits inside Garmin's per-request memory limit
+// even on devices with limited heap (e.g. Fenix 7 ~340 KB).
+const PLAYLIST_PAGE_SIZE = 15;
 
 // Delegate for playlist selection menu
 class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
@@ -9,6 +15,11 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
     private var _library as YuMusicLibrary;
     private var _serverConfig as YuMusicServerConfig;
     private var _loadingPushed as Boolean = false;
+
+    // Paginated-fetch state
+    private var _pendingPlaylistId as String?;
+    private var _fetchOffset as Number = 0;
+    private var _accumulatedSongs as Array = [];
 
     function initialize() {
         Menu2InputDelegate.initialize();
@@ -34,22 +45,147 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             return;
         }
 
-        // Show loading view first. On some devices/network failures the web request can
-        // invoke the callback very quickly; pushing first avoids popping the wrong view.
+        // Show loading view first
         _loadingPushed = true;
         var loadingView = new YuMusicLoadingView("Loading playlist...");
         WatchUi.pushView(loadingView, new WatchUi.BehaviorDelegate(), WatchUi.SLIDE_LEFT);
 
-        // Load playlist songs
-        _api.getPlaylist(playlistId.toString(), method(:onPlaylistReceived));
+        // Initialise paginated fetch state
+        _pendingPlaylistId = playlistId.toString();
+        _fetchOffset = 0;
+        _accumulatedSongs = [];
+
+        fetchNextPage();
     }
 
-    // Callback when playlist details are received
-    function onPlaylistReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        System.println("getPlaylist responseCode: " + responseCode.toString());
+    // Request the next page of songs from the server.
+    private function fetchNextPage() as Void {
+        if (_pendingPlaylistId == null) {
+            return;
+        }
+        System.println("fetchNextPage offset=" + _fetchOffset.toString());
+        _api.getPlaylist(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPageReceived));
+    }
 
-        // Pop loading view (if it was pushed). Guard against popping the menu view
-        // in case the callback fires before the view stack updates.
+    // Callback for each page received.
+    function onPageReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        System.println("onPageReceived responseCode=" + responseCode.toString() + " offset=" + _fetchOffset.toString());
+
+        if (responseCode != 200) {
+            popLoadingView();
+            if (responseCode == -402) {
+                // Only reachable when the server ignored pagination params and returned
+                // everything at once, still hitting the device memory limit.
+                showError("Playlist too large.\nTry < 30 songs.");
+            } else {
+                showError("Failed (" + responseCode.toString() + ")");
+            }
+            return;
+        }
+
+        var dict = data as Dictionary?;
+        if (dict == null) {
+            popLoadingView();
+            showError("Empty response");
+            return;
+        }
+
+        var response = dict["subsonic-response"] as Dictionary?;
+        var playlist = response != null ? response["playlist"] as Dictionary? : null;
+        if (playlist == null) {
+            popLoadingView();
+            showError("Invalid playlist data");
+            return;
+        }
+
+        var pageSongs = _api.ensureArray(playlist["entry"]);
+
+        // Extract and accumulate only the essential fields per song.
+        for (var i = 0; i < pageSongs.size(); i++) {
+            var song = pageSongs[i] as Dictionary?;
+            if (song == null) { continue; }
+
+            var songId = song["id"] as String?;
+            var title = song["title"] as String?;
+            if (songId == null || title == null) { continue; }
+
+            var duration = null;
+            if (song.hasKey("duration")) {
+                var raw = song["duration"];
+                if (raw != null) {
+                    duration = raw as Number?;
+                    if (duration == null) {
+                        var s = raw as String?;
+                        if (s != null) { duration = s.toNumber(); }
+                    }
+                }
+            }
+
+            var artist = song.hasKey("artist") ? song["artist"] as String? : null;
+            if (artist == null) { artist = "Unknown"; }
+
+            var album = song.hasKey("album") ? song["album"] as String? : null;
+            if (album == null) { album = "Unknown"; }
+
+            var streamUrl = _api.getStreamUrl(songId);
+            _accumulatedSongs.add({
+                "id"        => songId,
+                "title"     => title,
+                "artist"    => artist,
+                "album"     => album,
+                "duration"  => duration != null ? duration : 0,
+                "url"       => streamUrl,
+                "streamUrl" => streamUrl
+            });
+        }
+
+        var pageCount = pageSongs.size();
+        System.println("page had " + pageCount.toString() + " songs, total=" + _accumulatedSongs.size().toString());
+
+        // If the server honoured the page size and returned a full page, there may be more.
+        // If it returned fewer songs (or zero), we have reached the end.
+        // If it returned MORE than PLAYLIST_PAGE_SIZE the server ignored pagination and
+        // returned everything in one shot — treat this page as the final page.
+        if (pageCount == PLAYLIST_PAGE_SIZE) {
+            _fetchOffset += PLAYLIST_PAGE_SIZE;
+            fetchNextPage();
+            return;
+        }
+
+        // All pages received — finalise.
+        finaliseFetch(playlist);
+    }
+
+    // Called once all pages have been collected.
+    private function finaliseFetch(playlistMeta as Dictionary) as Void {
+        popLoadingView();
+
+        var songs = _accumulatedSongs;
+        if (songs.size() == 0) {
+            showError("Playlist is empty");
+            return;
+        }
+
+        var playlistId = _pendingPlaylistId;
+        if (playlistId != null) {
+            var savedPlaylist = {
+                "id"        => playlistId,
+                "name"      => playlistMeta.hasKey("name") ? playlistMeta["name"] : "Unnamed",
+                "songCount" => songs.size()
+            };
+            _library.saveDownloadedPlaylist(savedPlaylist);
+            _library.saveSelectedSongsPreservingDownloads(songs, playlistId);
+            _library.setCurrentPlaylist(playlistId);
+        }
+
+        var confirmView = new YuMusicConfirmView(
+            "Ready to Sync",
+            songs.size().toString() + " songs selected"
+        );
+        WatchUi.pushView(confirmView, new YuMusicConfirmDelegate(true), WatchUi.SLIDE_LEFT);
+    }
+
+    private function popLoadingView() as Void {
         if (_loadingPushed) {
             _loadingPushed = false;
             try {
@@ -57,104 +193,6 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             } catch (ex) {
                 System.println("pop loading view failed: " + ex.toString());
             }
-        }
-        
-        var dict = data as Dictionary?;
-        if (responseCode == 200 && dict != null) {
-            var response = dict["subsonic-response"] as Dictionary?;
-            var playlist = response != null ? response["playlist"] as Dictionary? : null;
-            if (playlist != null) {
-                    var songs = _api.ensureArray(playlist["entry"]);
-                if (songs != null && songs.size() > 0) {
-                    
-                    // Process songs and prepare for download
-                    var processedSongs = [];
-                    for (var i = 0; i < songs.size(); i++) {
-                        var song = songs[i] as Dictionary?;
-                        if (song == null) {
-                            continue;
-                        }
-
-                        var songId = song["id"] as String?;
-                        var title = song["title"] as String?;
-                        if (songId == null || title == null) {
-                            continue;
-                        }
-
-                        var duration = null;
-                        if (song.hasKey("duration")) {
-                            var rawDuration = song["duration"];
-                            if (rawDuration != null) {
-                                duration = rawDuration as Number?;
-                                if (duration == null) {
-                                    var durationString = rawDuration as String?;
-                                    if (durationString != null) {
-                                        duration = durationString.toNumber();
-                                    }
-                                }
-                            }
-                        }
-                        var artist = song.hasKey("artist") ? song["artist"] as String? : null;
-                        if (artist == null) {
-                            artist = "Unknown";
-                        }
-
-                        var album = song.hasKey("album") ? song["album"] as String? : null;
-                        if (album == null) {
-                            album = "Unknown";
-                        }
-
-                        var streamUrl = _api.getStreamUrl(songId);
-                        // Keep only the essential fields to minimise the in-memory
-                        // footprint. Garmin limits JSON response body sizes and large
-                        // playlists can overflow that limit (-402) if extra fields like
-                        // coverArtUrl are retained per song.
-                        var processedSong = {
-                            "id" => songId,
-                            "title" => title,
-                            "artist" => artist,
-                            "album" => album,
-                            "duration" => duration != null ? duration : 0,
-                            "url" => streamUrl,
-                            "streamUrl" => streamUrl
-                        };
-                        processedSongs.add(processedSong);
-                    }
-                    
-                    var playlistId = playlist["id"] as String?;
-                    if (playlistId != null) {
-                        // Clean up the playlist object to keep only essential metadata for the list
-                        var savedPlaylist = {
-                            "id" => playlistId,
-                            "name" => playlist.hasKey("name") ? playlist["name"] : "Unnamed",
-                            "songCount" => processedSongs.size()
-                        };
-                        _library.saveDownloadedPlaylist(savedPlaylist);
-
-                        // Save songs to library with the tagged playlistId
-                        _library.saveSelectedSongsPreservingDownloads(processedSongs, playlistId);
-                        
-                        _library.setCurrentPlaylist(playlistId);
-                    }
-                    
-                    // Show confirmation
-                    var confirmView = new YuMusicConfirmView(
-                        "Ready to Sync",
-                        processedSongs.size().toString() + " songs selected"
-                    );
-                    WatchUi.pushView(confirmView, new YuMusicConfirmDelegate(true), WatchUi.SLIDE_LEFT);
-                } else {
-                    showError("Playlist is empty");
-                }
-            } else {
-                showError("Invalid playlist data");
-            }
-        } else if (responseCode == -402) {
-            // Garmin response-too-large error: the playlist JSON exceeded the device
-            // memory limit. Instruct the user to use fewer songs.
-            showError("Playlist too large. Try syncing fewer than 30 songs at a time.");
-        } else {
-            showError("Failed to load playlist (" + responseCode.toString() + ")");
         }
     }
 
