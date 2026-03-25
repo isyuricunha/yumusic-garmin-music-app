@@ -75,7 +75,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             if (responseCode == -402) {
                 // Only reachable when the server ignored pagination params and returned
                 // everything at once, still hitting the device memory limit.
-                showError("Too many songs.\nKeep under 50.");
+                showError("Too many songs.\nKeep under \n30 or 50.");
             } else {
                 showError("Failed (" + responseCode.toString() + ")");
             }
