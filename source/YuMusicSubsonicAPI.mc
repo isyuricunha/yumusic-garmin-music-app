@@ -162,6 +162,43 @@ class YuMusicSubsonicAPI {
         Communications.makeWebRequest(url, {}, options, callback);
     }
 
+    // Get all podcast channels (without episodes to save memory)
+    function getPodcasts(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+        var url = buildBaseUrl("getPodcasts");
+        if (url.length() == 0) {
+            callback.invoke(0, null);
+            return;
+        }
+        
+        url += "&includeEpisodes=false";
+        
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+
+        Communications.makeWebRequest(url, {}, options, callback);
+    }
+
+    // Get specific podcast channel episodes
+    function getPodcastEpisodes(channelId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+        var url = buildBaseUrl("getPodcasts");
+        if (url.length() == 0) {
+            callback.invoke(0, null);
+            return;
+        }
+        
+        url += "&includeEpisodes=true";
+        url += "&id=" + channelId;
+        
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+
+        Communications.makeWebRequest(url, {}, options, callback);
+    }
+
     // Get all playlists
     function getPlaylists(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPlaylists");

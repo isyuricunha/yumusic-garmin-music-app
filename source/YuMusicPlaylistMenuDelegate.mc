@@ -19,6 +19,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
     private var _pendingPlaylistId as String?;
     private var _fetchOffset as Number = 0;
     private var _accumulatedSongs as Array = [];
+    private var _isPodcast as Boolean = false;
 
     function initialize() {
         Menu2InputDelegate.initialize();
@@ -39,19 +40,26 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     // Handle menu item selection
     function onSelect(item as MenuItem) as Void {
-        var playlistId = item.getId();
-        
-        if (playlistId == null) {
+        var rawId = item.getId() as String?;
+        if (rawId == null) {
             return;
+        }
+
+        _pendingPlaylistId = rawId;
+        _isPodcast = false;
+        
+        if (rawId.find("podcast_") == 0) {
+            _isPodcast = true;
+            _pendingPlaylistId = rawId.substring(8, rawId.length());
         }
 
         // Show loading view first
         _loadingPushed = true;
-        var loadingView = new YuMusicLoadingView("Loading playlist...");
+        var loadingText = _isPodcast ? "Loading episodes..." : "Loading playlist...";
+        var loadingView = new YuMusicLoadingView(loadingText);
         WatchUi.pushView(loadingView, new WatchUi.BehaviorDelegate(), WatchUi.SLIDE_LEFT);
 
         // Initialise paginated fetch state
-        _pendingPlaylistId = playlistId.toString();
         _fetchOffset = 0;
         _accumulatedSongs = [];
 
@@ -63,8 +71,14 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         if (_pendingPlaylistId == null) {
             return;
         }
-        System.println("fetchNextPage offset=" + _fetchOffset.toString());
-        _api.getPlaylist(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPageReceived));
+        
+        if (_isPodcast) {
+            System.println("fetchNextPage (podcast) id=" + _pendingPlaylistId);
+            _api.getPodcastEpisodes(_pendingPlaylistId, method(:onPodcastEpisodesReceived));
+        } else {
+            System.println("fetchNextPage offset=" + _fetchOffset.toString());
+            _api.getPlaylist(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPageReceived));
+        }
     }
 
     // Callback for each page received.
@@ -156,6 +170,84 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         finaliseFetch(playlist);
     }
 
+    // Callback for podcast episodes (usually returned all at once without pagination in Subsonic API)
+    function onPodcastEpisodesReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        System.println("onPodcastEpisodesReceived responseCode=" + responseCode.toString());
+
+        if (responseCode != 200) {
+            popLoadingView();
+            showError("Failed (" + responseCode.toString() + ")");
+            return;
+        }
+
+        var dict = data as Dictionary?;
+        if (dict == null) {
+            popLoadingView();
+            showError("Empty response");
+            return;
+        }
+
+        var response = dict["subsonic-response"] as Dictionary?;
+        var podcasts = response != null ? response["podcasts"] as Dictionary? : null;
+        if (podcasts == null) {
+            popLoadingView();
+            showError("Invalid podcast data");
+            return;
+        }
+
+        // Podcasts endpoint wraps channels -> episodes
+        var channels = _api.ensureArray(podcasts["channel"]);
+        if (channels.size() == 0) {
+            popLoadingView();
+            showError("Empty channel");
+            return;
+        }
+        
+        var channel = channels[0] as Dictionary;
+        var episodes = _api.ensureArray(channel["episode"]);
+
+        for (var i = 0; i < episodes.size(); i++) {
+            var episode = episodes[i] as Dictionary?;
+            if (episode == null) { continue; }
+
+            // Episode uses 'streamId' for playback media instead of 'id'. Sometimes 'id' works too.
+            // But we use the stream component as the unique song playback hook.
+            var streamId = episode.hasKey("streamId") ? episode["streamId"] as String? : episode["id"] as String?;
+            var title = episode["title"] as String?;
+            if (streamId == null || title == null) { continue; }
+
+            var duration = null;
+            if (episode.hasKey("duration")) {
+                var raw = episode["duration"];
+                if (raw != null) {
+                    duration = raw as Number?;
+                    if (duration == null) {
+                        var s = raw as String?;
+                        if (s != null) { duration = s.toNumber(); }
+                    }
+                }
+            }
+
+            // Treat Channel Title as the 'Artist'
+            var artist = channel.hasKey("title") ? channel["title"] as String? : "Unknown";
+            var album = "Podcast";
+
+            var streamUrl = _api.getStreamUrl(streamId);
+            _accumulatedSongs.add({
+                "id"        => streamId, // ID used for downloading & scrobbling
+                "title"     => title,
+                "artist"    => artist,
+                "album"     => album,
+                "duration"  => duration != null ? duration : 0,
+                "url"       => streamUrl,
+                "streamUrl" => streamUrl
+            });
+        }
+
+        // Pass an object masquerading as a playlist metadata block
+        finaliseFetch({ "name" => channel.hasKey("title") ? channel["title"] : "Podcast" });
+    }
+
     // Called once all pages have been collected.
     private function finaliseFetch(playlistMeta as Dictionary) as Void {
         popLoadingView();
@@ -168,14 +260,16 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         var playlistId = _pendingPlaylistId;
         if (playlistId != null) {
+            // Re-apply prefix when saving to prevent namespace collisions internally
+            var saveId = _isPodcast ? ("podcast_" + playlistId) : playlistId;
             var savedPlaylist = {
-                "id"        => playlistId,
+                "id"        => saveId,
                 "name"      => playlistMeta.hasKey("name") ? playlistMeta["name"] : "Unnamed",
                 "songCount" => songs.size()
             };
             _library.saveDownloadedPlaylist(savedPlaylist);
-            _library.saveSelectedSongsPreservingDownloads(songs, playlistId);
-            _library.setCurrentPlaylist(playlistId);
+            _library.saveSelectedSongsPreservingDownloads(songs, saveId);
+            _library.setCurrentPlaylist(saveId);
         }
 
         var confirmView = new YuMusicConfirmView(
