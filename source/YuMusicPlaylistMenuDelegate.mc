@@ -73,11 +73,8 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         }
         
         if (_isPodcast) {
-            System.println("fetchNextPage (podcast) channelId=" + _pendingPlaylistId);
-            // Use getNewestPodcasts (lightweight flat list) instead of getPodcasts?includeEpisodes=true
-            // to avoid the -402 memory overflow caused by the heavy channel+episodes wrapper payload.
-            // We request more than we need (50) and filter by channelId client side.
-            _api.getNewestPodcasts(50, method(:onNewestPodcastsReceived));
+            System.println("fetchNextPage (podcast) id=" + _pendingPlaylistId);
+            _api.getPodcastEpisodes(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPodcastEpisodesReceived));
         } else {
             System.println("fetchNextPage offset=" + _fetchOffset.toString());
             _api.getPlaylist(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPageReceived));
@@ -173,15 +170,14 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         finaliseFetch(playlist);
     }
 
-    // Callback for getNewestPodcasts — filters by the selected channelId client-side.
-    // This avoids -402 memory overflows caused by the heavy getPodcasts?includeEpisodes=true payload.
-    function onNewestPodcastsReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        System.println("onNewestPodcastsReceived responseCode=" + responseCode.toString());
+    // Callback for podcast episodes (usually returned all at once without pagination in Subsonic API)
+    function onPodcastEpisodesReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        System.println("onPodcastEpisodesReceived responseCode=" + responseCode.toString());
 
         if (responseCode != 200) {
             popLoadingView();
             if (responseCode == -402) {
-                showError("Too many episodes.\nReduce retention\nin Gonic.");
+                showError("Too many episodes.\nReduce retention\nin server.");
             } else {
                 showError("Failed (" + responseCode.toString() + ")");
             }
@@ -196,37 +192,30 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         }
 
         var response = dict["subsonic-response"] as Dictionary?;
-        var newestPodcasts = response != null ? response["newestPodcasts"] as Dictionary? : null;
-        if (newestPodcasts == null) {
+        var podcasts = response != null ? response["podcasts"] as Dictionary? : null;
+        if (podcasts == null) {
             popLoadingView();
-            showError("No podcast data");
+            showError("Invalid podcast data");
             return;
         }
 
-        var episodes = _api.ensureArray(newestPodcasts["episode"]);
-        if (episodes.size() == 0) {
+        // Podcasts endpoint wraps channels -> episodes
+        var channels = _api.ensureArray(podcasts["channel"]);
+        if (channels.size() == 0) {
             popLoadingView();
-            showError("No episodes found");
+            showError("Empty channel");
             return;
         }
-
-        var targetChannelId = _pendingPlaylistId; // e.g. "pd-4"
-        var channelTitle = "Podcast";
         
+        var channel = channels[0] as Dictionary;
+        var episodes = _api.ensureArray(channel["episode"]);
+
         for (var i = 0; i < episodes.size(); i++) {
             var episode = episodes[i] as Dictionary?;
             if (episode == null) { continue; }
 
-            // Filter only episodes that belong to the selected channel.
-            // Fall back to keeping all episodes if channelId is missing from the payload.
-            if (targetChannelId != null && episode.hasKey("channelId")) {
-                var epChannelId = episode["channelId"] as String?;
-                if (epChannelId != null && !epChannelId.equals(targetChannelId)) {
-                    continue; // Skip episodes from other channels
-                }
-            }
-
-            // Episode uses 'streamId' as the playable media ID (may differ from the episode ID)
+            // Episode uses 'streamId' for playback media instead of 'id'. Sometimes 'id' works too.
+            // But we use the stream component as the unique song playback hook.
             var streamId = episode.hasKey("streamId") ? episode["streamId"] as String? : episode["id"] as String?;
             var title = episode["title"] as String?;
             if (streamId == null || title == null) { continue; }
@@ -243,24 +232,33 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
                 }
             }
 
-            // Use 'artist' field from the episode (it holds the channel name in most servers)
-            var artist = episode.hasKey("artist") ? episode["artist"] as String? : "Podcast";
-            if (artist == null) { artist = "Podcast"; }
-            channelTitle = artist; // Capture for finaliseFetch metadata
+            // Treat Channel Title as the 'Artist'
+            var artist = channel.hasKey("title") ? channel["title"] as String? : "Unknown";
+            var album = "Podcast";
 
             var streamUrl = _api.getStreamUrl(streamId);
             _accumulatedSongs.add({
-                "id"        => streamId,
+                "id"        => streamId, // ID used for downloading & scrobbling
                 "title"     => title,
                 "artist"    => artist,
-                "album"     => "Podcast",
+                "album"     => album,
                 "duration"  => duration != null ? duration : 0,
                 "url"       => streamUrl,
                 "streamUrl" => streamUrl
             });
         }
 
-        finaliseFetch({ "name" => channelTitle });
+        var pageCount = episodes.size();
+        
+        // If the server actually honored the experimental pagination.
+        if (pageCount == PLAYLIST_PAGE_SIZE) {
+            _fetchOffset += PLAYLIST_PAGE_SIZE;
+            fetchNextPage();
+            return;
+        }
+
+        // Pass an object masquerading as a playlist metadata block
+        finaliseFetch({ "name" => channel.hasKey("title") ? channel["title"] : "Podcast" });
     }
 
     // Called once all pages have been collected.

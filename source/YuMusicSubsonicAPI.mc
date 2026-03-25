@@ -180,18 +180,21 @@ class YuMusicSubsonicAPI {
         Communications.makeWebRequest(url, {}, options, callback);
     }
 
-    // Get the latest N podcast episodes across all subscribed channels.
-    // This is significantly lighter than getPodcasts?includeEpisodes=true because
-    // it returns a flat episode list without the full channel wrapper bloat.
-    // Episodes include a 'channelId' field - use this to filter by channel client-side.
-    function getNewestPodcasts(count as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = buildBaseUrl("getNewestPodcasts");
+    // Get specific podcast channel episodes
+    function getPodcastEpisodes(channelId as String, offset as Number, count as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+        var url = buildBaseUrl("getPodcasts");
         if (url.length() == 0) {
             callback.invoke(0, null);
             return;
         }
         
+        url += "&includeEpisodes=true";
+        url += "&id=" + channelId;
+        
+        // Experimental: Subsonic API doesn't officially paginate getPodcasts, 
+        // but some forks/extensions might respect these bounds.
         url += "&count=" + count.toString();
+        url += "&offset=" + offset.toString();
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
