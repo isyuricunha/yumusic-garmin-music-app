@@ -1,6 +1,6 @@
 # YuMusic
 
-**A personal music streaming app for Garmin Smartwatches**
+## A personal music streaming app for Garmin Smartwatches
 
 ## SDK and API Version
 
@@ -23,7 +23,9 @@ Once connected via the Garmin Connect phone app, you can browse your favorite pl
 - **Offline Playback:** Listen to your downloaded music anywhere using the high-quality native Garmin music player.
 - **Fluid Interface:** A fast, modern layout focused on getting you to your music without the clutter.
 - **Instant Local Playback:** Swap between your downloaded playlists in seconds without needing an internet connection.
-- **Auto-Tracking:** Supports automatic scrobbling to keep your server's listening history updated.
+- **Auto-Tracking Offline Scrobbling**: Supports automatic scrobbling to keep your server's listening history updated.
+- **Audio Quality (Transcoding Bit Rate) Settings**: You can choose your preferred download audio quality (320, 192, 128, or 96 kbps) through the Garmin Connect app settings. Lower bitrates drastically reduce the storage space used on your watch and speed up downloads.
+- **Force Server Audio Format Trancoding**: The app requests the server to send/transcode the file in MP3 (Garmin watches are compatible with MP3 and AAC), but if the format is not MP3, it will receive the original file.
 
 **Links**:
 
