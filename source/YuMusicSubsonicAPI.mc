@@ -11,16 +11,20 @@ class YuMusicSubsonicAPI {
     private var _username as String?;
     private var _password as String?;
     private var _apiVersion as String = "1.16.1";
-    private var _clientName as String = "YuMusic";
+    private var _clientName as String = "YuMusicGarmin";
+    private var _maxBitRate as String = "320";
 
     function initialize() {
     }
 
     // Configure the server connection
-    function configure(serverUrl as String, username as String, password as String) as Void {
+    function configure(serverUrl as String, username as String, password as String, maxBitRate as String) as Void {
         _serverUrl = serverUrl;
         _username = username;
         _password = password;
+        if (maxBitRate != null) {
+            _maxBitRate = maxBitRate;
+        }
     }
 
     // Generate authentication token using MD5 hash
@@ -284,6 +288,9 @@ class YuMusicSubsonicAPI {
             url += "&t=" + token;
             url += "&s=" + salt;
         }
+        
+        url += "&format=mp3";
+        url += "&maxBitRate=" + _maxBitRate;
 
         return url;
     }
@@ -302,7 +309,7 @@ class YuMusicSubsonicAPI {
         url += "&v=" + _apiVersion;
         url += "&c=" + _clientName;
         url += "&format=mp3";
-        url += "&maxBitRate=320";
+        url += "&maxBitRate=" + _maxBitRate;
 
         var auth = generateAuthToken();
         var token = auth["t"] as String?;

@@ -10,4 +10,13 @@
     <setting propertyKey="@Properties.password" title="Password">
         <settingConfig type="alphaNumeric" />
     </setting>
+
+    <setting propertyKey="@Properties.maxBitRate" title="@Strings.maxBitRateTitle">
+        <settingConfig type="list">
+            <listEntry value="320">@Strings.bitRate320</listEntry>
+            <listEntry value="192">@Strings.bitRate192</listEntry>
+            <listEntry value="128">@Strings.bitRate128</listEntry>
+            <listEntry value="96">@Strings.bitRate96</listEntry>
+        </settingConfig>
+    </setting>
 </settings>

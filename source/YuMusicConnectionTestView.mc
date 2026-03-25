@@ -113,6 +113,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
         var serverUrl = config["serverUrl"] as String?;
         var username = config["username"] as String?;
         var password = config["password"] as String?;
+        var maxBitRate = config["maxBitRate"] as String?;
 
         if (serverUrl == null || username == null || password == null) {
             setResult(2, "skipped", "missing config");
@@ -123,7 +124,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
 
         serverUrl = normalizeServerUrl(serverUrl);
         System.println("connection test: serverUrl=" + serverUrl);
-        _api.configure(serverUrl, username, password);
+        _api.configure(serverUrl, username, password, maxBitRate);
         return true;
     }
 

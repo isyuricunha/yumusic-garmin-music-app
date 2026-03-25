@@ -6,16 +6,18 @@ class YuMusicServerConfig {
     private const SERVER_URL_KEY = "serverUrl";
     private const USERNAME_KEY = "username";
     private const PASSWORD_KEY = "password";
+    private const MAX_BITRATE_KEY = "maxBitRate";
     private const CONFIGURED_KEY = "configured";
 
     function initialize() {
     }
 
     // Save server configuration
-    function saveConfig(serverUrl as String, username as String, password as String) as Void {
+    function saveConfig(serverUrl as String, username as String, password as String, maxBitRate as String) as Void {
         Storage.setValue(SERVER_URL_KEY, serverUrl);
         Storage.setValue(USERNAME_KEY, username);
         Storage.setValue(PASSWORD_KEY, password);
+        Storage.setValue(MAX_BITRATE_KEY, maxBitRate);
         Storage.setValue(CONFIGURED_KEY, true);
     }
 
@@ -34,6 +36,12 @@ class YuMusicServerConfig {
         return Storage.getValue(PASSWORD_KEY) as String?;
     }
 
+    // Get max bit rate
+    function getMaxBitRate() as String? {
+        var bitrate = Storage.getValue(MAX_BITRATE_KEY) as String?;
+        return bitrate != null ? bitrate : "320"; // Default High Quality
+    }
+
     // Check if server is configured
     function isConfigured() as Boolean {
         var configured = Storage.getValue(CONFIGURED_KEY) as Boolean?;
@@ -45,6 +53,7 @@ class YuMusicServerConfig {
         Storage.deleteValue(SERVER_URL_KEY);
         Storage.deleteValue(USERNAME_KEY);
         Storage.deleteValue(PASSWORD_KEY);
+        Storage.deleteValue(MAX_BITRATE_KEY);
         Storage.deleteValue(CONFIGURED_KEY);
     }
 
@@ -54,6 +63,7 @@ class YuMusicServerConfig {
             "serverUrl" => getServerUrl(),
             "username" => getUsername(),
             "password" => getPassword(),
+            "maxBitRate" => getMaxBitRate(),
             "configured" => isConfigured()
         };
     }

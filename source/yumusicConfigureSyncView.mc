@@ -43,12 +43,13 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         var serverUrl = config["serverUrl"] as String?;
         var username = config["username"] as String?;
         var password = config["password"] as String?;
+        var maxBitRate = config["maxBitRate"] as String?;
         if (serverUrl == null || username == null || password == null) {
             addSingleItem("Error", "Server not configured", "error");
             return;
         }
 
-        _api.configure(serverUrl, username, password);
+        _api.configure(serverUrl, username, password, maxBitRate);
         _retryCount = 0;
         fetchPlaylists();
     }
