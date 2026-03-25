@@ -51,12 +51,12 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
 
     private function fetchPlaylists() as Void {
         _fetching = true;
-        addSingleItem("Loading...", "Please wait", "loading");
+        addSingleItem("Fetching vibes", "Playlist incoming", "loading");
         _api.getPlaylists(method(:onPlaylistsReceived));
     }
 
     private function scheduleRetry() as Void {
-        addSingleItem("Retrying...", "Please wait", "loading");
+        addSingleItem("Knock knock...", "Yoo-hoo...", "loading");
         WatchUi.requestUpdate();
         _retryTimer = new Timer.Timer();
         _retryTimer.start(method(:onRetryTimer), RETRY_DELAY_MS, false);
