@@ -44,21 +44,53 @@
     "configMin" : null,
     "configMax" : null,
     "configMaxLength" : null
+  }, {
+    "key" : "maxBitRate",
+    "valueType" : "number",
+    "defaultValue" : 320,
+    "configTitle" : "maxBitRateTitle",
+    "configPrompt" : null,
+    "configType" : "list",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : [ {
+      "display" : "bitRate320",
+      "value" : 320
+    }, {
+      "display" : "bitRate192",
+      "value" : 192
+    }, {
+      "display" : "bitRate128",
+      "value" : 128
+    }, {
+      "display" : "bitRate96",
+      "value" : 96
+    } ],
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
   } ],
   "supportsLiveValidation" : false,
   "languages" : {
     "valyrian" : {
       "noSongs" : "No songs available",
-      "$literal1$" : "Username",
       "configurePlaybackMessage" : "Playback Settings",
-      "$literal0$" : "Server URL",
       "syncFailed" : "Sync failed",
-      "$literal2$" : "Password",
+      "bitRate128" : "128 kbps (Standard)",
+      "bitRate320" : "320 kbps (High / Source)",
       "loading" : "Loading...",
+      "AppName" : "YuMusic",
+      "bitRate192" : "192 kbps (Medium)",
+      "$literal1$" : "Username",
+      "bitRate96" : "96 kbps (Low)",
+      "$literal0$" : "Server URL",
+      "maxBitRateTitle" : "Audio Quality (Bitrate)",
+      "$literal2$" : "Password",
       "serverNotConfigured" : "Server not configured",
       "configureSyncMessage" : "Select Music to Sync",
-      "syncComplete" : "Sync complete!",
-      "AppName" : "YuMusic"
+      "syncComplete" : "Sync complete!"
     }
   }
 }
