@@ -6,6 +6,10 @@ import Toybox.PersistedContent;
 import Toybox.System;
 import Toybox.Timer;
 
+// Playlists with more songs than this threshold may fail to load on memory-constrained
+// devices. Shown as a warning in the playlist list and referenced in error messages.
+const LARGE_PLAYLIST_THRESHOLD = 50;
+
 // Native Menu2 for configuring songs to sync.
 class YuMusicConfigureSyncView extends WatchUi.Menu2 {
     private var _serverConfig as YuMusicServerConfig;
@@ -103,7 +107,14 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
                         var id = playlist["id"] as String?;
                         var songCount = playlist["songCount"] as Number?;
                         if (name != null && id != null) {
-                            var subtitle = (songCount != null ? songCount.toString() : "0") + " songs";
+                            var count = songCount != null ? songCount : 0;
+                            var subtitle;
+                            if (count > LARGE_PLAYLIST_THRESHOLD) {
+                                // Warn upfront so users know the playlist may be too large.
+                                subtitle = count.toString() + " songs - may be too large";
+                            } else {
+                                subtitle = count.toString() + " songs";
+                            }
                             addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
                             _itemCount++;
                         }

@@ -4,9 +4,8 @@ import Toybox.Communications;
 import Toybox.PersistedContent;
 import Toybox.System;
 
-// Number of songs to fetch per paginated request.
-// Kept small so the JSON response fits inside Garmin's per-request memory limit
-// even on devices with limited heap (e.g. Fenix 7 ~340 KB).
+// Songs fetched per paginated API request. Kept small so each HTTP response body
+// fits within the Garmin JSON response memory limit on all devices.
 const PLAYLIST_PAGE_SIZE = 15;
 
 // Delegate for playlist selection menu
@@ -76,7 +75,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             if (responseCode == -402) {
                 // Only reachable when the server ignored pagination params and returned
                 // everything at once, still hitting the device memory limit.
-                showError("Playlist too large.\nTry < 30 songs.");
+                showError("Too many songs.\nKeep under 50.");
             } else {
                 showError("Failed (" + responseCode.toString() + ")");
             }
