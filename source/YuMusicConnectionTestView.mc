@@ -218,7 +218,8 @@ class YuMusicConnectionTestView extends WatchUi.View {
                 line += " " + detail;
             }
 
-            dc.drawText(10, y, Graphics.FONT_TINY, line, Graphics.TEXT_JUSTIFY_LEFT);
+            // Draw each result row centered so text stays within the round bezel.
+            dc.drawText(centerX, y, Graphics.FONT_TINY, line, Graphics.TEXT_JUSTIFY_CENTER);
             y += 22;
         }
 

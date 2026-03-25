@@ -45,9 +45,10 @@ class YuMusicServerConfigView extends WatchUi.View {
         dc.drawText(centerX, y, Graphics.FONT_MEDIUM, "Server Config", Graphics.TEXT_JUSTIFY_CENTER);
         y += 50;
 
-        // Draw instructions
+        // Draw instructions — truncate to safe width for round watches
+        var maxW = (width * 80 / 100);
         dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(centerX, y, Graphics.FONT_TINY, "Configure via Garmin Connect", Graphics.TEXT_JUSTIFY_CENTER);
+        dc.drawText(centerX, y, Graphics.FONT_TINY, truncateToFit(dc, "Configure via Garmin Connect", Graphics.FONT_TINY, maxW), Graphics.TEXT_JUSTIFY_CENTER);
         y += 40;
 
         // Draw current configuration status
@@ -59,9 +60,9 @@ class YuMusicServerConfigView extends WatchUi.View {
             
             dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
             if (_currentField == 0) {
-                dc.drawText(centerX, y, Graphics.FONT_TINY, "Server: " + _serverUrl, Graphics.TEXT_JUSTIFY_CENTER);
+                dc.drawText(centerX, y, Graphics.FONT_TINY, truncateToFit(dc, "Server: " + _serverUrl, Graphics.FONT_TINY, maxW), Graphics.TEXT_JUSTIFY_CENTER);
             } else if (_currentField == 1) {
-                dc.drawText(centerX, y, Graphics.FONT_TINY, "User: " + _username, Graphics.TEXT_JUSTIFY_CENTER);
+                dc.drawText(centerX, y, Graphics.FONT_TINY, truncateToFit(dc, "User: " + _username, Graphics.FONT_TINY, maxW), Graphics.TEXT_JUSTIFY_CENTER);
             } else {
                 var passwordStatus = _password.length() > 0 ? "(set)" : "(empty)";
                 dc.drawText(centerX, y, Graphics.FONT_TINY, "Password: " + passwordStatus, Graphics.TEXT_JUSTIFY_CENTER);
@@ -109,5 +110,17 @@ class YuMusicServerConfigView extends WatchUi.View {
 
     function getPassword() as String {
         return _password;
+    }
+
+    // Truncate text so it fits within maxWidth pixels, appending "..." if needed.
+    private function truncateToFit(dc as Dc, text as String, font as FontDefinition, maxWidth as Number) as String {
+        if (dc.getTextWidthInPixels(text, font) <= maxWidth) {
+            return text;
+        }
+        var truncated = text;
+        while (truncated.length() > 0 && dc.getTextWidthInPixels(truncated + "...", font) > maxWidth) {
+            truncated = truncated.substring(0, truncated.length() - 1);
+        }
+        return truncated + "...";
     }
 }
