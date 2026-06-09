@@ -377,6 +377,10 @@ class YuMusicJellyfinAPI {
         return url;
     }
 
+    function getFallbackDownloadUrlForSong(song as Dictionary) as String {
+        return "";
+    }
+
     function scrobble(songId as String, timestamp as Number?, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         performAction("/UserPlayedItems/" + sourceIdFromStableId(songId), Communications.HTTP_REQUEST_METHOD_POST, callback);
     }
@@ -505,6 +509,9 @@ class YuMusicJellyfinAPI {
         }
         if (code == -1002) {
             return "-1002 unsupported content";
+        }
+        if (code == -1005) {
+            return "-1005 media unreadable";
         }
         if (code == 0) {
             return "0 invalid download response";

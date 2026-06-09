@@ -270,6 +270,9 @@ class YuMusicSubsonicAPI {
         if (code == -1002) {
             return "-1002 unsupported content";
         }
+        if (code == -1005) {
+            return "-1005 media unreadable";
+        }
         if (code == 401) {
             return "401 unauthorized";
         }
@@ -479,6 +482,23 @@ class YuMusicSubsonicAPI {
             sourceId = song["id"] as String?;
         }
         return sourceId != null ? getDownloadUrl(sourceId) : "";
+    }
+
+    function getFallbackDownloadUrl(songId as String) as String {
+        var url = appendQueryParameter(buildRequestUrl("download"), "id", songId);
+        url = appendQueryParameter(url, "format", "mp3");
+        url = appendQueryParameter(url, "maxBitRate", _maxBitRate);
+        url = appendQueryParameter(url, "estimateContentLength", "true");
+
+        return url;
+    }
+
+    function getFallbackDownloadUrlForSong(song as Dictionary) as String {
+        var sourceId = song["sourceId"] as String?;
+        if (sourceId == null) {
+            sourceId = song["id"] as String?;
+        }
+        return sourceId != null ? getFallbackDownloadUrl(sourceId) : "";
     }
 
     // Get stream URL for a song

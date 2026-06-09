@@ -172,7 +172,8 @@ Subsonic or Jellyfin response body.
 | Garmin `-403` | The watch ran out of memory while processing the response | This is not HTTP 403. Reduce playlist metadata/size and retry after restarting the watch. |
 | Garmin `-1001` | The Garmin request context requires a secure connection | Configure HTTPS with a trusted certificate. |
 | Garmin `-1002` | Unsupported content or response type | Confirm the server can provide MP3 and that a proxy is not replacing the audio response. |
-| `Sync failed (0)` | Synchronization ended without a usable Garmin error code | Re-run Test Connection, confirm the playlist contains downloadable audio, and inspect server/proxy logs for the stream requests. |
+| Garmin `-1005` | The watch could not read the downloaded media | Confirm the track is playable as MP3/AAC and inspect server/proxy logs for the stream or download request. |
+| `Sync failed (0)` | Synchronization ended without a usable Garmin error code | Re-run Test Connection, confirm the playlist contains downloadable audio, and inspect server/proxy logs for stream or download requests. |
 | Sync completes with zero playlists | The server returned no visible playlists | Create or expose a playlist for the user. For Nextcloud Music, verify its displayed Subsonic URL and generated API password. |
 
 If a failure affects only one playlist, compare its size and track metadata with

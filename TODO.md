@@ -97,3 +97,15 @@ Related report: #10.
 - [x] Run all automated tests after the download-progress fix.
 
 Related reports: #5, #10.
+
+## Milestone 9: Subsonic Media Import Fallback
+
+- [x] Keep Subsonic/Navidrome `stream.view` as the primary transcoded download path.
+- [x] Retry once with Subsonic/Navidrome `download.view` when Garmin rejects or cannot import the media response.
+- [x] Report unreadable imported media as `-1005 media unreadable` instead of a generic `0`.
+- [x] Add regression coverage for the fallback download URL and media error message.
+- [x] Build with the current SDK for Forerunner 955, Venu 2, Enduro 3, and Forerunner 265.
+- [x] Build with the previous supported SDK to catch compatibility regressions.
+- [x] Run all automated tests after the fallback fix.
+
+Related report: #5.

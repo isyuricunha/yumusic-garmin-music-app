@@ -14,6 +14,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _failedCount as Number = 0;
     private var _firstFailureCode as Number? = null;
     private var _lastProgress as Number = -1;
+    private var _downloadFallbackAttempted as Boolean = false;
 
     function initialize() {
         SyncDelegate.initialize();
@@ -32,6 +33,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         _failedCount = 0;
         _firstFailureCode = null;
         _lastProgress = -1;
+        _downloadFallbackAttempted = false;
 
         System.println("sync onStartSync songs: " + _songsToDownload.size().toString());
 
@@ -141,9 +143,12 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         }
 
         System.println("sync download song index " + _currentDownloadIndex.toString());
+        _downloadFallbackAttempted = false;
         notifyCurrentSongProgress(0.0);
+        startDownloadRequest(url);
+    }
 
-        // Download options (audio content provider expects audio responses)
+    private function startDownloadRequest(url as String) as Void {
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
             :headers => {
@@ -154,7 +159,6 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             :fileDownloadProgressCallback => method(:onSongDownloadProgress)
         };
 
-        // Make the download request
         Communications.makeWebRequest(
             url,
             {},
@@ -189,10 +193,10 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
                 if (persistedContent != null) {
                     persistedContent.remove();
                 }
-                recordFailure(0);
-                notifyCurrentSongProgress(1.0);
-                _currentDownloadIndex++;
-                downloadNextSong();
+                if (tryFallbackDownload(song, "no persisted content")) {
+                    return;
+                }
+                failCurrentSong(-1005);
                 return;
             }
 
@@ -208,10 +212,11 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             downloadNextSong();
         } else {
             System.println("sync download failed responseCode: " + responseCode.toString());
-            recordFailure(responseCode);
-            notifyCurrentSongProgress(1.0);
-            _currentDownloadIndex++;
-            downloadNextSong();
+            var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
+            if (isRetriableDownloadFailure(responseCode) && tryFallbackDownload(song, "response " + responseCode.toString())) {
+                return;
+            }
+            failCurrentSong(responseCode);
         }
     }
 
@@ -265,6 +270,35 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             _firstFailureCode = responseCode;
         }
         _failedCount++;
+    }
+
+    private function failCurrentSong(responseCode as Number) as Void {
+        recordFailure(responseCode);
+        notifyCurrentSongProgress(1.0);
+        _currentDownloadIndex++;
+        downloadNextSong();
+    }
+
+    private function isRetriableDownloadFailure(responseCode as Number) as Boolean {
+        return responseCode == 0
+            || responseCode == -1002
+            || responseCode == -1005;
+    }
+
+    private function tryFallbackDownload(song as Dictionary?, reason as String) as Boolean {
+        if (_downloadFallbackAttempted || song == null) {
+            return false;
+        }
+
+        var fallbackUrl = _api.getFallbackDownloadUrl(song);
+        if (fallbackUrl.length() == 0) {
+            return false;
+        }
+
+        _downloadFallbackAttempted = true;
+        System.println("sync retrying download with fallback URL: " + reason);
+        startDownloadRequest(fallbackUrl);
+        return true;
     }
 
     // Called by the system to determine if the app needs to be synced.

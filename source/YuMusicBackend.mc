@@ -96,6 +96,16 @@ class YuMusicBackend {
         return "";
     }
 
+    function getFallbackDownloadUrl(song as Dictionary) as String {
+        if (_jellyfin != null) {
+            return _jellyfin.getFallbackDownloadUrlForSong(song);
+        }
+        if (_subsonic != null) {
+            return _subsonic.getFallbackDownloadUrlForSong(song);
+        }
+        return "";
+    }
+
     function scrobble(songId as String, timestamp as Number?, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         if (_jellyfin != null) {
             _jellyfin.scrobble(songId, timestamp, callback);

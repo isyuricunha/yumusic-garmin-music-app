@@ -108,3 +108,33 @@ function audioDownloadUsesStreamWithEstimatedLength(logger) {
         && url.find("estimateContentLength=true") != null
         && url.find("/rest/download.view") == null;
 }
+
+(:test)
+function fallbackAudioDownloadUsesDownloadWithEstimatedLength(logger) {
+    var api = new YuMusicSubsonicAPI();
+    api.configure({
+        "serverUrl" => "https://music.example.com",
+        "username" => "runner",
+        "password" => "secret",
+        "maxBitRate" => "192",
+        "authMode" => YUMUSIC_AUTH_TOKEN
+    });
+    var url = api.getFallbackDownloadUrl("song id");
+
+    logger.debug(url);
+    return url.find("/rest/download.view?") != null
+        && url.find("id=song%20id") != null
+        && url.find("format=mp3") != null
+        && url.find("maxBitRate=192") != null
+        && url.find("estimateContentLength=true") != null
+        && url.find("/rest/stream.view") == null;
+}
+
+(:test)
+function mediaProcessingErrorIsHumanReadable(logger) {
+    var api = new YuMusicSubsonicAPI();
+    var message = api.formatTransportError(-1005);
+
+    logger.debug(message);
+    return message.equals("-1005 media unreadable");
+}
