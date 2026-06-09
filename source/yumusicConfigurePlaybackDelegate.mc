@@ -7,13 +7,13 @@ import Toybox.PersistedContent;
 class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
     private var _library as YuMusicLibrary;
     private var _serverConfig as YuMusicServerConfig;
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend;
 
     function initialize() {
         Menu2InputDelegate.initialize();
         _library = new YuMusicLibrary();
         _serverConfig = new YuMusicServerConfig();
-        _api = new YuMusicSubsonicAPI();
+        _api = new YuMusicBackend();
     }
 
     function onSelect(item as MenuItem) as Void {

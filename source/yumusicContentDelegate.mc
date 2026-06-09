@@ -8,13 +8,13 @@ import Toybox.WatchUi;
 // that iterates over the songs configured to play.
 class YuMusicContentDelegate extends Media.ContentDelegate {
     private var _library as YuMusicLibrary;
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend;
     private var _serverConfig as YuMusicServerConfig;
 
     function initialize() {
         ContentDelegate.initialize();
         _library = new YuMusicLibrary();
-        _api = new YuMusicSubsonicAPI();
+        _api = new YuMusicBackend();
         _serverConfig = new YuMusicServerConfig();
         
         // Configure API if server is set up

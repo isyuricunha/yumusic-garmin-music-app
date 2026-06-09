@@ -53,13 +53,14 @@ Related reports: #6, #8.
 
 ## Milestone 5: Jellyfin
 
-- [ ] Define a backend abstraction instead of mixing protocols.
-- [ ] Implement Jellyfin server validation and access-token authentication.
-- [ ] Discover audio libraries and playlists using Jellyfin APIs.
-- [ ] Map Jellyfin tracks to the existing Garmin content model.
-- [ ] Request Garmin-compatible MP3 audio with bounded bitrate.
-- [ ] Add backend-specific tests and setup documentation.
-- [ ] Keep all existing Subsonic-compatible servers working unchanged.
+- [x] Define a backend abstraction instead of mixing protocols.
+- [x] Implement Jellyfin server validation and access-token authentication.
+- [x] Discover playlists across Jellyfin audio libraries with paginated requests.
+- [x] Map Jellyfin tracks to the existing Garmin content model.
+- [x] Request Garmin-compatible MP3 audio with bounded bitrate.
+- [x] Add backend-specific automated and live integration tests.
+- [ ] Add Jellyfin setup documentation.
+- [x] Keep all existing Subsonic-compatible servers working unchanged.
 
 Related report: #10.
 

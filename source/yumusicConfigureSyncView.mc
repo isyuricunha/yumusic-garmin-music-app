@@ -9,7 +9,7 @@ import Toybox.Timer;
 // Native Menu2 for configuring songs to sync.
 class YuMusicConfigureSyncView extends WatchUi.Menu2 {
     private var _serverConfig as YuMusicServerConfig;
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend;
     private var _playlists as Array?;
     private var _fetching as Boolean = false;
     private var _retryTimer as Timer.Timer?;
@@ -22,7 +22,7 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
     function initialize() {
         Menu2.initialize({:title => "Add Music"});
         _serverConfig = new YuMusicServerConfig();
-        _api = new YuMusicSubsonicAPI();
+        _api = new YuMusicBackend();
     }
 
     function onShow() as Void {
@@ -80,37 +80,29 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         _fetching = false;
 
         var responseError = _api.getResponseError(responseCode, data);
-        var dict = data as Dictionary?;
-        if (responseError == null && dict != null) {
-            var subsonic = dict["subsonic-response"] as Dictionary?;
-            if (subsonic != null) {
-                var playlistsContainer = subsonic["playlists"] as Dictionary?;
-                var playlists = playlistsContainer != null ? _api.ensureArray(playlistsContainer["playlist"]) : null;
-                if (playlists != null && playlists.size() > 0) {
-                    _playlists = playlists;
-                    
-                    // Populate menu items
-                    clearItems();
-                    for (var i = 0; i < playlists.size(); i++) {
-                        var playlist = playlists[i] as Dictionary?;
-                        if (playlist == null) {
-                            continue;
-                        }
-                        var name = playlist["name"] as String?;
-                        var id = playlist["id"] as String?;
-                        var songCount = playlist["songCount"] as Number?;
-                        if (name != null && id != null) {
-                            var count = songCount != null ? songCount : 0;
-                            var subtitle = count.toString() + " songs";
-                            addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
-                            _itemCount++;
-                        }
+        if (responseError == null) {
+            var playlists = _api.extractPlaylists(data);
+            if (playlists.size() > 0) {
+                _playlists = playlists;
+
+                clearItems();
+                for (var i = 0; i < playlists.size(); i++) {
+                    var playlist = playlists[i] as Dictionary?;
+                    if (playlist == null) {
+                        continue;
                     }
-                } else {
-                    addSingleItem("No playlists", "No playlists found on server", "empty");
+                    var name = playlist["name"] as String?;
+                    var id = playlist["id"] as String?;
+                    var songCount = playlist["songCount"] as Number?;
+                    if (name != null && id != null) {
+                        var count = songCount != null ? songCount : 0;
+                        var subtitle = count.toString() + " songs";
+                        addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
+                        _itemCount++;
+                    }
                 }
             } else {
-                addSingleItem("Error", "Invalid response", "error");
+                addSingleItem("No playlists", "No playlists found on server", "empty");
             }
         } else if (responseCode == -1004 || responseCode == -1003 || responseCode == -1001) {
             // Transient BLE/WiFi error — auto-retry up to MAX_RETRIES times.

@@ -45,6 +45,10 @@ class YuMusicSubsonicAPI {
         return true;
     }
 
+    function prepare(callback as Method(success as Boolean, error as String?) as Void) as Void {
+        callback.invoke(true, null);
+    }
+
     // Generate authentication token using MD5 hash
     private function generateAuthToken() as Dictionary {
         if (_password == null) {
@@ -395,6 +399,70 @@ class YuMusicSubsonicAPI {
         return [value];
     }
 
+    function extractPlaylists(data as Dictionary or String or PersistedContent.Iterator or Null) as Array {
+        var dict = data as Dictionary?;
+        var response = dict != null ? dict["subsonic-response"] as Dictionary? : null;
+        var playlistsContainer = response != null ? response["playlists"] as Dictionary? : null;
+        return playlistsContainer != null ? ensureArray(playlistsContainer["playlist"]) : [];
+    }
+
+    function extractPlaylist(data as Dictionary or String or PersistedContent.Iterator or Null) as Dictionary? {
+        var dict = data as Dictionary?;
+        var response = dict != null ? dict["subsonic-response"] as Dictionary? : null;
+        var playlist = response != null ? response["playlist"] as Dictionary? : null;
+        if (playlist == null) {
+            return null;
+        }
+
+        var entries = ensureArray(playlist["entry"]);
+        var songs = [];
+        for (var i = 0; i < entries.size(); i++) {
+            var sourceSong = entries[i] as Dictionary?;
+            if (sourceSong == null) {
+                continue;
+            }
+
+            var songId = sourceSong["id"] as String?;
+            var title = sourceSong["title"] as String?;
+            if (songId == null || title == null) {
+                continue;
+            }
+
+            var duration = sourceSong.hasKey("duration")
+                ? readNumber(sourceSong["duration"])
+                : null;
+            var artist = sourceSong["artist"] as String?;
+            var album = sourceSong["album"] as String?;
+            var suffix = sourceSong["suffix"] as String?;
+
+            songs.add({
+                "id" => songId,
+                "sourceId" => songId,
+                "backendType" => YUMUSIC_BACKEND_SUBSONIC,
+                "title" => title,
+                "artist" => artist != null ? artist : "Unknown",
+                "album" => album != null ? album : "Unknown",
+                "duration" => duration != null ? duration : 0,
+                "suffix" => suffix != null ? suffix : "mp3"
+            });
+        }
+
+        return {
+            "playlist" => playlist,
+            "songs" => songs
+        };
+    }
+
+    private function readNumber(value as Object) as Number? {
+        if (value instanceof Number) {
+            return value as Number;
+        }
+        if (value instanceof String) {
+            return (value as String).toNumber();
+        }
+        return null;
+    }
+
     // Get download URL for a song
     function getDownloadUrl(songId as String) as String {
         var url = appendQueryParameter(buildRequestUrl("stream"), "id", songId);
@@ -403,6 +471,14 @@ class YuMusicSubsonicAPI {
         url = appendQueryParameter(url, "estimateContentLength", "true");
 
         return url;
+    }
+
+    function getDownloadUrlForSong(song as Dictionary) as String {
+        var sourceId = song["sourceId"] as String?;
+        if (sourceId == null) {
+            sourceId = song["id"] as String?;
+        }
+        return sourceId != null ? getDownloadUrl(sourceId) : "";
     }
 
     // Get stream URL for a song

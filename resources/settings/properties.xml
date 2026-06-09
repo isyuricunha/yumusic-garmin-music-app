@@ -4,4 +4,5 @@
     <property id="password" type="string"></property>
     <property id="maxBitRate" type="number">320</property>
     <property id="authMode" type="number">0</property>
+    <property id="backendType" type="number">0</property>
 </properties>

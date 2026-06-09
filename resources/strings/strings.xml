@@ -10,6 +10,9 @@
     <string id="syncComplete">Sync complete!</string>
     <string id="syncFailed">Sync failed</string>
 
+    <string id="backendTypeTitle">Server Type</string>
+    <string id="backendTypeSubsonic">Subsonic Compatible</string>
+    <string id="backendTypeJellyfin">Jellyfin</string>
     <string id="credentialTitle">Password / API Key</string>
     <string id="authModeTitle">Authentication</string>
     <string id="authModeToken">Subsonic Token (Recommended)</string>

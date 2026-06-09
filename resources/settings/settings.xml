@@ -1,4 +1,11 @@
 <settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://developer.garmin.com/downloads/connect-iq/resources.xsd">
+    <setting propertyKey="@Properties.backendType" title="@Strings.backendTypeTitle">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.backendTypeSubsonic</listEntry>
+            <listEntry value="1">@Strings.backendTypeJellyfin</listEntry>
+        </settingConfig>
+    </setting>
+
     <setting propertyKey="@Properties.serverUrl" title="Server URL">
         <settingConfig type="url" />
     </setting>

@@ -6,7 +6,7 @@ import Toybox.System;
 
 class YuMusicConnectionTestView extends WatchUi.View {
     private var _serverConfig as YuMusicServerConfig;
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend;
 
     private var _results as Array;
     private var _running as Boolean;
@@ -14,7 +14,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
     function initialize() {
         View.initialize();
         _serverConfig = new YuMusicServerConfig();
-        _api = new YuMusicSubsonicAPI();
+        _api = new YuMusicBackend();
         _results = [];
         _running = false;
     }
@@ -144,14 +144,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
     }
 
     private function getPlaylistCount(data as Dictionary or String or PersistedContent.Iterator or Null) as Number {
-        var dict = data as Dictionary?;
-        var response = dict != null ? dict["subsonic-response"] as Dictionary? : null;
-        var container = response != null ? response["playlists"] as Dictionary? : null;
-        if (container == null) {
-            return 0;
-        }
-
-        return _api.ensureArray(container["playlist"]).size();
+        return _api.extractPlaylists(data).size();
     }
 
     private function truncate(text as String, maxLength as Number) as String {

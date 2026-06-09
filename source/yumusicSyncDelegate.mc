@@ -6,7 +6,7 @@ import Toybox.System;
 
 class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _library as YuMusicLibrary;
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend;
     private var _serverConfig as YuMusicServerConfig;
     private var _songsToDownload as Array = [];
     private var _currentDownloadIndex as Number = 0;
@@ -17,7 +17,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     function initialize() {
         SyncDelegate.initialize();
         _library = new YuMusicLibrary();
-        _api = new YuMusicSubsonicAPI();
+        _api = new YuMusicBackend();
         _serverConfig = new YuMusicServerConfig();
     }
 
@@ -46,8 +46,15 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        // Flush offline scrobbles before downloading songs
-        // Flush offline scrobbles sequentially before downloading songs
+        _api.prepare(method(:onBackendPrepared));
+    }
+
+    function onBackendPrepared(success as Boolean, error as String?) as Void {
+        if (!success) {
+            Communications.notifySyncComplete(error != null ? error : "Server authentication failed");
+            return;
+        }
+
         flushNextScrobble();
     }
 
@@ -120,7 +127,13 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        var url = _api.getDownloadUrl(songId);
+        var url = _api.getDownloadUrl(song);
+        if (url.length() == 0) {
+            recordFailure(0);
+            _currentDownloadIndex++;
+            downloadNextSong();
+            return;
+        }
 
         System.println("sync download song index " + _currentDownloadIndex.toString());
 

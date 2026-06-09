@@ -34,10 +34,11 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         var passwordRaw = safe_get_property_string("password");
         var maxBitRateRaw = safe_get_property_number("maxBitRate");
         var authModeRaw = safe_get_property_number("authMode");
+        var backendTypeRaw = safe_get_property_number("backendType");
 
         // If the app settings haven't been delivered yet, don't overwrite/clear
         // previously stored configuration.
-        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null && authModeRaw == null) {
+        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null && authModeRaw == null && backendTypeRaw == null) {
             return;
         }
 
@@ -54,7 +55,9 @@ class YuMusicApp extends Application.AudioContentProviderApp {
             }
         }
         var username = normalize_setting_string(usernameRaw);
-        var password = normalize_setting_string(passwordRaw);
+        // Credentials are opaque. Empty passwords are valid for some Jellyfin
+        // and Subsonic users, and surrounding whitespace may be significant.
+        var password = passwordRaw;
 
         var maxBitRate = "320"; // Default
         if (maxBitRateRaw != null) {
@@ -62,10 +65,14 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         }
 
         var authMode = authModeRaw != null ? authModeRaw : YUMUSIC_AUTH_TOKEN;
-        var hasRequiredUsername = authMode == YUMUSIC_AUTH_API_KEY || username != null;
+        var backendType = backendTypeRaw != null ? backendTypeRaw : YUMUSIC_BACKEND_SUBSONIC;
+        var hasRequiredUsername = username != null;
+        if (backendType == YUMUSIC_BACKEND_SUBSONIC && authMode == YUMUSIC_AUTH_API_KEY) {
+            hasRequiredUsername = true;
+        }
 
         if (serverUrl != null && password != null && hasRequiredUsername) {
-            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, authMode);
+            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, authMode, backendType);
         } else {
             _serverConfig.clearConfig();
         }
