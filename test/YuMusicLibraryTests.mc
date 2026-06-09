@@ -139,6 +139,24 @@ function invalidCachedContentRemainsPending(logger) {
 }
 
 (:test)
+function audioContentRefsUseGarminStringIds(logger) {
+    clearLibraryTestState();
+    var library = new YuMusicLibrary();
+    var numericId = library.getAudioContentRefId(8123);
+    var storedStringId = library.getAudioContentRefId("8123");
+    var invalidId = library.getAudioContentRefId("invalid");
+    var passed = numericId != null
+        && numericId.equals("8123")
+        && storedStringId != null
+        && storedStringId.equals("8123")
+        && invalidId == null;
+
+    logger.debug("audio content ref=" + numericId);
+    library.clearMetadata();
+    return passed;
+}
+
+(:test)
 function removingPlaylistKeepsSharedTracks(logger) {
     clearLibraryTestState();
     var library = new YuMusicLibrary();

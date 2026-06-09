@@ -104,8 +104,8 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
             } else {
                 addSingleItem("No playlists", "No playlists found on server", "empty");
             }
-        } else if (responseCode == -1004 || responseCode == -1003 || responseCode == -1001) {
-            // Transient BLE/WiFi error — auto-retry up to MAX_RETRIES times.
+        } else if (responseCode == -1004 || responseCode == -1003) {
+            // Retry connection drops and system-cancelled requests.
             _retryCount++;
             if (_retryCount <= MAX_RETRIES) {
                 System.println("getPlaylists transient error " + responseCode.toString() + ", retry " + _retryCount.toString());

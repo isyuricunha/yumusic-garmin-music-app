@@ -22,9 +22,14 @@ class YuMusicRemovePlaylistDelegate extends WatchUi.ConfirmationDelegate {
                     continue;
                 }
 
+                var audioContentRefId = _library.getAudioContentRefId(contentRefId);
+                if (audioContentRefId == null) {
+                    continue;
+                }
+
                 try {
                     Media.deleteCachedItem(
-                        new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO)
+                        new Media.ContentRef(audioContentRefId, Media.CONTENT_TYPE_AUDIO)
                     );
                 } catch (ex) {
                     System.println("cached media deletion failed: " + ex.toString());

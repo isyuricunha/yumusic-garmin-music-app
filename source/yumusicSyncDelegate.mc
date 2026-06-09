@@ -161,12 +161,18 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     function onSongDownloaded(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200) {
             var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
-            var persistedContent = data as PersistedContent.Content?;
+            var iterator = data as PersistedContent.Iterator?;
+            var persistedContent = iterator != null
+                ? iterator.next()
+                : null;
             var persistedIdNumber = persistedContent != null
                 ? persistedContent.getId() as Number?
                 : null;
             if (song == null || persistedIdNumber == null) {
                 System.println("sync download response had no persisted content id");
+                if (persistedContent != null) {
+                    persistedContent.remove();
+                }
                 recordFailure(0);
                 _currentDownloadIndex++;
                 downloadNextSong();

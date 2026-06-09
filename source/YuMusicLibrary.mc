@@ -46,6 +46,12 @@ class YuMusicLibrary {
         return number != null && number > 0 ? number : null;
     }
 
+    // Garmin returns numeric persisted IDs but requires string IDs for audio ContentRef objects.
+    function getAudioContentRefId(value as Object) as String? {
+        var contentRefId = safeContentRefId(value);
+        return contentRefId != null ? contentRefId.toString() : null;
+    }
+
     private function getPlaylistIds() as Array {
         var playlistIds = Storage.getValue(PLAYLIST_IDS_KEY) as Array?;
         return playlistIds != null ? playlistIds : [];
@@ -583,7 +589,12 @@ class YuMusicLibrary {
             return null;
         }
 
-        var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
+        var audioContentRefId = getAudioContentRefId(contentRefId);
+        if (audioContentRefId == null) {
+            return null;
+        }
+
+        var contentRef = new Media.ContentRef(audioContentRefId, Media.CONTENT_TYPE_AUDIO);
         var content = Media.getCachedContentObj(contentRef);
         var metadata = content.getMetadata();
         if (metadata != null) {
