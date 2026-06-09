@@ -5,14 +5,14 @@ compile for the affected device families before it is considered complete.
 
 ## Milestone 1: Connection, Authentication, and Diagnostics
 
-- [ ] Preserve valid HTTP and HTTPS server URLs, including reverse-proxy paths.
-- [ ] URL-encode all Subsonic request parameters.
-- [ ] Keep token authentication as the backward-compatible default.
-- [ ] Add legacy password authentication for compatible Subsonic servers.
-- [ ] Add API-key authentication for Nextcloud Music.
-- [ ] Validate Subsonic response status and error payloads, not only HTTP status.
-- [ ] Replace the unrelated public HTTPS probe with server-specific diagnostics.
-- [ ] Show actionable messages for Garmin network and memory error codes.
+- [x] Preserve valid HTTP and HTTPS server URLs, including reverse-proxy paths.
+- [x] URL-encode all Subsonic request parameters.
+- [x] Keep token authentication as the backward-compatible default.
+- [x] Add legacy password authentication for compatible Subsonic servers.
+- [x] Add API-key authentication for Nextcloud Music.
+- [x] Validate Subsonic response status and error payloads, not only HTTP status.
+- [x] Replace the unrelated public HTTPS probe with server-specific diagnostics.
+- [x] Show actionable messages for Garmin network and memory error codes.
 - [ ] Document Nextcloud Music's generated API-key requirement.
 
 Related reports: #5, #7, #9.

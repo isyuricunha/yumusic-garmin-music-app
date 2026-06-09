@@ -7,8 +7,16 @@
         <settingConfig type="alphaNumeric" />
     </setting>
 
-    <setting propertyKey="@Properties.password" title="Password">
-        <settingConfig type="alphaNumeric" />
+    <setting propertyKey="@Properties.password" title="@Strings.credentialTitle">
+        <settingConfig type="password" />
+    </setting>
+
+    <setting propertyKey="@Properties.authMode" title="@Strings.authModeTitle">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.authModeToken</listEntry>
+            <listEntry value="1">@Strings.authModePassword</listEntry>
+            <listEntry value="2">@Strings.authModeApiKey</listEntry>
+        </settingConfig>
     </setting>
 
     <setting propertyKey="@Properties.maxBitRate" title="@Strings.maxBitRateTitle">

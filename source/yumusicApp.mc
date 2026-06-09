@@ -32,31 +32,40 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         var serverUrlRaw = safe_get_property_string("serverUrl");
         var usernameRaw = safe_get_property_string("username");
         var passwordRaw = safe_get_property_string("password");
-        
         var maxBitRateRaw = safe_get_property_number("maxBitRate");
+        var authModeRaw = safe_get_property_number("authMode");
 
         // If the app settings haven't been delivered yet, don't overwrite/clear
         // previously stored configuration.
-        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null) {
+        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null && authModeRaw == null) {
             return;
         }
 
         var serverUrl = normalize_setting_string(serverUrlRaw);
         if (serverUrl != null) {
-            if (serverUrl.length() > 0 && serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) == "/") {
+            var lastCharacter = serverUrl.length() > 0
+                ? serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) as String?
+                : null;
+            while (lastCharacter != null && lastCharacter.equals("/")) {
                 serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
+                lastCharacter = serverUrl.length() > 0
+                    ? serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) as String?
+                    : null;
             }
         }
         var username = normalize_setting_string(usernameRaw);
         var password = normalize_setting_string(passwordRaw);
-        
+
         var maxBitRate = "320"; // Default
         if (maxBitRateRaw != null) {
             maxBitRate = maxBitRateRaw.toString();
         }
 
-        if (serverUrl != null && username != null && password != null) {
-            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate);
+        var authMode = authModeRaw != null ? authModeRaw : YUMUSIC_AUTH_TOKEN;
+        var hasRequiredUsername = authMode == YUMUSIC_AUTH_API_KEY || username != null;
+
+        if (serverUrl != null && password != null && hasRequiredUsername) {
+            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, authMode);
         } else {
             _serverConfig.clearConfig();
         }
@@ -76,7 +85,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
 
         while (startIndex < endIndex) {
             var ch = value.substring(startIndex, startIndex + 1);
-            if (ch == " " || ch == "\t" || ch == "\n" || ch == "\r") {
+            if (is_whitespace(ch)) {
                 startIndex++;
             } else {
                 break;
@@ -85,7 +94,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
 
         while (endIndex > startIndex) {
             var ch = value.substring(endIndex - 1, endIndex);
-            if (ch == " " || ch == "\t" || ch == "\n" || ch == "\r") {
+            if (is_whitespace(ch)) {
                 endIndex--;
             } else {
                 break;
@@ -99,6 +108,14 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         }
 
         return trimmedValue;
+    }
+
+    private function is_whitespace(value as String?) as Boolean {
+        return value != null
+            && (value.equals(" ")
+                || value.equals("\t")
+                || value.equals("\n")
+                || value.equals("\r"));
     }
 
     private function safe_get_property_string(key as String) as String? {

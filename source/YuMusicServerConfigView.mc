@@ -8,7 +8,8 @@ class YuMusicServerConfigView extends WatchUi.View {
     private var _serverUrl as String = "";
     private var _username as String = "";
     private var _password as String = "";
-    private var _currentField as Number = 0; // 0=url, 1=username, 2=password
+    private var _authMode as Number = YUMUSIC_AUTH_TOKEN;
+    private var _currentField as Number = 0;
     private var _message as String?;
 
     function initialize() {
@@ -29,6 +30,7 @@ class YuMusicServerConfigView extends WatchUi.View {
         if (password != null) {
             _password = password;
         }
+        _authMode = _serverConfig.getAuthMode();
     }
 
     function onUpdate(dc as Dc) as Void {
@@ -62,10 +64,12 @@ class YuMusicServerConfigView extends WatchUi.View {
             if (_currentField == 0) {
                 dc.drawText(centerX, y, Graphics.FONT_TINY, truncateToFit(dc, "Server: " + _serverUrl, Graphics.FONT_TINY, maxW), Graphics.TEXT_JUSTIFY_CENTER);
             } else if (_currentField == 1) {
+                dc.drawText(centerX, y, Graphics.FONT_TINY, "Auth: " + getAuthModeLabel(), Graphics.TEXT_JUSTIFY_CENTER);
+            } else if (_currentField == 2) {
                 dc.drawText(centerX, y, Graphics.FONT_TINY, truncateToFit(dc, "User: " + _username, Graphics.FONT_TINY, maxW), Graphics.TEXT_JUSTIFY_CENTER);
             } else {
                 var passwordStatus = _password.length() > 0 ? "(set)" : "(empty)";
-                dc.drawText(centerX, y, Graphics.FONT_TINY, "Password: " + passwordStatus, Graphics.TEXT_JUSTIFY_CENTER);
+                dc.drawText(centerX, y, Graphics.FONT_TINY, "Credential: " + passwordStatus, Graphics.TEXT_JUSTIFY_CENTER);
             }
             y += 35;
 
@@ -96,8 +100,18 @@ class YuMusicServerConfigView extends WatchUi.View {
     }
 
     function cycleField() as Void {
-        _currentField = (_currentField + 1) % 3;
+        _currentField = (_currentField + 1) % 4;
         WatchUi.requestUpdate();
+    }
+
+    private function getAuthModeLabel() as String {
+        if (_authMode == YUMUSIC_AUTH_PASSWORD) {
+            return "Legacy";
+        }
+        if (_authMode == YUMUSIC_AUTH_API_KEY) {
+            return "API Key";
+        }
+        return "Token";
     }
 
     function getServerUrl() as String {

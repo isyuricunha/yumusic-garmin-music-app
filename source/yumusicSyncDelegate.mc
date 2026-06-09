@@ -41,13 +41,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
         // Configure API
         var config = _serverConfig.getConfig();
-        var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        if (serverUrl != null && username != null && password != null) {
-            _api.configure(serverUrl, username, password, maxBitRate);
-        } else {
+        if (!_api.configure(config)) {
             // Server not configured
             Communications.notifySyncComplete("Server not configured");
             return;
@@ -81,7 +75,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
     // Callback when a single offline scrobble flush completes
     function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        if (responseCode == 200) {
+        if (_api.isResponseSuccessful(responseCode, data)) {
             System.println("sync scrobble flush successful");
             // Remove the successfully uploaded scrobble
             _library.removeFirstScrobble();
@@ -131,7 +125,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             url = streamUrl;
         }
 
-        System.println("sync download song index " + _currentDownloadIndex.toString() + ": " + url);
+        System.println("sync download song index " + _currentDownloadIndex.toString());
 
         // Download options (audio content provider expects audio responses)
         var options = {

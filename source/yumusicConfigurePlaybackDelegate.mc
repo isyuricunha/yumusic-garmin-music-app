@@ -59,13 +59,7 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
             }
 
             var config = _serverConfig.getConfig();
-            var serverUrl = config["serverUrl"] as String?;
-            var username = config["username"] as String?;
-            var password = config["password"] as String?;
-            var maxBitRate = config["maxBitRate"] as String?;
-            
-            if (serverUrl != null && username != null && password != null) {
-                _api.configure(serverUrl, username, password, maxBitRate);
+            if (_api.configure(config)) {
                 var loadingView = new YuMusicLoadingView("Syncing scrobbles...");
                 WatchUi.pushView(loadingView, null, WatchUi.SLIDE_LEFT);
                 flushNextScrobble();
@@ -114,12 +108,13 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        if (responseCode == 200) {
+        if (_api.isResponseSuccessful(responseCode, data)) {
             _library.removeFirstScrobble();
             flushNextScrobble();
         } else {
             WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // Remove loading view
-            var msg = "Sync failed (" + responseCode.toString() + ")";
+            var error = _api.getResponseError(responseCode, data);
+            var msg = "Sync failed (" + (error != null ? error : responseCode.toString()) + ")";
             if (responseCode == -104) {
                 msg = "BLE Disconnected";
             }

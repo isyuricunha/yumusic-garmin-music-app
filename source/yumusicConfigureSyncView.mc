@@ -40,16 +40,11 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
         }
 
         var config = _serverConfig.getConfig();
-        var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        if (serverUrl == null || username == null || password == null) {
+        if (!_api.configure(config)) {
             addSingleItem("Error", "Server not configured", "error");
             return;
         }
 
-        _api.configure(serverUrl, username, password, maxBitRate);
         _retryCount = 0;
         fetchPlaylists();
     }
@@ -88,8 +83,9 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
     function onPlaylistsReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         _fetching = false;
 
+        var responseError = _api.getResponseError(responseCode, data);
         var dict = data as Dictionary?;
-        if (responseCode == 200 && dict != null) {
+        if (responseError == null && dict != null) {
             var subsonic = dict["subsonic-response"] as Dictionary?;
             if (subsonic != null) {
                 var playlistsContainer = subsonic["playlists"] as Dictionary?;
@@ -136,7 +132,7 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
             }
             addSingleItem("Connection error", "Go back & try again", "error");
         } else {
-            addSingleItem("Error", "Failed to load (" + responseCode.toString() + ")", "error");
+            addSingleItem("Error", responseError != null ? responseError : "Invalid response", "error");
         }
         
         WatchUi.requestUpdate();

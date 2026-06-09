@@ -10,6 +10,12 @@
     <string id="syncComplete">Sync complete!</string>
     <string id="syncFailed">Sync failed</string>
 
+    <string id="credentialTitle">Password / API Key</string>
+    <string id="authModeTitle">Authentication</string>
+    <string id="authModeToken">Subsonic Token (Recommended)</string>
+    <string id="authModePassword">Legacy Password</string>
+    <string id="authModeApiKey">Nextcloud Music API Key</string>
+
     <string id="maxBitRateTitle">Audio Quality (Bitrate)</string>
     <string id="bitRate320">320 kbps (High / Source)</string>
     <string id="bitRate192">192 kbps (Medium)</string>

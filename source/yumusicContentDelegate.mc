@@ -19,13 +19,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         
         // Configure API if server is set up
         var config = _serverConfig.getConfig();
-        var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        if (serverUrl != null && username != null && password != null) {
-            _api.configure(serverUrl, username, password, maxBitRate);
-        }
+        _api.configure(config);
     }
 
     // Returns an iterator that is used by the system to play songs.
@@ -132,7 +126,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     }
 
     function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        if (responseCode == 200) {
+        if (_api.isResponseSuccessful(responseCode, data)) {
             _library.removeFirstScrobble();
             flushNextScrobble();
         }
