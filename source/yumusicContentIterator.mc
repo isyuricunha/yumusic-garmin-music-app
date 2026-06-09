@@ -25,20 +25,14 @@ class YuMusicContentIterator extends Media.ContentIterator {
         _activePlaylistId = playlistId;
         _shuffle = _library.getShuffle();
 
-        var allSongs = _library.getSongs();
+        var playlistSongs = playlistId != null
+            ? _library.getSongsForPlaylist(playlistId)
+            : [];
         var filtered = [];
-        for (var i = 0; i < allSongs.size(); i++) {
-            var song = allSongs[i] as Dictionary?;
+        for (var i = 0; i < playlistSongs.size(); i++) {
+            var song = playlistSongs[i] as Dictionary?;
             if (song == null) {
                 continue;
-            }
-
-            // Only include songs that belong to the active playlist (if one is set).
-            if (playlistId != null) {
-                var pId = song.hasKey("playlistId") ? song["playlistId"] as String? : null;
-                if (pId == null || !pId.equals(playlistId)) {
-                    continue;
-                }
             }
 
             // Only expose songs that have been downloaded (have a numeric contentRefId).

@@ -310,15 +310,8 @@ class YuMusicSubsonicAPI {
         Communications.makeWebRequest(url, {}, options, callback);
     }
 
-    // Get playlist details with songs.
-    // Supports pagination via optional offset and count (Subsonic API v1.9.0+).
-    // Pass count=-1 to request the full playlist without pagination params.
-    function getPlaylist(playlistId as String, offset as Number, count as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+    function getPlaylist(playlistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = appendQueryParameter(buildRequestUrl("getPlaylist"), "id", playlistId);
-        if (count >= 0) {
-            url = appendQueryParameter(url, "offset", offset.toString());
-            url = appendQueryParameter(url, "count", count.toString());
-        }
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -404,17 +397,16 @@ class YuMusicSubsonicAPI {
 
     // Get download URL for a song
     function getDownloadUrl(songId as String) as String {
-        var url = appendQueryParameter(buildRequestUrl("download"), "id", songId);
+        var url = appendQueryParameter(buildRequestUrl("stream"), "id", songId);
         url = appendQueryParameter(url, "format", "mp3");
         url = appendQueryParameter(url, "maxBitRate", _maxBitRate);
+        url = appendQueryParameter(url, "estimateContentLength", "true");
 
         return url;
     }
 
     // Get stream URL for a song
     function getStreamUrl(songId as String) as String {
-        // Use download.view instead of stream.view to ensure Content-Length header is present,
-        // which is required for Media.makeWebRequest / AudioContentProvider downlaods on Garmin.
         return getDownloadUrl(songId);
     }
 

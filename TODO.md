@@ -19,15 +19,15 @@ Related reports: #5, #7, #9.
 
 ## Milestone 2: Playlist Loading, Sync, and Storage
 
-- [ ] Remove unsupported `offset` and `count` parameters from `getPlaylist`.
-- [ ] Handle Garmin `-402` and `-403` playlist response limits explicitly.
-- [ ] Use Navidrome's supported transcoding parameters.
-- [ ] Request an estimated content length for transcoded Navidrome downloads.
-- [ ] Download only tracks that are not already cached.
-- [ ] Do not expose incomplete playlists as ready for playback.
-- [ ] Replace oversized aggregate storage values with per-record storage.
-- [ ] Migrate existing stored playlists and songs without losing cached content.
-- [ ] Add tests for URL construction, response validation, migration, and sync state.
+- [x] Remove unsupported `offset` and `count` parameters from `getPlaylist`.
+- [x] Handle Garmin `-402` and `-403` playlist response limits explicitly.
+- [x] Use Navidrome's supported transcoding parameters.
+- [x] Request an estimated content length for transcoded Navidrome downloads.
+- [x] Download only tracks that are not already cached.
+- [x] Do not expose incomplete playlists as ready for playback.
+- [x] Replace oversized aggregate storage values with per-record storage.
+- [x] Migrate existing stored playlists and songs without losing cached content.
+- [x] Add tests for URL construction, response validation, migration, and sync state.
 
 Related reports: #5, #6, #9.
 

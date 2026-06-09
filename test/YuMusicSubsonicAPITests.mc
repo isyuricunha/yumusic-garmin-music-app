@@ -87,3 +87,24 @@ function successfulSubsonicResponseHasNoError(logger) {
 
     return error == null;
 }
+
+(:test)
+function audioDownloadUsesStreamWithEstimatedLength(logger) {
+    var api = new YuMusicSubsonicAPI();
+    api.configure({
+        "serverUrl" => "https://music.example.com",
+        "username" => "runner",
+        "password" => "secret",
+        "maxBitRate" => "192",
+        "authMode" => YUMUSIC_AUTH_TOKEN
+    });
+    var url = api.getDownloadUrl("song id");
+
+    logger.debug(url);
+    return url.find("/rest/stream.view?") != null
+        && url.find("id=song%20id") != null
+        && url.find("format=mp3") != null
+        && url.find("maxBitRate=192") != null
+        && url.find("estimateContentLength=true") != null
+        && url.find("/rest/download.view") == null;
+}

@@ -25,7 +25,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     // The app should begin to download songs chosen in the configure
     // sync view.
     function onStartSync() as Void {
-        _songsToDownload = _library.getSongs();
+        _songsToDownload = _library.getPendingSongs();
         _currentDownloadIndex = 0;
         _downloadedCount = 0;
         _failedCount = 0;
@@ -33,8 +33,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
         System.println("sync onStartSync songs: " + _songsToDownload.size().toString());
 
-        if (_songsToDownload.size() == 0) {
-            // No songs to download
+        if (_songsToDownload.size() == 0 && _library.getScrobbleQueue().size() == 0) {
             Communications.notifySyncComplete("No songs selected");
             return;
         }
@@ -91,11 +90,11 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     // Download the next song in the queue
     private function downloadNextSong() as Void {
         if (_currentDownloadIndex >= _songsToDownload.size()) {
-            // All songs processed
+            _library.refreshPlaylistReadiness();
             if (_downloadedCount == 0 && _failedCount > 0) {
                 var message = "Sync failed";
                 if (_firstFailureCode != null) {
-                    message += " (" + _firstFailureCode.toString() + ")";
+                    message += ": " + _api.formatTransportError(_firstFailureCode);
                 }
                 Communications.notifySyncComplete(message);
             } else if (_failedCount > 0) {
@@ -113,17 +112,15 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        var url = song["url"] as String?;
-        if (url == null) {
+        var songId = song["id"] as String?;
+        if (songId == null) {
+            recordFailure(0);
             _currentDownloadIndex++;
             downloadNextSong();
             return;
         }
 
-        var streamUrl = song.hasKey("streamUrl") ? song["streamUrl"] as String? : null;
-        if (streamUrl != null) {
-            url = streamUrl;
-        }
+        var url = _api.getDownloadUrl(songId);
 
         System.println("sync download song index " + _currentDownloadIndex.toString());
 
@@ -150,27 +147,23 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     // Callback when a song is downloaded
     function onSongDownloaded(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200) {
-            // Song downloaded successfully
             var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
-            if (song != null) {
-                song["downloaded"] = true;
-
-                // For HTTP_RESPONSE_CONTENT_TYPE_AUDIO, the response object can provide
-                // the persisted media id used by the system media cache.
-                var persistedContent = data as PersistedContent.Content?;
-                if (persistedContent != null) {
-                    var persistedIdNumber = persistedContent.getId() as Number?;
-                    if (persistedIdNumber != null) {
-                        song["contentRefId"] = persistedIdNumber;
-                        System.println("sync downloaded persisted id: " + persistedIdNumber.toString());
-                    }
-                } else {
-                    System.println("sync download response had no persisted content object");
-                }
+            var persistedContent = data as PersistedContent.Content?;
+            var persistedIdNumber = persistedContent != null
+                ? persistedContent.getId() as Number?
+                : null;
+            if (song == null || persistedIdNumber == null) {
+                System.println("sync download response had no persisted content id");
+                recordFailure(0);
+                _currentDownloadIndex++;
+                downloadNextSong();
+                return;
             }
 
-            _library.saveSongs(_songsToDownload);
-
+            song["downloaded"] = true;
+            song["contentRefId"] = persistedIdNumber;
+            _library.saveSong(song);
+            System.println("sync downloaded persisted id: " + persistedIdNumber.toString());
             _downloadedCount++;
 
             // Move to next song
@@ -178,37 +171,23 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             downloadNextSong();
         } else {
             System.println("sync download failed responseCode: " + responseCode.toString());
-            if (_firstFailureCode == null) {
-                _firstFailureCode = responseCode;
-            }
-            _failedCount++;
-            // Download failed, try next song
+            recordFailure(responseCode);
             _currentDownloadIndex++;
             downloadNextSong();
         }
     }
 
+    private function recordFailure(responseCode as Number) as Void {
+        if (_firstFailureCode == null) {
+            _firstFailureCode = responseCode;
+        }
+        _failedCount++;
+    }
+
     // Called by the system to determine if the app needs to be synced.
     function isSyncNeeded() as Boolean {
-        // Check if there are songs in the library that need to be downloaded
-        var songs = _library.getSongs();
-        
-        if (songs.size() == 0) {
-            return false;
-        }
-
-        // Check if any songs are not downloaded
-        for (var i = 0; i < songs.size(); i++) {
-            var song = songs[i] as Dictionary?;
-            if (song == null) {
-                continue;
-            }
-            if (!song.hasKey("downloaded") || song["downloaded"] == false) {
-                return true;
-            }
-        }
-
-        return false;
+        return _library.getPendingSongs().size() > 0
+            || _library.getScrobbleQueue().size() > 0;
     }
 
     // Called when the user chooses to cancel an active sync.

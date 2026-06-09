@@ -14,7 +14,7 @@ class YuMusicLocalPlaylistsView extends WatchUi.Menu2 {
 
     function onShow() as Void {
         clearItems();
-        var playlists = _library.getPlaylists();
+        var playlists = _library.getPlayablePlaylists();
         
         if (playlists == null || playlists.size() == 0) {
             addItem(new WatchUi.MenuItem("No Playlists", "Sync music first", "empty", {}));
