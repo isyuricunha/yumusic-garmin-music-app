@@ -71,6 +71,6 @@ Related report: #10.
 - [x] Explain HTTP, HTTPS, certificates, local-network, and Garmin limitations.
 - [x] Explain playlist-size limits as device/response dependent.
 - [x] Add an error-code troubleshooting table.
-- [ ] Build with the current SDK for Forerunner 955, Forerunner 265, and Enduro 3.
-- [ ] Build with the previous supported SDK to catch compatibility regressions.
-- [ ] Run all automated tests and complete a final code review.
+- [x] Build with the current SDK for Forerunner 955, Forerunner 265, and Enduro 3.
+- [x] Build with the previous supported SDK to catch compatibility regressions.
+- [x] Run all automated tests and complete a final code review.
