@@ -30,6 +30,8 @@ class YuMusicJellyfinAPI {
     private var _currentPlaylist as Dictionary?;
     private var _currentSongs as Array = [];
 
+    private var _actionQueue as Array = [];
+    private var _actionInProgress as Boolean = false;
     private var _actionPath as String?;
     private var _actionMethod as Communications.HttpRequestMethod = Communications.HTTP_REQUEST_METHOD_POST;
 
@@ -388,10 +390,46 @@ class YuMusicJellyfinAPI {
     }
 
     private function performAction(path as String, requestMethod as Communications.HttpRequestMethod, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+        _actionQueue.add({
+            "path" => path,
+            "method" => requestMethod,
+            "callback" => callback
+        });
+        startNextAction();
+    }
+
+    private function startNextAction() as Void {
+        if (_actionInProgress || _actionQueue.size() == 0) {
+            return;
+        }
+
+        var action = _actionQueue[0] as Dictionary?;
+        if (action == null) {
+            removeFirstAction();
+            startNextAction();
+            return;
+        }
+
+        var path = action["path"] as String?;
+        var methodValue = action["method"] as Communications.HttpRequestMethod?;
+        var callback = action["callback"] as Method?;
+        if (path == null || methodValue == null || callback == null) {
+            removeFirstAction();
+            startNextAction();
+            return;
+        }
+
         _actionPath = path;
-        _actionMethod = requestMethod;
+        _actionMethod = methodValue;
         _actionCallback = callback;
+        _actionInProgress = true;
         prepare(method(:onActionPrepared));
+    }
+
+    private function removeFirstAction() as Void {
+        if (_actionQueue.size() > 0) {
+            _actionQueue = _actionQueue.slice(1, null);
+        }
     }
 
     function onActionPrepared(success as Boolean, error as String?) as Void {
@@ -421,9 +459,12 @@ class YuMusicJellyfinAPI {
         var callback = _actionCallback;
         _actionCallback = null;
         _actionPath = null;
+        _actionInProgress = false;
+        removeFirstAction();
         if (callback != null) {
             callback.invoke(responseCode, data);
         }
+        startNextAction();
     }
 
     function getResponseError(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as String? {

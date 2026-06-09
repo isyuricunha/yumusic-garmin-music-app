@@ -15,10 +15,10 @@ class YuMusicClearLibraryDelegate extends WatchUi.ConfirmationDelegate {
         if (response == WatchUi.CONFIRM_YES) {
             try {
                 Media.resetContentCache();
-                _library.clearAllState();
             } catch (ex) {
-                System.println("library clear failed: " + ex.toString());
+                System.println("content cache reset failed: " + ex.toString());
             }
+            _library.clearAllState();
         }
 
         return true;

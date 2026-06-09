@@ -36,7 +36,7 @@ class YuMusicLocalPlaylistsView extends WatchUi.Menu2 {
             if (name != null && id != null) {
                 var subtitle = (songCount != null ? songCount.toString() : "0") + " songs";
                 if (id.equals(currentPlaylistId)) {
-                    subtitle = "\u25B6 " + subtitle; // Add a visual indicator for current playlist
+                    subtitle = "Current - " + subtitle;
                 }
                 addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
                 _itemCount++;

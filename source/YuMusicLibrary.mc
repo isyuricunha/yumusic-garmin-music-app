@@ -52,6 +52,44 @@ class YuMusicLibrary {
         return contentRefId != null ? contentRefId.toString() : null;
     }
 
+    function hasCachedMedia(song as Dictionary) as Boolean {
+        return getCachedMediaContent(song) != null;
+    }
+
+    private function getCachedMediaContent(song as Dictionary) as Media.Content? {
+        var contentRefId = song.hasKey("contentRefId")
+            ? safeContentRefId(song["contentRefId"])
+            : null;
+        if (contentRefId == null) {
+            return null;
+        }
+
+        var audioContentRefId = getAudioContentRefId(contentRefId);
+        if (audioContentRefId == null) {
+            return null;
+        }
+
+        try {
+            var contentRef = new Media.ContentRef(audioContentRefId, Media.CONTENT_TYPE_AUDIO);
+            return Media.getCachedContentObj(contentRef);
+        } catch (ex) {
+            markSongCacheMissing(song, contentRefId);
+            return null;
+        }
+    }
+
+    private function markSongCacheMissing(song as Dictionary, contentRefId as Number) as Void {
+        if (song.hasKey("contentRefId")) {
+            song.remove("contentRefId");
+        }
+        song["downloaded"] = false;
+        saveSong(song);
+        if (getLastPlayedContentRefId() == contentRefId) {
+            Storage.deleteValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
+        }
+        refreshPlaylistReadiness();
+    }
+
     private function getPlaylistIds() as Array {
         var playlistIds = Storage.getValue(PLAYLIST_IDS_KEY) as Array?;
         return playlistIds != null ? playlistIds : [];
@@ -582,20 +620,11 @@ class YuMusicLibrary {
     }
 
     function createMediaContent(song as Dictionary) as Media.Content? {
-        var contentRefId = song.hasKey("contentRefId")
-            ? safeContentRefId(song["contentRefId"])
-            : null;
-        if (contentRefId == null) {
+        var content = getCachedMediaContent(song);
+        if (content == null) {
             return null;
         }
 
-        var audioContentRefId = getAudioContentRefId(contentRefId);
-        if (audioContentRefId == null) {
-            return null;
-        }
-
-        var contentRef = new Media.ContentRef(audioContentRefId, Media.CONTENT_TYPE_AUDIO);
-        var content = Media.getCachedContentObj(contentRef);
         var metadata = content.getMetadata();
         if (metadata != null) {
             var title = song["title"] as String?;

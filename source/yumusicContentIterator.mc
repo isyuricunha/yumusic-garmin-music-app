@@ -35,16 +35,7 @@ class YuMusicContentIterator extends Media.ContentIterator {
                 continue;
             }
 
-            // Only expose songs that have been downloaded (have a numeric contentRefId).
-            var contentRefId = null;
-            if (song.hasKey("contentRefId")) {
-                try {
-                    contentRefId = song["contentRefId"] as Number?;
-                } catch (ex) {
-                    contentRefId = null;
-                }
-            }
-            if (contentRefId != null) {
+            if (_library.hasCachedMedia(song)) {
                 filtered.add(song);
             }
         }

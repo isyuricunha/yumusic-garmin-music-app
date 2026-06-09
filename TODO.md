@@ -74,3 +74,14 @@ Related report: #10.
 - [x] Build with the current SDK for Forerunner 955, Forerunner 265, and Enduro 3.
 - [x] Build with the previous supported SDK to catch compatibility regressions.
 - [x] Run all automated tests and complete a final code review.
+
+## Milestone 7: Playback and Cache Hardening
+
+- [x] Verify cached Garmin audio exists before exposing a track to playback.
+- [x] Mark stale cached tracks as pending instead of crashing playback.
+- [x] Avoid sending Garmin local content IDs to Subsonic or Jellyfin actions.
+- [x] Serialize Jellyfin playback actions so callbacks cannot overwrite each other.
+- [x] Keep library metadata cleanup independent from content-cache reset failures.
+- [x] Add regression coverage for unmapped Garmin content IDs.
+- [x] Build with the current SDK for Forerunner 955, Venu 2, Enduro 3, and Forerunner 265.
+- [x] Run all automated tests after the cache and playback fixes.

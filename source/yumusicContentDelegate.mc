@@ -10,6 +10,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     private var _library as YuMusicLibrary;
     private var _api as YuMusicBackend;
     private var _serverConfig as YuMusicServerConfig;
+    private var _scrobbleFlushInProgress as Boolean = false;
 
     function initialize() {
         ContentDelegate.initialize();
@@ -46,11 +47,6 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
             var songId = song != null ? song["id"] as String? : null;
             if (songId != null) {
                 _api.star(songId, method(:onStarResponse));
-            } else {
-                var contentRefString = contentRefId as String?;
-                if (contentRefString != null) {
-                    _api.star(contentRefString, method(:onStarResponse));
-                }
             }
         }
     }
@@ -63,11 +59,6 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
             var songId = song != null ? song["id"] as String? : null;
             if (songId != null) {
                 _api.unstar(songId, method(:onUnstarResponse));
-            } else {
-                var contentRefString = contentRefId as String?;
-                if (contentRefString != null) {
-                    _api.unstar(contentRefString, method(:onUnstarResponse));
-                }
             }
         }
     }
@@ -88,12 +79,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
             _library.setLastPlayedContentRefId(contentRefId);
             var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
-            var targetId = songId != null ? songId : (contentRefId as String?);
 
-            if (targetId != null) {
+            if (songId != null) {
                 // Queue scrobble locally to support offline playback
                 if (songEvent == Media.SONG_EVENT_COMPLETE) {
-                    _library.queueScrobble(targetId, Toybox.Time.now().value());
+                    _library.queueScrobble(songId, Toybox.Time.now().value());
                     flushNextScrobble();
                 }
             }
@@ -111,12 +101,17 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     }
 
     function flushNextScrobble() as Void {
+        if (_scrobbleFlushInProgress) {
+            return;
+        }
+
         var queue = _library.getScrobbleQueue();
         if (queue.size() > 0) {
             var item = queue[0] as Dictionary;
             var id = item["id"] as String?;
             var time = item["time"] as Number?;
             if (id != null) {
+                _scrobbleFlushInProgress = true;
                 _api.scrobble(id, time, method(:onScrobbleFlushed));
             } else {
                 _library.removeFirstScrobble();
@@ -126,6 +121,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     }
 
     function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        _scrobbleFlushInProgress = false;
         if (_api.isResponseSuccessful(responseCode, data)) {
             _library.removeFirstScrobble();
             flushNextScrobble();

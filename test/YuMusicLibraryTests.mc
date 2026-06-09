@@ -1,5 +1,6 @@
 using Toybox.Application;
 using Toybox.Application.Storage;
+using Toybox.Media;
 using Toybox.Test;
 import Toybox.Lang;
 
@@ -248,5 +249,21 @@ function selectedPlaylistSurvivesProviderRecreation(logger) {
 
     logger.debug("current playlist=" + currentPlaylist);
     recreatedLibrary.clearMetadata();
+    return passed;
+}
+
+(:test)
+function contentDelegateDoesNotScrobbleUnmappedGarminIds(logger) {
+    clearLibraryTestState();
+    new YuMusicServerConfig().clearConfig();
+
+    var delegate = new YuMusicContentDelegate();
+    delegate.onSong(9001, Media.SONG_EVENT_COMPLETE, 0);
+
+    var library = new YuMusicLibrary();
+    var passed = library.getScrobbleQueue().size() == 0;
+
+    logger.debug("queued scrobbles=" + library.getScrobbleQueue().size().toString());
+    library.clearAllState();
     return passed;
 }
