@@ -14,7 +14,7 @@
     <string id="backendTypeSubsonic">Subsonic Compatible</string>
     <string id="backendTypeJellyfin">Jellyfin</string>
     <string id="credentialTitle">Password / API Key</string>
-    <string id="authModeTitle">Authentication</string>
+    <string id="authModeTitle">Subsonic Authentication</string>
     <string id="authModeToken">Subsonic Token (Recommended)</string>
     <string id="authModePassword">Legacy Password</string>
     <string id="authModeApiKey">Nextcloud Music API Key</string>

@@ -13,7 +13,7 @@ compile for the affected device families before it is considered complete.
 - [x] Validate Subsonic response status and error payloads, not only HTTP status.
 - [x] Replace the unrelated public HTTPS probe with server-specific diagnostics.
 - [x] Show actionable messages for Garmin network and memory error codes.
-- [ ] Document Nextcloud Music's generated API-key requirement.
+- [x] Document Nextcloud Music's generated API-key requirement.
 
 Related reports: #5, #7, #9.
 
@@ -59,18 +59,18 @@ Related reports: #6, #8.
 - [x] Map Jellyfin tracks to the existing Garmin content model.
 - [x] Request Garmin-compatible MP3 audio with bounded bitrate.
 - [x] Add backend-specific automated and live integration tests.
-- [ ] Add Jellyfin setup documentation.
+- [x] Add Jellyfin setup documentation.
 - [x] Keep all existing Subsonic-compatible servers working unchanged.
 
 Related report: #10.
 
 ## Milestone 6: Documentation and Release Validation
 
-- [ ] Update the README and Garmin Store description content.
-- [ ] List tested and expected-compatible server types.
-- [ ] Explain HTTP, HTTPS, certificates, local-network, and Garmin limitations.
-- [ ] Explain playlist-size limits as device/response dependent.
-- [ ] Add an error-code troubleshooting table.
+- [x] Update the README and Garmin Store description content.
+- [x] List tested and expected-compatible server types.
+- [x] Explain HTTP, HTTPS, certificates, local-network, and Garmin limitations.
+- [x] Explain playlist-size limits as device/response dependent.
+- [x] Add an error-code troubleshooting table.
 - [ ] Build with the current SDK for Forerunner 955, Forerunner 265, and Enduro 3.
 - [ ] Build with the previous supported SDK to catch compatibility regressions.
 - [ ] Run all automated tests and complete a final code review.
