@@ -109,3 +109,14 @@ Related reports: #5, #10.
 - [x] Run all automated tests after the fallback fix.
 
 Related report: #5.
+
+## Milestone 10: Media Callback Compatibility Regression
+
+- [x] Accept both Garmin persisted media callback shapes: direct `PersistedContent.Content` and `PersistedContent.Iterator`.
+- [x] Remove non-essential audio request options added after 1.5.0 until real-device sync confirms they are safe.
+- [x] Keep the documented Subsonic/Navidrome primary stream path unchanged.
+- [x] Build with the current SDK for Forerunner 955, Venu 2, Enduro 3, and Forerunner 265.
+- [x] Build with the previous supported SDK to catch compatibility regressions.
+- [x] Run automated tests after the compatibility fix.
+
+Related report: #5.

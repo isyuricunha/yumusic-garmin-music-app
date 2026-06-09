@@ -1,4 +1,38 @@
 using Toybox.Test;
+import Toybox.Lang;
+import Toybox.System;
+
+class FakePersistedContent {
+    private var _id as Number;
+
+    function initialize(id as Number) {
+        _id = id;
+    }
+
+    function getName() as String {
+        return "Fake Content";
+    }
+
+    function toIntent() as System.Intent {
+        return new System.Intent("fake://content", null);
+    }
+
+    function getId() as Number {
+        return _id;
+    }
+
+    function remove() as Void {
+    }
+}
+
+(:test)
+function syncAcceptsDirectPersistedContentCallback(logger) {
+    var delegate = new YuMusicSyncDelegate();
+    var id = delegate.readPersistedContentId(new FakePersistedContent(42));
+
+    logger.debug("content id: " + (id != null ? id.toString() : "null"));
+    return id == 42;
+}
 
 (:test)
 function syncProgressIncludesCurrentFileFraction(logger) {

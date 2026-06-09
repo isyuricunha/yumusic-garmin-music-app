@@ -151,12 +151,8 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private function startDownloadRequest(url as String) as Void {
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :headers => {
-                "Accept" => "audio/mpeg, audio/*"
-            },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO,
-            :mediaEncoding => Media.ENCODING_MP3,
-            :fileDownloadProgressCallback => method(:onSongDownloadProgress)
+            :mediaEncoding => Media.ENCODING_MP3
         };
 
         Communications.makeWebRequest(
@@ -167,24 +163,11 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         );
     }
 
-    function onSongDownloadProgress(totalBytesTransferred as Number, fileSize as Number?) as Void {
-        if (fileSize == null || fileSize <= 0) {
-            notifyCurrentSongProgress(0.0);
-            return;
-        }
-
-        var fileProgress = totalBytesTransferred.toFloat() / fileSize.toFloat();
-        notifyCurrentSongProgress(fileProgress);
-    }
-
     // Callback when a song is downloaded
     function onSongDownloaded(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
         if (responseCode == 200) {
             var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
-            var iterator = data as PersistedContent.Iterator?;
-            var persistedContent = iterator != null
-                ? iterator.next()
-                : null;
+            var persistedContent = extractPersistedContent(data);
             var persistedIdNumber = persistedContent != null
                 ? persistedContent.getId() as Number?
                 : null;
@@ -218,6 +201,21 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             }
             failCurrentSong(responseCode);
         }
+    }
+
+    private function extractPersistedContent(data as Dictionary or String or PersistedContent.Iterator or PersistedContent.Content or Null) as PersistedContent.Content? {
+        var content = data as PersistedContent.Content?;
+        if (content != null) {
+            return content;
+        }
+
+        var iterator = data as PersistedContent.Iterator?;
+        return iterator != null ? iterator.next() : null;
+    }
+
+    function readPersistedContentId(data as Dictionary or String or PersistedContent.Iterator or PersistedContent.Content or Null) as Number? {
+        var content = extractPersistedContent(data);
+        return content != null ? content.getId() as Number? : null;
     }
 
     function calculateSyncProgress(currentIndex as Number, totalCount as Number, fileProgress as Float) as Number {
