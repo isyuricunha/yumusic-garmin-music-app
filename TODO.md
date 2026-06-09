@@ -85,3 +85,15 @@ Related report: #10.
 - [x] Add regression coverage for unmapped Garmin content IDs.
 - [x] Build with the current SDK for Forerunner 955, Venu 2, Enduro 3, and Forerunner 265.
 - [x] Run all automated tests after the cache and playback fixes.
+
+## Milestone 8: Media Download Progress
+
+- [x] Use Garmin's media file download progress callback during audio sync.
+- [x] Calculate overall sync progress from the current track and file progress.
+- [x] Request audio responses with an explicit MP3/audio `Accept` header.
+- [x] Add regression coverage for sync progress calculation.
+- [x] Build with the current SDK for Forerunner 955, Venu 2, Enduro 3, and Forerunner 265.
+- [x] Build with the previous supported SDK to catch compatibility regressions.
+- [x] Run all automated tests after the download-progress fix.
+
+Related reports: #5, #10.

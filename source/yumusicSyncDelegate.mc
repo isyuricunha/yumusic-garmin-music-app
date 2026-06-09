@@ -13,6 +13,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _downloadedCount as Number = 0;
     private var _failedCount as Number = 0;
     private var _firstFailureCode as Number? = null;
+    private var _lastProgress as Number = -1;
 
     function initialize() {
         SyncDelegate.initialize();
@@ -30,6 +31,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         _downloadedCount = 0;
         _failedCount = 0;
         _firstFailureCode = null;
+        _lastProgress = -1;
 
         System.println("sync onStartSync songs: " + _songsToDownload.size().toString());
 
@@ -114,6 +116,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
         var song = _songsToDownload[_currentDownloadIndex] as Dictionary?;
         if (song == null) {
+            notifyCurrentSongProgress(1.0);
             _currentDownloadIndex++;
             downloadNextSong();
             return;
@@ -122,6 +125,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         var songId = song["id"] as String?;
         if (songId == null) {
             recordFailure(0);
+            notifyCurrentSongProgress(1.0);
             _currentDownloadIndex++;
             downloadNextSong();
             return;
@@ -130,18 +134,24 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         var url = _api.getDownloadUrl(song);
         if (url.length() == 0) {
             recordFailure(0);
+            notifyCurrentSongProgress(1.0);
             _currentDownloadIndex++;
             downloadNextSong();
             return;
         }
 
         System.println("sync download song index " + _currentDownloadIndex.toString());
+        notifyCurrentSongProgress(0.0);
 
         // Download options (audio content provider expects audio responses)
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :headers => {
+                "Accept" => "audio/mpeg, audio/*"
+            },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_AUDIO,
-            :mediaEncoding => Media.ENCODING_MP3
+            :mediaEncoding => Media.ENCODING_MP3,
+            :fileDownloadProgressCallback => method(:onSongDownloadProgress)
         };
 
         // Make the download request
@@ -151,10 +161,16 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             options,
             method(:onSongDownloaded)
         );
+    }
 
-        // Update sync progress
-        var progress = (_currentDownloadIndex.toFloat() / _songsToDownload.size().toFloat()) * 100;
-        Communications.notifySyncProgress(progress.toNumber());
+    function onSongDownloadProgress(totalBytesTransferred as Number, fileSize as Number?) as Void {
+        if (fileSize == null || fileSize <= 0) {
+            notifyCurrentSongProgress(0.0);
+            return;
+        }
+
+        var fileProgress = totalBytesTransferred.toFloat() / fileSize.toFloat();
+        notifyCurrentSongProgress(fileProgress);
     }
 
     // Callback when a song is downloaded
@@ -174,6 +190,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
                     persistedContent.remove();
                 }
                 recordFailure(0);
+                notifyCurrentSongProgress(1.0);
                 _currentDownloadIndex++;
                 downloadNextSong();
                 return;
@@ -184,6 +201,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             _library.saveSong(song);
             System.println("sync downloaded persisted id: " + persistedIdNumber.toString());
             _downloadedCount++;
+            notifyCurrentSongProgress(1.0);
 
             // Move to next song
             _currentDownloadIndex++;
@@ -191,8 +209,54 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         } else {
             System.println("sync download failed responseCode: " + responseCode.toString());
             recordFailure(responseCode);
+            notifyCurrentSongProgress(1.0);
             _currentDownloadIndex++;
             downloadNextSong();
+        }
+    }
+
+    function calculateSyncProgress(currentIndex as Number, totalCount as Number, fileProgress as Float) as Number {
+        if (totalCount <= 0) {
+            return 100;
+        }
+
+        var boundedIndex = currentIndex;
+        if (boundedIndex < 0) {
+            boundedIndex = 0;
+        } else if (boundedIndex > totalCount) {
+            boundedIndex = totalCount;
+        }
+
+        var boundedFileProgress = fileProgress;
+        if (boundedFileProgress < 0.0) {
+            boundedFileProgress = 0.0;
+        } else if (boundedFileProgress > 1.0) {
+            boundedFileProgress = 1.0;
+        }
+
+        var progress = ((boundedIndex.toFloat() + boundedFileProgress) / totalCount.toFloat()) * 100;
+        var progressNumber = progress.toNumber();
+        if (progressNumber < 0) {
+            return 0;
+        }
+        if (progressNumber > 100) {
+            return 100;
+        }
+        return progressNumber;
+    }
+
+    private function notifyCurrentSongProgress(fileProgress as Float) as Void {
+        notifySyncProgress(calculateSyncProgress(
+            _currentDownloadIndex,
+            _songsToDownload.size(),
+            fileProgress
+        ));
+    }
+
+    private function notifySyncProgress(progress as Number) as Void {
+        if (progress != _lastProgress) {
+            _lastProgress = progress;
+            Communications.notifySyncProgress(progress);
         }
     }
 
