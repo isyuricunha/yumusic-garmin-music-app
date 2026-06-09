@@ -33,12 +33,12 @@ Related reports: #5, #6, #9.
 
 ## Milestone 3: Library Management
 
-- [ ] Add a playlist-management screen.
-- [ ] Remove a selected downloaded playlist.
-- [ ] Delete cached tracks only when no remaining playlist references them.
-- [ ] Make Clear Library remove playlists, tracks, state, and cached media.
-- [ ] Add confirmation before destructive library operations.
-- [ ] Add tests for shared-track and last-playlist removal.
+- [x] Add a playlist-management screen.
+- [x] Remove a selected downloaded playlist.
+- [x] Delete cached tracks only when no remaining playlist references them.
+- [x] Make Clear Library remove playlists, tracks, state, and cached media.
+- [x] Add confirmation before destructive library operations.
+- [x] Add tests for shared-track and last-playlist removal.
 
 Related report: #8.
 

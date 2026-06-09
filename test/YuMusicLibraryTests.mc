@@ -137,3 +137,76 @@ function invalidCachedContentRemainsPending(logger) {
     library.clearMetadata();
     return passed;
 }
+
+(:test)
+function removingPlaylistKeepsSharedTracks(logger) {
+    clearLibraryTestState();
+    var library = new YuMusicLibrary();
+    var sharedSong = testSong("shared-removal-song");
+    sharedSong["contentRefId"] = 7001;
+    sharedSong["downloaded"] = true;
+
+    library.saveDownloadedPlaylist(testPlaylist("remove-a", "Remove A"));
+    library.saveSelectedSongsPreservingDownloads([sharedSong], "remove-a");
+    library.saveDownloadedPlaylist(testPlaylist("remove-b", "Remove B"));
+    library.saveSelectedSongsPreservingDownloads([sharedSong], "remove-b");
+    library.setCurrentPlaylist("remove-a");
+
+    var orphanedIds = library.removePlaylist("remove-a");
+    var currentPlaylist = library.getCurrentPlaylist();
+    var passed = orphanedIds.size() == 0
+        && library.getPlaylists().size() == 1
+        && library.getSongsForPlaylist("remove-b").size() == 1
+        && currentPlaylist != null
+        && currentPlaylist.equals("remove-b");
+
+    logger.debug("remaining playlists=" + library.getPlaylists().size().toString());
+    library.clearMetadata();
+    return passed;
+}
+
+(:test)
+function removingLastPlaylistReturnsOrphanedMedia(logger) {
+    clearLibraryTestState();
+    var library = new YuMusicLibrary();
+    var song = testSong("orphan-song");
+    song["contentRefId"] = 7002;
+    song["downloaded"] = true;
+
+    library.saveDownloadedPlaylist(testPlaylist("last-playlist", "Last"));
+    library.saveSelectedSongsPreservingDownloads([song], "last-playlist");
+    library.setCurrentPlaylist("last-playlist");
+
+    var orphanedIds = library.removePlaylist("last-playlist");
+    var orphanedId = orphanedIds.size() == 1 ? orphanedIds[0] as Number? : null;
+    var passed = orphanedId == 7002
+        && library.getPlaylists().size() == 0
+        && library.getSongs().size() == 0
+        && library.getCurrentPlaylist() == null;
+
+    logger.debug("orphaned media=" + orphanedIds.size().toString());
+    library.clearMetadata();
+    return passed;
+}
+
+(:test)
+function clearAllStateRemovesLibraryPreferences(logger) {
+    clearLibraryTestState();
+    var library = new YuMusicLibrary();
+    library.saveDownloadedPlaylist(testPlaylist("clear-playlist", "Clear"));
+    library.saveSelectedSongsPreservingDownloads([testSong("clear-song")], "clear-playlist");
+    library.setCurrentPlaylist("clear-playlist");
+    library.setShuffle(true);
+    library.queueScrobble("clear-song", 1234);
+
+    library.clearAllState();
+    var passed = library.getPlaylists().size() == 0
+        && library.getSongs().size() == 0
+        && library.getCurrentPlaylist() == null
+        && !library.getShuffle()
+        && library.getScrobbleQueue().size() == 0;
+
+    logger.debug("library cleared=" + passed.toString());
+    library.clearMetadata();
+    return passed;
+}

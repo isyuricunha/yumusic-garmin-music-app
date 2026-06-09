@@ -68,9 +68,18 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
             _library.setShuffle(!_library.getShuffle());
             var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";
             item.setLabel(shuffleText);
+        } else if (id.equals("manage")) {
+            WatchUi.pushView(
+                new YuMusicManagePlaylistsView(),
+                new YuMusicManagePlaylistsDelegate(),
+                WatchUi.SLIDE_LEFT
+            );
         } else if (id.equals("clear")) {
-            _library.clearSongs();
-            WatchUi.popView(WatchUi.SLIDE_RIGHT);
+            WatchUi.pushView(
+                new WatchUi.Confirmation("Clear all downloaded music?"),
+                new YuMusicClearLibraryDelegate(),
+                WatchUi.SLIDE_IMMEDIATE
+            );
         } else if (id.equals("server")) {
             var serverView = new YuMusicServerConfigView();
             var serverDelegate = new YuMusicServerConfigDelegate();

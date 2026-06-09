@@ -434,6 +434,80 @@ class YuMusicLibrary {
         return playable;
     }
 
+    private function isSongReferenced(songId as String) as Boolean {
+        var playlists = getPlaylists();
+        for (var i = 0; i < playlists.size(); i++) {
+            var playlist = playlists[i] as Dictionary?;
+            var songIds = getSongIdsFromPlaylist(playlist);
+            for (var j = 0; j < songIds.size(); j++) {
+                var referencedId = songIds[j] as String?;
+                if (referencedId != null && referencedId.equals(songId)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    function removePlaylist(playlistId as String) as Array {
+        var playlist = getPlaylistById(playlistId);
+        if (playlist == null) {
+            return [];
+        }
+
+        var removedSongIds = getSongIdsFromPlaylist(playlist);
+        var oldPlaylistIds = getPlaylistIds();
+        var newPlaylistIds = [];
+        for (var i = 0; i < oldPlaylistIds.size(); i++) {
+            var existingId = oldPlaylistIds[i] as String?;
+            if (existingId != null && !existingId.equals(playlistId)) {
+                newPlaylistIds.add(existingId);
+            }
+        }
+
+        savePlaylistIds(newPlaylistIds);
+        Storage.deleteValue(playlistKey(playlistId));
+
+        var orphanedContentRefIds = [];
+        for (var j = 0; j < removedSongIds.size(); j++) {
+            var songId = removedSongIds[j] as String?;
+            if (songId == null || isSongReferenced(songId)) {
+                continue;
+            }
+
+            var song = getSongById(songId);
+            var contentRefId = song != null && song.hasKey("contentRefId")
+                ? safeContentRefId(song["contentRefId"])
+                : null;
+            if (contentRefId != null) {
+                orphanedContentRefIds.add(contentRefId);
+                if (getLastPlayedContentRefId() == contentRefId) {
+                    Storage.deleteValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
+                }
+            }
+            Storage.deleteValue(songKey(songId));
+        }
+
+        var currentPlaylistId = getCurrentPlaylist();
+        if (currentPlaylistId != null && currentPlaylistId.equals(playlistId)) {
+            var playablePlaylists = getPlayablePlaylists();
+            var nextPlaylist = playablePlaylists.size() > 0
+                ? playablePlaylists[0] as Dictionary?
+                : null;
+            var nextPlaylistId = nextPlaylist != null
+                ? nextPlaylist["id"] as String?
+                : null;
+            if (nextPlaylistId != null) {
+                setCurrentPlaylist(nextPlaylistId);
+            } else {
+                Storage.deleteValue(CURRENT_PLAYLIST_KEY);
+            }
+        }
+
+        return orphanedContentRefIds;
+    }
+
     private function areSongsDownloaded(songIds as Array) as Boolean {
         if (songIds.size() == 0) {
             return false;
@@ -603,6 +677,12 @@ class YuMusicLibrary {
         Storage.deleteValue(CURRENT_PLAYLIST_KEY);
         Storage.deleteValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
         Storage.deleteValue(STORAGE_VERSION_KEY);
+    }
+
+    function clearAllState() as Void {
+        clearMetadata();
+        Storage.deleteValue(SHUFFLE_KEY);
+        Storage.deleteValue(SCROBBLES_KEY);
     }
 
     function getScrobbleQueue() as Array {
