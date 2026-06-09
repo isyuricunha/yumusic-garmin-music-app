@@ -44,10 +44,10 @@ Related report: #8.
 
 ## Milestone 4: Playback Navigation
 
-- [ ] Start Garmin playback directly after a local playlist is selected.
-- [ ] Remove delayed double-pop navigation that can return to the watch face.
-- [ ] Keep the selected playlist stable when Garmin recreates the provider.
-- [ ] Verify selection from a cold provider launch and after synchronization.
+- [x] Start Garmin playback directly after a local playlist is selected.
+- [x] Remove delayed double-pop navigation that can return to the watch face.
+- [x] Keep the selected playlist stable when Garmin recreates the provider.
+- [x] Verify selection state across provider recreation in automated tests.
 
 Related reports: #6, #8.
 

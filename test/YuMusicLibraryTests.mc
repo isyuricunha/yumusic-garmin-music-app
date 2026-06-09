@@ -210,3 +210,25 @@ function clearAllStateRemovesLibraryPreferences(logger) {
     library.clearMetadata();
     return passed;
 }
+
+(:test)
+function selectedPlaylistSurvivesProviderRecreation(logger) {
+    clearLibraryTestState();
+    var library = new YuMusicLibrary();
+    var song = testSong("playback-song");
+    song["contentRefId"] = 8001;
+    song["downloaded"] = true;
+    library.saveDownloadedPlaylist(testPlaylist("playback-playlist", "Playback"));
+    library.saveSelectedSongsPreservingDownloads([song], "playback-playlist");
+    library.setCurrentPlaylist("playback-playlist");
+
+    var recreatedLibrary = new YuMusicLibrary();
+    var currentPlaylist = recreatedLibrary.getCurrentPlaylist();
+    var passed = currentPlaylist != null
+        && currentPlaylist.equals("playback-playlist")
+        && recreatedLibrary.getSongsForPlaylist("playback-playlist").size() == 1;
+
+    logger.debug("current playlist=" + currentPlaylist);
+    recreatedLibrary.clearMetadata();
+    return passed;
+}
