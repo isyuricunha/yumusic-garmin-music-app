@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    name: Build & Semantic Release
+    name: Semantic Release
     runs-on: ubuntu-latest
 
     steps:
@@ -19,46 +19,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      # --- Connect IQ SDK Setup ---
-      - name: Install connect-iq-sdk-manager-cli
-        run: curl -sL https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sudo sh
-
-      - name: Accept Garmin License Agreement
-        run: connect-iq-sdk-manager agreement accept --agreement-hash=${{ secrets.GARMIN_AGREEMENT_HASH }}
-
-      - name: Login to Garmin
-        env:
-          GARMIN_USERNAME: ${{ secrets.GARMIN_USERNAME }}
-          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
-        run: connect-iq-sdk-manager login
-
-      - name: Install SDK
-        run: |
-          connect-iq-sdk-manager sdk set 9.2.0
-          echo "$(connect-iq-sdk-manager sdk current-path --bin)" >> $GITHUB_PATH
-
-      - name: Download device files
-        run: connect-iq-sdk-manager device download --manifest=manifest.xml
-
-      # --- Developer Key ---
-      - name: Decode developer key
-        run: |
-          echo "${{ secrets.DEVELOPER_KEY_B64 }}" | base64 -d > developer_key.der
-        env:
-          DEVELOPER_KEY_B64: ${{ secrets.DEVELOPER_KEY_B64 }}
-
-      # --- Semantic Release ---
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Semantic Release
         uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEVELOPER_KEY_PATH: ${{ github.workspace }}/developer_key.der
         with:
           extra_plugins: |
-            @semantic-release/exec
             @semantic-release/github
