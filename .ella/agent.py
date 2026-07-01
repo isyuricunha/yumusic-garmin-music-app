@@ -1824,10 +1824,11 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         context_str = "\n".join(files_content)[:MAX_CONTEXT_REPO_FILES_BYTES]
 
         system_prompt = (
-            "You are Ella Mizuki, an AI assistant generating GitHub Wiki documentation. "
+            f"You are Ella Mizuki, an AI assistant generating GitHub Wiki documentation for the '{self.repo}' repository. "
             "Write in English in a clear, professional, and friendly tone. "
             "Analyze the provided codebase and generate a comprehensive `Home.md` file for the repository's Wiki. "
             "Include an overview of the project, setup instructions, architecture, and any other relevant details you can infer. "
+            f"When providing git clone instructions, strictly use 'https://github.com/{self.repo}.git' as the URL and '{self.repo.split('/')[-1]}' as the directory name. "
             "CRITICAL: Do NOT hallucinate or invent origins for the project name (e.g., YuMusic means Yuri's Music, do not say it means 'You Music'). Stick strictly to facts found in the provided text. "
             "Return ONLY valid Markdown content. Do not wrap the output in markdown code fences like ```markdown."
         )
