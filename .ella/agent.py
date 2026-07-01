@@ -1828,6 +1828,7 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             "Write in English in a clear, professional, and friendly tone. "
             "Analyze the provided codebase and generate a comprehensive `Home.md` file for the repository's Wiki. "
             "Include an overview of the project, setup instructions, architecture, and any other relevant details you can infer. "
+            "CRITICAL: Do NOT hallucinate or invent origins for the project name (e.g., YuMusic means Yuri's Music, do not say it means 'You Music'). Stick strictly to facts found in the provided text. "
             "Return ONLY valid Markdown content. Do not wrap the output in markdown code fences like ```markdown."
         )
 
