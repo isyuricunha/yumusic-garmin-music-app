@@ -1826,23 +1826,23 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         system_prompt = (
             f"You are Ella Mizuki, an AI assistant generating GitHub Wiki documentation for the '{self.repo}' repository. "
             "Write in English in a clear, professional, and friendly tone. "
-            "Analyze the provided codebase and generate a comprehensive `Home.md` file for the repository's Wiki. "
+            "Analyze the provided codebase and generate a comprehensive multi-page Wiki for the repository. "
+            "You MUST divide the documentation into logical separate pages (e.g., Home.md, Setup.md, Architecture.md, Network.md, etc.). "
             "Include an overview of the project, setup instructions, architecture, and any other relevant details you can infer. "
             f"When providing git clone instructions, strictly use 'https://github.com/{self.repo}.git' as the URL and '{self.repo.split('/')[-1]}' as the directory name. "
             "CRITICAL: Do NOT hallucinate or invent origins for the project name (e.g., YuMusic means Yuri's Music, do not say it means 'You Music'). Stick strictly to facts found in the provided text. "
-            "Return ONLY valid Markdown content. Do not wrap the output in markdown code fences like ```markdown."
+            "You MUST return ONLY a valid JSON object where the keys are the filenames (ending in .md) and the values are the raw Markdown content for that file. "
+            "Do NOT wrap the JSON in markdown code fences. Just return the raw JSON object."
         )
 
         try:
             wiki_content = self.ai_call(context_str, system_prompt, 8192)
-            if wiki_content.startswith("```markdown"):
-                wiki_content = wiki_content[11:].strip()
-            if wiki_content.startswith("```"):
-                wiki_content = wiki_content[3:].strip()
-            if wiki_content.endswith("```"):
-                wiki_content = wiki_content[:-3].strip()
+            pages = parse_jsonish(wiki_content)
+            
+            if not isinstance(pages, dict):
+                raise ValueError("AI did not return a JSON dictionary.")
 
-            self.update_progress("🔄 I have generated the documentation. Pushing to the wiki repository...")
+            self.update_progress("🔄 I have generated the multi-page documentation. Pushing to the wiki repository...")
 
             token = os.environ.get("GH_TOKEN")
             if not token:
@@ -1853,14 +1853,18 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
 
             git(["clone", wiki_url, str(wiki_dir)])
 
-            home_md = wiki_dir / "Home.md"
-            home_md.write_text(wiki_content, encoding="utf-8")
+            for filename, content in pages.items():
+                if not filename.endswith(".md"):
+                    filename += ".md"
+                safe_filename = filename.replace("/", "_").replace("\\", "_")
+                file_path = wiki_dir / safe_filename
+                file_path.write_text(str(content), encoding="utf-8")
 
             run_cmd(["git", "-C", str(wiki_dir), "config", "user.name", self.commit_name], capture=True)
             run_cmd(["git", "-C", str(wiki_dir), "config", "user.email", self.commit_email], capture=True)
-            run_cmd(["git", "-C", str(wiki_dir), "add", "Home.md"], capture=True)
+            run_cmd(["git", "-C", str(wiki_dir), "add", "."], capture=True)
 
-            msg = "docs: generate wiki documentation via Ella"
+            msg = "docs: generate multi-page wiki documentation via Ella"
             if self.yuri_name and self.yuri_email:
                 msg += f"\n\nCo-authored-by: {self.yuri_name} <{self.yuri_email}>"
 
