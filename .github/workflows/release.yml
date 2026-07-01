@@ -24,7 +24,7 @@ jobs:
         run: curl -sL https://raw.githubusercontent.com/lindell/connect-iq-sdk-manager-cli/master/install.sh | sudo sh
 
       - name: Accept Garmin License Agreement
-        run: connect-iq-sdk-manager agreement accept --agreement-hash=${{ secrets.GARMIN_AGREEMENT_HASH }}
+        run: connect-iq-sdk-manager agreement accept --acceptance-hash=${{ secrets.GARMIN_AGREEMENT_HASH }}
 
       - name: Login to Garmin
         env:
