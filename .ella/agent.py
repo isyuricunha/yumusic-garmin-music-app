@@ -1749,8 +1749,14 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             self.comment(response)
             
             try:
-                # Close the issue as not planned (GitHub will mark it as duplicate due to the comment)
-                gh(["issue", "close", str(self.issue_number), "--reason", "not planned", "--repo", self.repo])
+                # Close the issue explicitly as a duplicate using the GitHub API
+                gh([
+                    "api",
+                    "--method", "PATCH",
+                    f"repos/{self.repo}/issues/{self.issue_number}",
+                    "-f", "state=closed",
+                    "-f", "state_reason=duplicate"
+                ])
             except Exception as e:
                 print(f"Failed to close issue as duplicate: {e}")
         else:
