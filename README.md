@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
   <img src="yumusic.png" alt="YuMusic Logo" width="128" />
   <h1>YuMusic</h1>
   <p>A sleek, standalone music streaming app for Garmin Smartwatches</p>
