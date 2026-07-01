@@ -6,7 +6,7 @@ import Toybox.System;
 
 // Songs fetched per paginated API request. Kept small so each HTTP response body
 // fits within the Garmin JSON response memory limit on all devices.
-const PLAYLIST_PAGE_SIZE = 15;
+const PLAYLIST_PAGE_SIZE = 8;
 
 // Delegate for playlist selection menu
 class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
