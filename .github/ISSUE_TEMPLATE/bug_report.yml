@@ -8,6 +8,11 @@ body:
       value: |
         Thanks for taking the time to fill out this bug report! 
         Please provide as much detail as possible to help me reproduce the issue.
+        
+        ### 📚 Before you submit:
+        Please check the **[Official Documentation](https://github.com/isyuricunha/yumusic-garmin-music-app/tree/main/docs)** to see if your issue is already solved:
+        - 🌐 **[Network & HTTPS Requirements](https://github.com/isyuricunha/yumusic-garmin-music-app/blob/main/docs/network-requirements.md)**
+        - 🛠️ **[Troubleshooting Errors (-1001, -300, etc.)](https://github.com/isyuricunha/yumusic-garmin-music-app/blob/main/docs/troubleshooting.md)**
   - type: input
     id: watch_model
     attributes:

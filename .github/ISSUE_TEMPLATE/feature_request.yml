@@ -8,6 +8,10 @@ body:
       value: |
         Thanks for taking the time to suggest a new feature!
         Please note that YuMusic is primarily designed to integrate with Subsonic API servers.
+        
+        ### 📚 Useful Links:
+        - 📖 **[Supported Servers](https://github.com/isyuricunha/yumusic-garmin-music-app/blob/main/docs/supported-servers.md)**
+        - 🌐 **[Full Documentation](https://github.com/isyuricunha/yumusic-garmin-music-app/tree/main/docs)**
   - type: checkboxes
     id: checklist
     attributes:
