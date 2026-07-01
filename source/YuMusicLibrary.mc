@@ -216,9 +216,64 @@ class YuMusicLibrary {
         saveSongs(newSongs);
     }
 
-    // Clear all songs
+    // Clear all songs and playlists
     function clearSongs() as Void {
         Storage.deleteValue(SONGS_KEY);
+        Storage.deleteValue(PLAYLISTS_KEY);
+        Storage.deleteValue(CURRENT_PLAYLIST_KEY);
+    }
+
+    // Remove an entire playlist
+    function removePlaylist(playlistId as String) as Void {
+        // Remove from playlists list
+        var playlists = getPlaylists();
+        var newPlaylists = [];
+        for (var i = 0; i < playlists.size(); i++) {
+            var p = playlists[i] as Dictionary?;
+            if (p != null) {
+                var pId = p["id"] as String?;
+                if (pId != null && !pId.equals(playlistId)) {
+                    newPlaylists.add(p);
+                }
+            }
+        }
+        savePlaylists(newPlaylists);
+
+        // Remove from current if selected
+        if (playlistId.equals(getCurrentPlaylist())) {
+            Storage.deleteValue(CURRENT_PLAYLIST_KEY);
+        }
+
+        // Clean up songs
+        var songs = getSongs();
+        var newSongs = [];
+        for (var i = 0; i < songs.size(); i++) {
+            var song = songs[i] as Dictionary?;
+            if (song == null) { continue; }
+            
+            var keepSong = true;
+            if (song.hasKey("playlists")) {
+                var pList = song["playlists"] as Array;
+                var newPList = [];
+                for (var j = 0; j < pList.size(); j++) {
+                    if (!pList[j].equals(playlistId)) {
+                        newPList.add(pList[j]);
+                    }
+                }
+                song["playlists"] = newPList;
+                if (newPList.size() == 0) {
+                    keepSong = false;
+                }
+            } else {
+                // If for some reason a song has no playlist metadata, it was from an older version, assume orphaned
+                keepSong = false;
+            }
+
+            if (keepSong) {
+                newSongs.add(song);
+            }
+        }
+        saveSongs(newSongs);
     }
 
     // Get song by ID

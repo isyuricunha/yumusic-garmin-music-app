@@ -25,7 +25,8 @@ class YuMusicConfigurePlaybackView extends WatchUi.Menu2 {
         _shuffleItem = new WatchUi.MenuItem("Enable Shuffle", null, "shuffle", {});
         addItem(_shuffleItem);
         
-        addItem(new WatchUi.MenuItem("Clear Library", null, "clear", {}));
+        addItem(new WatchUi.MenuItem("Remove Playlist", "Delete a specific playlist", "removePlaylist", {}));
+        addItem(new WatchUi.MenuItem("Clear Library", "Delete everything", "clear", {}));
         
         _serverItem = new WatchUi.MenuItem("Configure Server", "", "server", {});
         addItem(_serverItem);
