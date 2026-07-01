@@ -2,640 +2,341 @@ import Toybox.Application;
 import Toybox.Application.Storage;
 import Toybox.Lang;
 import Toybox.Media;
-import Toybox.System;
 
+// Module to manage music library and downloaded songs
 class YuMusicLibrary {
-    private const LEGACY_SONGS_KEY = "songs";
-    private const LEGACY_PLAYLISTS_KEY = "playlists";
-    private const PLAYLIST_IDS_KEY = "playlistIdsV2";
-    private const STORAGE_VERSION_KEY = "libraryStorageVersion";
-    private const STORAGE_VERSION = 2;
-    private const SONG_KEY_PREFIX = "song:";
-    private const PLAYLIST_KEY_PREFIX = "playlist:";
+    private const SONGS_KEY = "songs";
+    private const PLAYLISTS_KEY = "playlists";
     private const CURRENT_PLAYLIST_KEY = "currentPlaylist";
     private const SHUFFLE_KEY = "shuffle";
     private const LAST_PLAYED_CONTENT_REF_ID_KEY = "lastPlayedContentRefId";
     private const SCROBBLES_KEY = "scrobbles";
 
     function initialize() {
-        migrateLegacyStorage();
     }
 
-    private function songKey(songId as String) as String {
-        return SONG_KEY_PREFIX + songId;
+    private function hashStringToNumber(value as String) as Number {
+        var bytes = value.toUtf8Array();
+        var hash = 0;
+
+        for (var i = 0; i < bytes.size(); i++) {
+            var b = bytes[i] as Number?;
+            if (b == null) {
+                b = bytes[i].toString().toNumber();
+            }
+
+            if (b != null) {
+                hash = ((hash * 31) + b) & 0x7FFFFFFF;
+            }
+        }
+
+        if (hash == 0) {
+            hash = 1;
+        }
+
+        return hash;
     }
 
-    private function playlistKey(playlistId as String) as String {
-        return PLAYLIST_KEY_PREFIX + playlistId;
+    function computeContentRefId(songId as String) as Number {
+        return hashStringToNumber(songId);
     }
 
     private function safe_number(value as Object) as Number? {
-        if (value instanceof Number) {
-            return value as Number;
-        }
-
-        if (value instanceof String) {
-            return (value as String).toNumber();
-        }
-
-        return null;
-    }
-
-    private function safeContentRefId(value as Object) as Number? {
-        var number = safe_number(value);
-        return number != null && number > 0 ? number : null;
-    }
-
-    // Garmin returns numeric persisted IDs but requires string IDs for audio ContentRef objects.
-    function getAudioContentRefId(value as Object) as String? {
-        var contentRefId = safeContentRefId(value);
-        return contentRefId != null ? contentRefId.toString() : null;
-    }
-
-    function hasCachedMedia(song as Dictionary) as Boolean {
-        return getCachedMediaContent(song) != null;
-    }
-
-    private function getCachedMediaContent(song as Dictionary) as Media.Content? {
-        var contentRefId = song.hasKey("contentRefId")
-            ? safeContentRefId(song["contentRefId"])
-            : null;
-        if (contentRefId == null) {
-            return null;
-        }
-
-        var audioContentRefId = getAudioContentRefId(contentRefId);
-        if (audioContentRefId == null) {
-            return null;
-        }
-
         try {
-            var contentRef = new Media.ContentRef(audioContentRefId, Media.CONTENT_TYPE_AUDIO);
-            return Media.getCachedContentObj(contentRef);
+            return value as Number?;
         } catch (ex) {
-            markSongCacheMissing(song, contentRefId);
             return null;
         }
     }
 
-    private function markSongCacheMissing(song as Dictionary, contentRefId as Number) as Void {
-        if (song.hasKey("contentRefId")) {
-            song.remove("contentRefId");
-        }
-        song["downloaded"] = false;
-        saveSong(song);
-        if (getLastPlayedContentRefId() == contentRefId) {
-            Storage.deleteValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
-        }
-        refreshPlaylistReadiness();
-    }
-
-    private function getPlaylistIds() as Array {
-        var playlistIds = Storage.getValue(PLAYLIST_IDS_KEY) as Array?;
-        return playlistIds != null ? playlistIds : [];
-    }
-
-    private function savePlaylistIds(playlistIds as Array) as Void {
-        Storage.setValue(PLAYLIST_IDS_KEY, playlistIds as Array<Application.PropertyValueType>);
-    }
-
-    private function addPlaylistId(playlistId as String) as Void {
-        var playlistIds = getPlaylistIds();
-        for (var i = 0; i < playlistIds.size(); i++) {
-            var existingId = playlistIds[i] as String?;
-            if (existingId != null && existingId.equals(playlistId)) {
-                return;
-            }
-        }
-
-        playlistIds.add(playlistId);
-        savePlaylistIds(playlistIds);
-    }
-
-    private function getSongIdsFromPlaylist(playlist as Dictionary?) as Array {
-        if (playlist == null) {
-            return [];
-        }
-
-        var songIds = playlist["songIds"] as Array?;
-        return songIds != null ? songIds : [];
-    }
-
-    private function sanitizeSong(song as Dictionary) as Boolean {
-        var changed = false;
-
-        if (song.hasKey("url")) {
-            song.remove("url");
-            changed = true;
-        }
-        if (song.hasKey("streamUrl")) {
-            song.remove("streamUrl");
-            changed = true;
-        }
-        if (song.hasKey("playlistId")) {
-            song.remove("playlistId");
-            changed = true;
-        }
-
-        var contentRefId = song.hasKey("contentRefId")
-            ? safeContentRefId(song["contentRefId"])
-            : null;
-        if (contentRefId == null) {
-            if (song.hasKey("contentRefId")) {
-                song.remove("contentRefId");
-                changed = true;
-            }
-            if (!song.hasKey("downloaded") || song["downloaded"] != false) {
-                song["downloaded"] = false;
-                changed = true;
-            }
-        } else {
-            if (song["contentRefId"] != contentRefId) {
-                song["contentRefId"] = contentRefId;
-                changed = true;
-            }
-            if (!song.hasKey("downloaded") || song["downloaded"] != true) {
-                song["downloaded"] = true;
-                changed = true;
-            }
-        }
-
-        if (song.hasKey("duration")) {
-            var duration = safe_number(song["duration"]);
-            if (duration != null && song["duration"] != duration) {
-                song["duration"] = duration;
-                changed = true;
-            }
-        }
-
-        return changed;
-    }
-
-    private function migrateLegacyStorage() as Void {
-        var version = Storage.getValue(STORAGE_VERSION_KEY) as Number?;
-        if (version != null && version >= STORAGE_VERSION) {
-            return;
-        }
-
-        try {
-            var legacySongs = Storage.getValue(LEGACY_SONGS_KEY) as Array?;
-            var legacyPlaylists = Storage.getValue(LEGACY_PLAYLISTS_KEY) as Array?;
-            var songIdsByPlaylist = {};
-
-            if (legacySongs != null) {
-                for (var i = 0; i < legacySongs.size(); i++) {
-                    var song = legacySongs[i] as Dictionary?;
-                    if (song == null) {
-                        continue;
-                    }
-
-                    var songId = song["id"] as String?;
-                    if (songId == null) {
-                        continue;
-                    }
-
-                    var playlistId = song["playlistId"] as String?;
-                    if (playlistId != null) {
-                        var songIds = songIdsByPlaylist[playlistId] as Array?;
-                        if (songIds == null) {
-                            songIds = [];
-                        }
-                        songIds.add(songId);
-                        songIdsByPlaylist[playlistId] = songIds;
-                    }
-
-                    saveSong(song);
-                }
-            }
-
-            if (legacyPlaylists != null) {
-                for (var j = 0; j < legacyPlaylists.size(); j++) {
-                    var playlist = legacyPlaylists[j] as Dictionary?;
-                    if (playlist == null) {
-                        continue;
-                    }
-
-                    var playlistId = playlist["id"] as String?;
-                    if (playlistId == null) {
-                        continue;
-                    }
-
-                    var playlistSongIds = songIdsByPlaylist[playlistId] as Array?;
-                    playlist["songIds"] = playlistSongIds != null ? playlistSongIds : [];
-                    playlist["ready"] = areSongsDownloaded(playlist["songIds"] as Array);
-                    saveDownloadedPlaylist(playlist);
-                }
-            }
-
-            Storage.setValue(STORAGE_VERSION_KEY, STORAGE_VERSION);
-            Storage.deleteValue(LEGACY_SONGS_KEY);
-            Storage.deleteValue(LEGACY_PLAYLISTS_KEY);
-        } catch (ex) {
-            System.println("library migration failed: " + ex.toString());
-        }
-    }
-
-    function saveSong(song as Dictionary) as Void {
-        var songId = song["id"] as String?;
-        if (songId == null) {
-            return;
-        }
-
-        sanitizeSong(song);
-        Storage.setValue(songKey(songId), song);
-    }
-
+    // Save songs to library
     function saveSongs(songs as Array) as Void {
-        for (var i = 0; i < songs.size(); i++) {
-            var song = songs[i] as Dictionary?;
-            if (song != null) {
-                saveSong(song);
-            }
-        }
+        Storage.setValue(SONGS_KEY, songs as Array<Application.PropertyValueType>);
     }
 
     function saveSelectedSongsPreservingDownloads(selectedSongs as Array, playlistId as String) as Void {
-        var songIds = [];
+        var existingSongs = Storage.getValue(SONGS_KEY) as Array?;
+        if (existingSongs == null) {
+            for (var i = 0; i < selectedSongs.size(); i++) {
+                var s = selectedSongs[i] as Dictionary?;
+                if (s != null) {
+                    s["playlistId"] = playlistId;
+                }
+            }
+            saveSongs(selectedSongs);
+            return;
+        }
 
-        for (var i = 0; i < selectedSongs.size(); i++) {
-            var song = selectedSongs[i] as Dictionary?;
+        var existingById = {};
+        for (var i = 0; i < existingSongs.size(); i++) {
+            var existingSong = existingSongs[i] as Dictionary?;
+            if (existingSong == null) {
+                continue;
+            }
+            var existingId = existingSong["id"] as String?;
+            if (existingId == null) {
+                continue;
+            }
+            existingById[existingId] = existingSong;
+        }
+
+        var mergedSongs = [];
+        for (var j = 0; j < selectedSongs.size(); j++) {
+            var song = selectedSongs[j] as Dictionary?;
             if (song == null) {
                 continue;
             }
-
             var songId = song["id"] as String?;
             if (songId == null) {
                 continue;
             }
 
-            var existingSong = getSongById(songId);
-            if (existingSong != null && existingSong.hasKey("contentRefId")) {
-                var existingContentRefId = safeContentRefId(existingSong["contentRefId"]);
-                if (existingContentRefId != null) {
-                    song["contentRefId"] = existingContentRefId;
-                    song["downloaded"] = true;
+            song["playlistId"] = playlistId;
+
+            var existing = existingById.hasKey(songId) ? existingById[songId] as Dictionary? : null;
+            if (existing != null) {
+                if (existing.hasKey("downloaded")) {
+                    song["downloaded"] = existing["downloaded"];
+                }
+
+                if (existing.hasKey("contentRefId")) {
+                    var rawExistingContentRefId = existing["contentRefId"];
+                    if (rawExistingContentRefId != null) {
+                        var existingContentRefIdNumber = safe_number(rawExistingContentRefId);
+                        if (existingContentRefIdNumber != null) {
+                            song["contentRefId"] = rawExistingContentRefId;
+                        }
+                    }
                 }
             }
 
-            songIds.add(songId);
-            saveSong(song);
+            mergedSongs.add(song);
+            existingById.remove(songId);
         }
 
-        var playlist = getPlaylistById(playlistId);
-        if (playlist == null) {
-            playlist = {
-                "id" => playlistId,
-                "name" => "Unnamed"
-            };
-        }
-        playlist["songIds"] = songIds;
-        playlist["songCount"] = songIds.size();
-        playlist["ready"] = areSongsDownloaded(songIds);
-        saveDownloadedPlaylist(playlist);
-    }
-
-    function getSongById(songId as String) as Dictionary? {
-        var song = Storage.getValue(songKey(songId)) as Dictionary?;
-        if (song != null && sanitizeSong(song)) {
-            Storage.setValue(songKey(songId), song);
-        }
-        return song;
-    }
-
-    function getSongsForPlaylist(playlistId as String) as Array {
-        var playlist = getPlaylistById(playlistId);
-        var songIds = getSongIdsFromPlaylist(playlist);
-        var songs = [];
-
-        for (var i = 0; i < songIds.size(); i++) {
-            var songId = songIds[i] as String?;
-            if (songId == null) {
-                continue;
-            }
-
-            var song = getSongById(songId);
-            if (song != null) {
-                songs.add(song);
+        var keys = existingById.keys();
+        for (var k = 0; k < keys.size(); k++) {
+            var key = keys[k];
+            var oldSong = existingById[key] as Dictionary?;
+            if (oldSong != null) {
+                var pId = oldSong["playlistId"] as String?;
+                if (pId != null && !pId.equals(playlistId)) {
+                    mergedSongs.add(oldSong);
+                }
             }
         }
 
-        return songs;
+        saveSongs(mergedSongs);
     }
 
+    // Get all songs from library
     function getSongs() as Array {
-        var playlists = getPlaylists();
-        var seenSongIds = {};
-        var songs = [];
-
-        for (var i = 0; i < playlists.size(); i++) {
-            var playlist = playlists[i] as Dictionary?;
-            var songIds = getSongIdsFromPlaylist(playlist);
-
-            for (var j = 0; j < songIds.size(); j++) {
-                var songId = songIds[j] as String?;
-                if (songId == null || seenSongIds.hasKey(songId)) {
-                    continue;
-                }
-
-                seenSongIds[songId] = true;
-                var song = getSongById(songId);
-                if (song != null) {
-                    songs.add(song);
-                }
-            }
+        var songs = Storage.getValue(SONGS_KEY) as Array?;
+        if (songs == null) {
+            return [];
         }
 
-        return songs;
-    }
-
-    function getPendingSongs() as Array {
-        var songs = getSongs();
-        var pendingSongs = [];
-
+        var changed = false;
         for (var i = 0; i < songs.size(); i++) {
             var song = songs[i] as Dictionary?;
             if (song == null) {
                 continue;
             }
 
-            var contentRefId = song.hasKey("contentRefId")
-                ? safeContentRefId(song["contentRefId"])
-                : null;
-            if (contentRefId == null) {
-                pendingSongs.add(song);
-            }
-        }
+            if (song.hasKey("contentRefId")) {
+                var rawContentRefId = song["contentRefId"];
+                if (rawContentRefId != null) {
+                    // Persisted media ids must be numeric. If a String is stored here, it's legacy/invalid.
+                    if (rawContentRefId instanceof String) {
+                        song.remove("contentRefId");
+                        song["downloaded"] = false;
+                        changed = true;
+                    }
 
-        return pendingSongs;
-    }
-
-    function addSong(song as Dictionary) as Void {
-        saveSong(song);
-    }
-
-    function removeSong(songId as String) as Void {
-        Storage.deleteValue(songKey(songId));
-
-        var playlists = getPlaylists();
-        for (var i = 0; i < playlists.size(); i++) {
-            var playlist = playlists[i] as Dictionary?;
-            if (playlist == null) {
-                continue;
-            }
-
-            var oldSongIds = getSongIdsFromPlaylist(playlist);
-            var newSongIds = [];
-            for (var j = 0; j < oldSongIds.size(); j++) {
-                var existingId = oldSongIds[j] as String?;
-                if (existingId != null && !existingId.equals(songId)) {
-                    newSongIds.add(existingId);
+                    var contentRefIdNumber = safe_number(rawContentRefId);
+                    if (contentRefIdNumber != null) {
+                        // Valid numeric persisted id, keep as-is
+                    } else {
+                        song.remove("contentRefId");
+                        song["downloaded"] = false;
+                        changed = true;
+                    }
+                } else {
+                    song.remove("contentRefId");
+                    song["downloaded"] = false;
+                    changed = true;
                 }
             }
 
-            playlist["songIds"] = newSongIds;
-            playlist["songCount"] = newSongIds.size();
-            playlist["ready"] = areSongsDownloaded(newSongIds);
-            saveDownloadedPlaylist(playlist);
+            if (song.hasKey("duration")) {
+                var rawDuration = song["duration"];
+                if (rawDuration != null) {
+                    var durationNumber = rawDuration as Number?;
+                    if (durationNumber == null) {
+                        var durationString = rawDuration as String?;
+                        if (durationString != null) {
+                            durationNumber = durationString.toNumber();
+                            song["duration"] = durationNumber;
+                            changed = true;
+                        }
+                    }
+                }
+            }
         }
+
+        if (changed) {
+            saveSongs(songs);
+        }
+        return songs;
     }
 
-    function clearSongs() as Void {
+    // Add a single song to library
+    function addSong(song as Dictionary) as Void {
         var songs = getSongs();
+        songs.add(song);
+        saveSongs(songs);
+    }
+
+    // Remove a song from library
+    function removeSong(songId as String) as Void {
+        var songs = getSongs();
+        var newSongs = [];
+        
         for (var i = 0; i < songs.size(); i++) {
             var song = songs[i] as Dictionary?;
-            var songId = song != null ? song["id"] as String? : null;
-            if (songId != null) {
-                Storage.deleteValue(songKey(songId));
-            }
-        }
-
-        refreshPlaylistReadiness();
-    }
-
-    function savePlaylists(playlists as Array) as Void {
-        for (var i = 0; i < playlists.size(); i++) {
-            var playlist = playlists[i] as Dictionary?;
-            if (playlist != null) {
-                saveDownloadedPlaylist(playlist);
-            }
-        }
-    }
-
-    function saveDownloadedPlaylist(playlist as Dictionary) as Void {
-        var playlistId = playlist["id"] as String?;
-        if (playlistId == null) {
-            return;
-        }
-
-        var existing = getPlaylistById(playlistId);
-        if (existing != null) {
-            if (!playlist.hasKey("songIds") && existing.hasKey("songIds")) {
-                playlist["songIds"] = existing["songIds"];
-            }
-            if (!playlist.hasKey("ready") && existing.hasKey("ready")) {
-                playlist["ready"] = existing["ready"];
-            }
-        }
-
-        addPlaylistId(playlistId);
-        Storage.setValue(playlistKey(playlistId), playlist);
-    }
-
-    function getPlaylistById(playlistId as String) as Dictionary? {
-        return Storage.getValue(playlistKey(playlistId)) as Dictionary?;
-    }
-
-    function getPlaylists() as Array {
-        var playlistIds = getPlaylistIds();
-        var playlists = [];
-
-        for (var i = 0; i < playlistIds.size(); i++) {
-            var playlistId = playlistIds[i] as String?;
-            if (playlistId == null) {
+            if (song == null) {
                 continue;
             }
-
-            var playlist = getPlaylistById(playlistId);
-            if (playlist != null) {
-                playlists.add(playlist);
+            var id = song["id"] as String?;
+            if (id == null || !id.equals(songId)) {
+                newSongs.add(song);
             }
         }
+        
+        saveSongs(newSongs);
+    }
 
+    // Clear all songs
+    function clearSongs() as Void {
+        Storage.deleteValue(SONGS_KEY);
+    }
+
+    // Get song by ID
+    function getSongById(songId as String) as Dictionary? {
+        var songs = getSongs();
+        
+        for (var i = 0; i < songs.size(); i++) {
+            var song = songs[i] as Dictionary?;
+            if (song == null) {
+                continue;
+            }
+            var id = song["id"] as String?;
+            if (id != null && id.equals(songId)) {
+                return song;
+            }
+        }
+        
+        return null;
+    }
+
+    // Save playlists
+    function savePlaylists(playlists as Array) as Void {
+        Storage.setValue(PLAYLISTS_KEY, playlists as Array<Application.PropertyValueType>);
+    }
+
+    // Save a newly downloaded playlist metadata, keeping old ones
+    function saveDownloadedPlaylist(playlist as Dictionary) as Void {
+        var playlists = getPlaylists();
+        var newPlaylists = [];
+        var playlistId = playlist["id"] as String?;
+        
+        for (var i = 0; i < playlists.size(); i++) {
+            var p = playlists[i] as Dictionary?;
+            if (p != null) {
+                var pId = p["id"] as String?;
+                if (pId != null && !pId.equals(playlistId)) {
+                    newPlaylists.add(p);
+                }
+            }
+        }
+        newPlaylists.add(playlist);
+        savePlaylists(newPlaylists);
+    }
+
+    // Get all playlists
+    function getPlaylists() as Array {
+        var playlists = Storage.getValue(PLAYLISTS_KEY) as Array?;
+        if (playlists == null) {
+            return [];
+        }
         return playlists;
     }
 
-    function getPlayablePlaylists() as Array {
-        var playlists = getPlaylists();
-        var playable = [];
-
-        for (var i = 0; i < playlists.size(); i++) {
-            var playlist = playlists[i] as Dictionary?;
-            if (playlist != null && playlist["ready"] == true) {
-                playable.add(playlist);
-            }
-        }
-
-        return playable;
-    }
-
-    private function isSongReferenced(songId as String) as Boolean {
-        var playlists = getPlaylists();
-        for (var i = 0; i < playlists.size(); i++) {
-            var playlist = playlists[i] as Dictionary?;
-            var songIds = getSongIdsFromPlaylist(playlist);
-            for (var j = 0; j < songIds.size(); j++) {
-                var referencedId = songIds[j] as String?;
-                if (referencedId != null && referencedId.equals(songId)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    function removePlaylist(playlistId as String) as Array {
-        var playlist = getPlaylistById(playlistId);
-        if (playlist == null) {
-            return [];
-        }
-
-        var removedSongIds = getSongIdsFromPlaylist(playlist);
-        var oldPlaylistIds = getPlaylistIds();
-        var newPlaylistIds = [];
-        for (var i = 0; i < oldPlaylistIds.size(); i++) {
-            var existingId = oldPlaylistIds[i] as String?;
-            if (existingId != null && !existingId.equals(playlistId)) {
-                newPlaylistIds.add(existingId);
-            }
-        }
-
-        savePlaylistIds(newPlaylistIds);
-        Storage.deleteValue(playlistKey(playlistId));
-
-        var orphanedContentRefIds = [];
-        for (var j = 0; j < removedSongIds.size(); j++) {
-            var songId = removedSongIds[j] as String?;
-            if (songId == null || isSongReferenced(songId)) {
-                continue;
-            }
-
-            var song = getSongById(songId);
-            var contentRefId = song != null && song.hasKey("contentRefId")
-                ? safeContentRefId(song["contentRefId"])
-                : null;
-            if (contentRefId != null) {
-                orphanedContentRefIds.add(contentRefId);
-                if (getLastPlayedContentRefId() == contentRefId) {
-                    Storage.deleteValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
-                }
-            }
-            Storage.deleteValue(songKey(songId));
-        }
-
-        var currentPlaylistId = getCurrentPlaylist();
-        if (currentPlaylistId != null && currentPlaylistId.equals(playlistId)) {
-            var playablePlaylists = getPlayablePlaylists();
-            var nextPlaylist = playablePlaylists.size() > 0
-                ? playablePlaylists[0] as Dictionary?
-                : null;
-            var nextPlaylistId = nextPlaylist != null
-                ? nextPlaylist["id"] as String?
-                : null;
-            if (nextPlaylistId != null) {
-                setCurrentPlaylist(nextPlaylistId);
-            } else {
-                Storage.deleteValue(CURRENT_PLAYLIST_KEY);
-            }
-        }
-
-        return orphanedContentRefIds;
-    }
-
-    private function areSongsDownloaded(songIds as Array) as Boolean {
-        if (songIds.size() == 0) {
-            return false;
-        }
-
-        for (var i = 0; i < songIds.size(); i++) {
-            var songId = songIds[i] as String?;
-            if (songId == null) {
-                return false;
-            }
-
-            var song = getSongById(songId);
-            var contentRefId = song != null && song.hasKey("contentRefId")
-                ? safeContentRefId(song["contentRefId"])
-                : null;
-            if (contentRefId == null) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    function refreshPlaylistReadiness() as Void {
-        var playlists = getPlaylists();
-        for (var i = 0; i < playlists.size(); i++) {
-            var playlist = playlists[i] as Dictionary?;
-            if (playlist == null) {
-                continue;
-            }
-
-            var songIds = getSongIdsFromPlaylist(playlist);
-            playlist["songCount"] = songIds.size();
-            playlist["ready"] = areSongsDownloaded(songIds);
-            saveDownloadedPlaylist(playlist);
-        }
-    }
-
+    // Set current playlist
     function setCurrentPlaylist(playlistId as String) as Void {
         Storage.setValue(CURRENT_PLAYLIST_KEY, playlistId);
     }
 
+    // Get current playlist
     function getCurrentPlaylist() as String? {
         return Storage.getValue(CURRENT_PLAYLIST_KEY) as String?;
     }
 
+    // Set shuffle mode
     function setShuffle(enabled as Boolean) as Void {
         Storage.setValue(SHUFFLE_KEY, enabled);
     }
 
+    // Get shuffle mode
     function getShuffle() as Boolean {
         var shuffle = Storage.getValue(SHUFFLE_KEY) as Boolean?;
         return shuffle != null && shuffle;
     }
 
     function setLastPlayedContentRefId(contentRefId as Object) as Void {
-        var number = safeContentRefId(contentRefId);
-        if (number != null) {
-            Storage.setValue(LAST_PLAYED_CONTENT_REF_ID_KEY, number);
+        var number = safe_number(contentRefId);
+        if (number == null) {
+            return;
         }
+        Storage.setValue(LAST_PLAYED_CONTENT_REF_ID_KEY, number);
     }
 
     function getLastPlayedContentRefId() as Number? {
         var raw = Storage.getValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
-        return raw != null ? safe_number(raw) : null;
-    }
-
-    function createMediaContent(song as Dictionary) as Media.Content? {
-        var content = getCachedMediaContent(song);
-        if (content == null) {
+        if (raw == null) {
             return null;
         }
+        return safe_number(raw);
+    }
+
+    // Create Media.Content object from song data
+    function createMediaContent(song as Dictionary) as Media.Content? {
+        var contentRefId = null;
+        if (song.hasKey("contentRefId")) {
+            var rawContentRefId = song["contentRefId"];
+            if (rawContentRefId != null) {
+                contentRefId = safe_number(rawContentRefId);
+            }
+        }
+        if (contentRefId == null) {
+            return null;
+        }
+        var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
+        var content = Media.getCachedContentObj(contentRef);
 
         var metadata = content.getMetadata();
         if (metadata != null) {
-            var title = song["title"] as String?;
-            var artist = song["artist"] as String?;
-            var album = song["album"] as String?;
+            var title = song.hasKey("title") ? song["title"] as String? : null;
             if (title != null) {
                 metadata.title = title;
             }
+
+            var artist = song.hasKey("artist") ? song["artist"] as String? : null;
             if (artist != null) {
                 metadata.artist = artist;
             }
+
+            var album = song.hasKey("album") ? song["album"] as String? : null;
             if (album != null) {
                 metadata.album = album;
             }
@@ -644,42 +345,77 @@ class YuMusicLibrary {
         return content;
     }
 
+    // Find a song by the ContentRef ID used by playback (typically the stream/download URL)
     function getSongByContentRefId(contentRefId as Object) as Dictionary? {
-        var targetId = safeContentRefId(contentRefId);
-        if (targetId == null) {
-            return null;
+        var contentRefNumber = safe_number(contentRefId);
+        var contentRefString = null;
+        try {
+            contentRefString = contentRefId as String?;
+        } catch (ex) {
+            contentRefString = null;
         }
-
         var songs = getSongs();
         for (var i = 0; i < songs.size(); i++) {
             var song = songs[i] as Dictionary?;
-            var storedId = song != null && song.hasKey("contentRefId")
-                ? safeContentRefId(song["contentRefId"])
-                : null;
-            if (storedId != null && storedId == targetId) {
-                return song;
+            if (song == null) {
+                continue;
+            }
+
+            if (contentRefNumber != null) {
+                var storedNumber = null;
+                if (song.hasKey("contentRefId")) {
+                    var rawStoredNumber = song["contentRefId"];
+                    if (rawStoredNumber != null) {
+                        storedNumber = safe_number(rawStoredNumber);
+                    }
+                }
+                if (storedNumber != null && storedNumber == contentRefNumber) {
+                    return song;
+                }
+            }
+
+            if (contentRefString != null) {
+                var storedString = null;
+                if (song.hasKey("contentRefId")) {
+                    try {
+                        storedString = song["contentRefId"] as String?;
+                    } catch (ex) {
+                        storedString = null;
+                    }
+                }
+                if (storedString != null && storedString.equals(contentRefString)) {
+                    return song;
+                }
+                var url = song.hasKey("url") ? song["url"] as String? : null;
+                if (url != null && url.equals(contentRefString)) {
+                    return song;
+                }
             }
         }
         return null;
     }
 
+    // Get total library size
     function getLibrarySize() as Number {
         return getSongs().size();
     }
 
+    // Check if library is empty
     function isEmpty() as Boolean {
         return getLibrarySize() == 0;
     }
 
+    // Get library statistics
     function getStats() as Dictionary {
         var songs = getSongs();
         var totalDuration = 0;
-
+        
         for (var i = 0; i < songs.size(); i++) {
             var song = songs[i] as Dictionary?;
-            var duration = song != null && song.hasKey("duration")
-                ? safe_number(song["duration"])
-                : null;
+            if (song == null) {
+                continue;
+            }
+            var duration = song.hasKey("duration") ? song["duration"] as Number? : null;
             if (duration != null) {
                 totalDuration += duration;
             }
@@ -688,48 +424,22 @@ class YuMusicLibrary {
         return {
             "songCount" => songs.size(),
             "totalDuration" => totalDuration,
-            "playlistCount" => getPlayablePlaylists().size()
+            "playlistCount" => getPlaylists().size()
         };
     }
 
-    function clearMetadata() as Void {
-        var playlists = getPlaylists();
-        var songs = getSongs();
+    // --- Offline Scrobble Queue ---
 
-        for (var i = 0; i < songs.size(); i++) {
-            var song = songs[i] as Dictionary?;
-            var songId = song != null ? song["id"] as String? : null;
-            if (songId != null) {
-                Storage.deleteValue(songKey(songId));
-            }
-        }
-        for (var j = 0; j < playlists.size(); j++) {
-            var playlist = playlists[j] as Dictionary?;
-            var playlistId = playlist != null ? playlist["id"] as String? : null;
-            if (playlistId != null) {
-                Storage.deleteValue(playlistKey(playlistId));
-            }
-        }
-
-        Storage.deleteValue(PLAYLIST_IDS_KEY);
-        Storage.deleteValue(LEGACY_SONGS_KEY);
-        Storage.deleteValue(LEGACY_PLAYLISTS_KEY);
-        Storage.deleteValue(CURRENT_PLAYLIST_KEY);
-        Storage.deleteValue(LAST_PLAYED_CONTENT_REF_ID_KEY);
-        Storage.deleteValue(STORAGE_VERSION_KEY);
-    }
-
-    function clearAllState() as Void {
-        clearMetadata();
-        Storage.deleteValue(SHUFFLE_KEY);
-        Storage.deleteValue(SCROBBLES_KEY);
-    }
-
+    // Get all pending scrobbles
     function getScrobbleQueue() as Array {
         var scrobbles = Storage.getValue(SCROBBLES_KEY) as Array?;
-        return scrobbles != null ? scrobbles : [];
+        if (scrobbles == null) {
+            return [];
+        }
+        return scrobbles;
     }
 
+    // Add a scrobble to the offline queue
     function queueScrobble(songId as String, timestamp as Number) as Void {
         var queue = getScrobbleQueue();
         queue.add({
@@ -739,10 +449,12 @@ class YuMusicLibrary {
         Storage.setValue(SCROBBLES_KEY, queue as Array<Application.PropertyValueType>);
     }
 
+    // Clear the offline scrobble queue (usually called after completely successful upload)
     function clearScrobbleQueue() as Void {
         Storage.deleteValue(SCROBBLES_KEY);
     }
 
+    // Remove only the first item from the queue (for sequential processing)
     function removeFirstScrobble() as Void {
         var queue = getScrobbleQueue();
         if (queue.size() > 0) {

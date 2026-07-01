@@ -8,19 +8,24 @@ import Toybox.WatchUi;
 // that iterates over the songs configured to play.
 class YuMusicContentDelegate extends Media.ContentDelegate {
     private var _library as YuMusicLibrary;
-    private var _api as YuMusicBackend;
+    private var _api as YuMusicSubsonicAPI;
     private var _serverConfig as YuMusicServerConfig;
-    private var _scrobbleFlushInProgress as Boolean = false;
 
     function initialize() {
         ContentDelegate.initialize();
         _library = new YuMusicLibrary();
-        _api = new YuMusicBackend();
+        _api = new YuMusicSubsonicAPI();
         _serverConfig = new YuMusicServerConfig();
         
         // Configure API if server is set up
         var config = _serverConfig.getConfig();
-        _api.configure(config);
+        var serverUrl = config["serverUrl"] as String?;
+        var username = config["username"] as String?;
+        var password = config["password"] as String?;
+        var maxBitRate = config["maxBitRate"] as String?;
+        if (serverUrl != null && username != null && password != null) {
+            _api.configure(serverUrl, username, password, maxBitRate);
+        }
     }
 
     // Returns an iterator that is used by the system to play songs.
@@ -47,6 +52,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
             var songId = song != null ? song["id"] as String? : null;
             if (songId != null) {
                 _api.star(songId, method(:onStarResponse));
+            } else {
+                var contentRefString = contentRefId as String?;
+                if (contentRefString != null) {
+                    _api.star(contentRefString, method(:onStarResponse));
+                }
             }
         }
     }
@@ -59,6 +69,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
             var songId = song != null ? song["id"] as String? : null;
             if (songId != null) {
                 _api.unstar(songId, method(:onUnstarResponse));
+            } else {
+                var contentRefString = contentRefId as String?;
+                if (contentRefString != null) {
+                    _api.unstar(contentRefString, method(:onUnstarResponse));
+                }
             }
         }
     }
@@ -79,11 +94,12 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
             _library.setLastPlayedContentRefId(contentRefId);
             var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
+            var targetId = songId != null ? songId : (contentRefId as String?);
 
-            if (songId != null) {
+            if (targetId != null) {
                 // Queue scrobble locally to support offline playback
                 if (songEvent == Media.SONG_EVENT_COMPLETE) {
-                    _library.queueScrobble(songId, Toybox.Time.now().value());
+                    _library.queueScrobble(targetId, Toybox.Time.now().value());
                     flushNextScrobble();
                 }
             }
@@ -101,17 +117,12 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     }
 
     function flushNextScrobble() as Void {
-        if (_scrobbleFlushInProgress) {
-            return;
-        }
-
         var queue = _library.getScrobbleQueue();
         if (queue.size() > 0) {
             var item = queue[0] as Dictionary;
             var id = item["id"] as String?;
             var time = item["time"] as Number?;
             if (id != null) {
-                _scrobbleFlushInProgress = true;
                 _api.scrobble(id, time, method(:onScrobbleFlushed));
             } else {
                 _library.removeFirstScrobble();
@@ -121,8 +132,7 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
     }
 
     function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        _scrobbleFlushInProgress = false;
-        if (_api.isResponseSuccessful(responseCode, data)) {
+        if (responseCode == 200) {
             _library.removeFirstScrobble();
             flushNextScrobble();
         }

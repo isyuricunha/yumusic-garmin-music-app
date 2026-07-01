@@ -7,13 +7,13 @@ import Toybox.PersistedContent;
 class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
     private var _library as YuMusicLibrary;
     private var _serverConfig as YuMusicServerConfig;
-    private var _api as YuMusicBackend;
+    private var _api as YuMusicSubsonicAPI;
 
     function initialize() {
         Menu2InputDelegate.initialize();
         _library = new YuMusicLibrary();
         _serverConfig = new YuMusicServerConfig();
-        _api = new YuMusicBackend();
+        _api = new YuMusicSubsonicAPI();
     }
 
     function onSelect(item as MenuItem) as Void {
@@ -59,7 +59,13 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
             }
 
             var config = _serverConfig.getConfig();
-            if (_api.configure(config)) {
+            var serverUrl = config["serverUrl"] as String?;
+            var username = config["username"] as String?;
+            var password = config["password"] as String?;
+            var maxBitRate = config["maxBitRate"] as String?;
+            
+            if (serverUrl != null && username != null && password != null) {
+                _api.configure(serverUrl, username, password, maxBitRate);
                 var loadingView = new YuMusicLoadingView("Syncing scrobbles...");
                 WatchUi.pushView(loadingView, null, WatchUi.SLIDE_LEFT);
                 flushNextScrobble();
@@ -68,18 +74,9 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
             _library.setShuffle(!_library.getShuffle());
             var shuffleText = _library.getShuffle() ? "Disable Shuffle" : "Enable Shuffle";
             item.setLabel(shuffleText);
-        } else if (id.equals("manage")) {
-            WatchUi.pushView(
-                new YuMusicManagePlaylistsView(),
-                new YuMusicManagePlaylistsDelegate(),
-                WatchUi.SLIDE_LEFT
-            );
         } else if (id.equals("clear")) {
-            WatchUi.pushView(
-                new WatchUi.Confirmation("Clear all downloaded music?"),
-                new YuMusicClearLibraryDelegate(),
-                WatchUi.SLIDE_IMMEDIATE
-            );
+            _library.clearSongs();
+            WatchUi.popView(WatchUi.SLIDE_RIGHT);
         } else if (id.equals("server")) {
             var serverView = new YuMusicServerConfigView();
             var serverDelegate = new YuMusicServerConfigDelegate();
@@ -117,13 +114,12 @@ class YuMusicConfigurePlaybackDelegate extends WatchUi.Menu2InputDelegate {
     }
 
     function onScrobbleFlushed(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        if (_api.isResponseSuccessful(responseCode, data)) {
+        if (responseCode == 200) {
             _library.removeFirstScrobble();
             flushNextScrobble();
         } else {
             WatchUi.popView(WatchUi.SLIDE_IMMEDIATE); // Remove loading view
-            var error = _api.getResponseError(responseCode, data);
-            var msg = "Sync failed (" + (error != null ? error : responseCode.toString()) + ")";
+            var msg = "Sync failed (" + responseCode.toString() + ")";
             if (responseCode == -104) {
                 msg = "BLE Disconnected";
             }

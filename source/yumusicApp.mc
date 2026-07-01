@@ -32,47 +32,31 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         var serverUrlRaw = safe_get_property_string("serverUrl");
         var usernameRaw = safe_get_property_string("username");
         var passwordRaw = safe_get_property_string("password");
+        
         var maxBitRateRaw = safe_get_property_number("maxBitRate");
-        var authModeRaw = safe_get_property_number("authMode");
-        var backendTypeRaw = safe_get_property_number("backendType");
 
         // If the app settings haven't been delivered yet, don't overwrite/clear
         // previously stored configuration.
-        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null && authModeRaw == null && backendTypeRaw == null) {
+        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null) {
             return;
         }
 
         var serverUrl = normalize_setting_string(serverUrlRaw);
         if (serverUrl != null) {
-            var lastCharacter = serverUrl.length() > 0
-                ? serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) as String?
-                : null;
-            while (lastCharacter != null && lastCharacter.equals("/")) {
+            if (serverUrl.length() > 0 && serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) == "/") {
                 serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
-                lastCharacter = serverUrl.length() > 0
-                    ? serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) as String?
-                    : null;
             }
         }
         var username = normalize_setting_string(usernameRaw);
-        // Credentials are opaque. Empty passwords are valid for some Jellyfin
-        // and Subsonic users, and surrounding whitespace may be significant.
-        var password = passwordRaw;
-
+        var password = normalize_setting_string(passwordRaw);
+        
         var maxBitRate = "320"; // Default
         if (maxBitRateRaw != null) {
             maxBitRate = maxBitRateRaw.toString();
         }
 
-        var authMode = authModeRaw != null ? authModeRaw : YUMUSIC_AUTH_TOKEN;
-        var backendType = backendTypeRaw != null ? backendTypeRaw : YUMUSIC_BACKEND_SUBSONIC;
-        var hasRequiredUsername = username != null;
-        if (backendType == YUMUSIC_BACKEND_SUBSONIC && authMode == YUMUSIC_AUTH_API_KEY) {
-            hasRequiredUsername = true;
-        }
-
-        if (serverUrl != null && password != null && hasRequiredUsername) {
-            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, authMode, backendType);
+        if (serverUrl != null && username != null && password != null) {
+            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate);
         } else {
             _serverConfig.clearConfig();
         }
@@ -92,7 +76,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
 
         while (startIndex < endIndex) {
             var ch = value.substring(startIndex, startIndex + 1);
-            if (is_whitespace(ch)) {
+            if (ch == " " || ch == "\t" || ch == "\n" || ch == "\r") {
                 startIndex++;
             } else {
                 break;
@@ -101,7 +85,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
 
         while (endIndex > startIndex) {
             var ch = value.substring(endIndex - 1, endIndex);
-            if (is_whitespace(ch)) {
+            if (ch == " " || ch == "\t" || ch == "\n" || ch == "\r") {
                 endIndex--;
             } else {
                 break;
@@ -115,14 +99,6 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         }
 
         return trimmedValue;
-    }
-
-    private function is_whitespace(value as String?) as Boolean {
-        return value != null
-            && (value.equals(" ")
-                || value.equals("\t")
-                || value.equals("\n")
-                || value.equals("\r"));
     }
 
     private function safe_get_property_string(key as String) as String? {

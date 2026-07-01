@@ -10,7 +10,6 @@ class YuMusicSubsonicAPI {
     private var _serverUrl as String?;
     private var _username as String?;
     private var _password as String?;
-    private var _authMode as Number = YUMUSIC_AUTH_TOKEN;
     private var _apiVersion as String = "1.16.1";
     private var _clientName as String = "YuMusicGarmin";
     private var _maxBitRate as String = "320";
@@ -18,35 +17,14 @@ class YuMusicSubsonicAPI {
     function initialize() {
     }
 
-    function configure(config as Dictionary) as Boolean {
-        var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        var authMode = config["authMode"] as Number?;
-
-        if (serverUrl == null || password == null) {
-            return false;
-        }
-
-        var resolvedAuthMode = authMode != null ? authMode : YUMUSIC_AUTH_TOKEN;
-        if (resolvedAuthMode != YUMUSIC_AUTH_API_KEY && username == null) {
-            return false;
-        }
-
+    // Configure the server connection
+    function configure(serverUrl as String, username as String, password as String, maxBitRate as String) as Void {
         _serverUrl = serverUrl;
         _username = username;
         _password = password;
-        _authMode = resolvedAuthMode;
         if (maxBitRate != null) {
             _maxBitRate = maxBitRate;
         }
-
-        return true;
-    }
-
-    function prepare(callback as Method(success as Boolean, error as String?) as Void) as Void {
-        callback.invoke(true, null);
     }
 
     // Generate authentication token using MD5 hash
@@ -72,8 +50,18 @@ class YuMusicSubsonicAPI {
         };
     }
 
+    // Generate a simple salt (6 random characters)
     private function generateSalt() as String {
-        return bytesToHex(Cryptography.randomBytes(6));
+        var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        var salt = "";
+        var time = System.getTimer();
+        
+        for (var i = 0; i < 6; i++) {
+            var index = (time + i * 7) % chars.length();
+            salt += chars.substring(index, index + 1);
+        }
+        
+        return salt;
     }
 
     // Convert byte array to hex string
@@ -126,168 +114,41 @@ class YuMusicSubsonicAPI {
         return bytes;
     }
 
-    function buildRequestUrl(endpoint as String) as String {
-        if (_serverUrl == null || _password == null) {
+    // Build base URL with authentication parameters
+    private function buildBaseUrl(endpoint as String) as String {
+        if (_serverUrl == null || _username == null) {
             return "";
         }
 
+        // Coerce nullable fields into non-null strings after the null guard
+        // and normalize the server URL to avoid a double slash before /rest.
         var serverUrl = _serverUrl + "";
-        var lastCharacter = serverUrl.length() > 0
-            ? serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) as String?
-            : null;
-        while (lastCharacter != null && lastCharacter.equals("/")) {
+        if (serverUrl.length() > 0 && serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) == "/") {
             serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
-            lastCharacter = serverUrl.length() > 0
-                ? serverUrl.substring(serverUrl.length() - 1, serverUrl.length()) as String?
-                : null;
         }
 
-        var url = serverUrl + "/rest/" + endpoint + ".view";
-        url = appendQueryParameter(url, "v", _apiVersion);
-        url = appendQueryParameter(url, "c", _clientName);
-        url = appendQueryParameter(url, "f", "json");
-
-        if (_authMode == YUMUSIC_AUTH_API_KEY) {
-            return appendQueryParameter(url, "apiKey", _password + "");
-        }
-
-        if (_username == null) {
-            return "";
-        }
-
-        url = appendQueryParameter(url, "u", _username + "");
-        if (_authMode == YUMUSIC_AUTH_PASSWORD) {
-            return appendQueryParameter(url, "p", _password + "");
-        }
+        var username = _username + "";
+        var url = serverUrl + "/rest/" + endpoint + ".view?";
+        url += "u=" + username;
+        url += "&v=" + _apiVersion;
+        url += "&c=" + _clientName;
+        url += "&f=json";
 
         var auth = generateAuthToken();
         var token = auth["t"] as String?;
         var salt = auth["s"] as String?;
         if (token != null && salt != null) {
-            url = appendQueryParameter(url, "t", token);
-            url = appendQueryParameter(url, "s", salt);
+            url += "&t=" + token;
+            url += "&s=" + salt;
         }
 
         return url;
     }
 
-    function appendQueryParameter(url as String, name as String, value as String) as String {
-        var separator = url.find("?") == null ? "?" : "&";
-        return url + separator + name + "=" + Communications.encodeURL(value);
-    }
-
-    function getTransportLabel() as String {
-        if (_serverUrl == null) {
-            return "unknown";
-        }
-
-        var lowerUrl = (_serverUrl + "").toLower();
-        if (hasPrefix(lowerUrl, "https://")) {
-            return "HTTPS";
-        }
-        if (hasPrefix(lowerUrl, "http://")) {
-            return "HTTP";
-        }
-        return "invalid URL";
-    }
-
-    private function hasPrefix(value as String, prefix as String) as Boolean {
-        if (value.length() < prefix.length()) {
-            return false;
-        }
-
-        var candidate = value.substring(0, prefix.length()) as String?;
-        return candidate != null && candidate.equals(prefix);
-    }
-
-    function getResponseError(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as String? {
-        if (responseCode != 200) {
-            return formatTransportError(responseCode);
-        }
-
-        var dict = data as Dictionary?;
-        if (dict == null) {
-            return "invalid JSON";
-        }
-
-        var response = dict["subsonic-response"] as Dictionary?;
-        if (response == null) {
-            return "invalid API response";
-        }
-
-        var status = response["status"] as String?;
-        if (status != null && status.equals("ok")) {
-            return null;
-        }
-
-        var error = response["error"] as Dictionary?;
-        if (error == null) {
-            return "Subsonic request failed";
-        }
-
-        var errorCode = error["code"];
-        var code = errorCode != null ? errorCode.toString() : "?";
-        if (code.equals("40")) {
-            return "40 wrong credentials";
-        }
-        if (code.equals("41")) {
-            return "41 token unsupported";
-        }
-        if (code.equals("44")) {
-            return "44 not authorized";
-        }
-        if (code.equals("50")) {
-            return "50 server trial expired";
-        }
-
-        var messageValue = error["message"];
-        if (messageValue != null) {
-            return code + " " + messageValue.toString();
-        }
-        return "Subsonic error " + code;
-    }
-
-    function isResponseSuccessful(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Boolean {
-        return getResponseError(responseCode, data) == null;
-    }
-
-    function formatTransportError(code as Number) as String {
-        if (code == -300) {
-            return "-300 timeout";
-        }
-        if (code == -400) {
-            return "-400 invalid response body";
-        }
-        if (code == -402) {
-            return "-402 response too large";
-        }
-        if (code == -403) {
-            return "-403 out of memory";
-        }
-        if (code == -1001) {
-            return "-1001 HTTPS required";
-        }
-        if (code == -1002) {
-            return "-1002 unsupported content";
-        }
-        if (code == -1005) {
-            return "-1005 media unreadable";
-        }
-        if (code == 401) {
-            return "401 unauthorized";
-        }
-        if (code == 403) {
-            return "403 forbidden";
-        }
-        if (code == 0) {
-            return "0 invalid download response";
-        }
-        return code.toString();
-    }
-
     // Test server connection
     function ping(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = buildRequestUrl("ping");
+        var url = buildBaseUrl("ping");
+        System.println("ping url: " + url);
         if (url.length() == 0) {
             callback.invoke(0, null);
             return;
@@ -303,7 +164,8 @@ class YuMusicSubsonicAPI {
 
     // Get all playlists
     function getPlaylists(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = buildRequestUrl("getPlaylists");
+        var url = buildBaseUrl("getPlaylists");
+        System.println("getPlaylists url: " + url);
         if (url.length() == 0) {
             callback.invoke(0, null);
             return;
@@ -317,8 +179,15 @@ class YuMusicSubsonicAPI {
         Communications.makeWebRequest(url, {}, options, callback);
     }
 
-    function getPlaylist(playlistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("getPlaylist"), "id", playlistId);
+    // Get playlist details with songs.
+    // Supports pagination via optional offset and count (Subsonic API v1.9.0+).
+    // Pass count=-1 to request the full playlist without pagination params.
+    function getPlaylist(playlistId as String, offset as Number, count as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+        var url = buildBaseUrl("getPlaylist") + "&id=" + playlistId;
+        if (count >= 0) {
+            url += "&offset=" + offset.toString() + "&count=" + count.toString();
+        }
+        System.println("getPlaylist url: " + url);
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -330,7 +199,7 @@ class YuMusicSubsonicAPI {
 
     // Get random songs
     function getRandomSongs(size as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("getRandomSongs"), "size", size.toString());
+        var url = buildBaseUrl("getRandomSongs") + "&size=" + size.toString();
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -342,7 +211,7 @@ class YuMusicSubsonicAPI {
 
     // Get all artists
     function getArtists(callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = buildRequestUrl("getArtists");
+        var url = buildBaseUrl("getArtists");
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -354,7 +223,7 @@ class YuMusicSubsonicAPI {
 
     // Get artist albums
     function getArtist(artistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("getArtist"), "id", artistId);
+        var url = buildBaseUrl("getArtist") + "&id=" + artistId;
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -366,7 +235,7 @@ class YuMusicSubsonicAPI {
 
     // Get album songs
     function getAlbum(albumId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("getAlbum"), "id", albumId);
+        var url = buildBaseUrl("getAlbum") + "&id=" + albumId;
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -378,10 +247,8 @@ class YuMusicSubsonicAPI {
 
     // Search for songs, albums, artists
     function search(query as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("search3"), "query", query);
-        url = appendQueryParameter(url, "artistCount", "10");
-        url = appendQueryParameter(url, "albumCount", "10");
-        url = appendQueryParameter(url, "songCount", "20");
+        var url = buildBaseUrl("search3") + "&query=" + query;
+        url += "&artistCount=10&albumCount=10&songCount=20";
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -402,129 +269,94 @@ class YuMusicSubsonicAPI {
         return [value];
     }
 
-    function extractPlaylists(data as Dictionary or String or PersistedContent.Iterator or Null) as Array {
-        var dict = data as Dictionary?;
-        var response = dict != null ? dict["subsonic-response"] as Dictionary? : null;
-        var playlistsContainer = response != null ? response["playlists"] as Dictionary? : null;
-        return playlistsContainer != null ? ensureArray(playlistsContainer["playlist"]) : [];
-    }
-
-    function extractPlaylist(data as Dictionary or String or PersistedContent.Iterator or Null) as Dictionary? {
-        var dict = data as Dictionary?;
-        var response = dict != null ? dict["subsonic-response"] as Dictionary? : null;
-        var playlist = response != null ? response["playlist"] as Dictionary? : null;
-        if (playlist == null) {
-            return null;
-        }
-
-        var entries = ensureArray(playlist["entry"]);
-        var songs = [];
-        for (var i = 0; i < entries.size(); i++) {
-            var sourceSong = entries[i] as Dictionary?;
-            if (sourceSong == null) {
-                continue;
-            }
-
-            var songId = sourceSong["id"] as String?;
-            var title = sourceSong["title"] as String?;
-            if (songId == null || title == null) {
-                continue;
-            }
-
-            var duration = sourceSong.hasKey("duration")
-                ? readNumber(sourceSong["duration"])
-                : null;
-            var artist = sourceSong["artist"] as String?;
-            var album = sourceSong["album"] as String?;
-            var suffix = sourceSong["suffix"] as String?;
-
-            songs.add({
-                "id" => songId,
-                "sourceId" => songId,
-                "backendType" => YUMUSIC_BACKEND_SUBSONIC,
-                "title" => title,
-                "artist" => artist != null ? artist : "Unknown",
-                "album" => album != null ? album : "Unknown",
-                "duration" => duration != null ? duration : 0,
-                "suffix" => suffix != null ? suffix : "mp3"
-            });
-        }
-
-        return {
-            "playlist" => playlist,
-            "songs" => songs
-        };
-    }
-
-    private function readNumber(value as Object) as Number? {
-        if (value instanceof Number) {
-            return value as Number;
-        }
-        if (value instanceof String) {
-            return (value as String).toNumber();
-        }
-        return null;
-    }
-
     // Get download URL for a song
     function getDownloadUrl(songId as String) as String {
-        var url = appendQueryParameter(buildRequestUrl("stream"), "id", songId);
-        url = appendQueryParameter(url, "format", "mp3");
-        url = appendQueryParameter(url, "maxBitRate", _maxBitRate);
-        url = appendQueryParameter(url, "estimateContentLength", "true");
+        if (_serverUrl == null || _username == null) {
+            return "";
+        }
+
+        var url = _serverUrl + "/rest/download.view?";
+        url += "id=" + songId;
+        url += "&u=" + _username;
+        url += "&v=" + _apiVersion;
+        url += "&c=" + _clientName;
+
+        var auth = generateAuthToken();
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
+        }
+        
+        url += "&format=mp3";
+        url += "&maxBitRate=" + _maxBitRate;
 
         return url;
-    }
-
-    function getDownloadUrlForSong(song as Dictionary) as String {
-        var sourceId = song["sourceId"] as String?;
-        if (sourceId == null) {
-            sourceId = song["id"] as String?;
-        }
-        return sourceId != null ? getDownloadUrl(sourceId) : "";
-    }
-
-    function getFallbackDownloadUrl(songId as String) as String {
-        var url = appendQueryParameter(buildRequestUrl("download"), "id", songId);
-        url = appendQueryParameter(url, "format", "mp3");
-        url = appendQueryParameter(url, "maxBitRate", _maxBitRate);
-        url = appendQueryParameter(url, "estimateContentLength", "true");
-
-        return url;
-    }
-
-    function getFallbackDownloadUrlForSong(song as Dictionary) as String {
-        var sourceId = song["sourceId"] as String?;
-        if (sourceId == null) {
-            sourceId = song["id"] as String?;
-        }
-        return sourceId != null ? getFallbackDownloadUrl(sourceId) : "";
     }
 
     // Get stream URL for a song
     function getStreamUrl(songId as String) as String {
-        return getDownloadUrl(songId);
+        // Use download.view instead of stream.view to ensure Content-Length header is present,
+        // which is required for Media.makeWebRequest / AudioContentProvider downlaods on Garmin.
+        if (_serverUrl == null || _username == null) {
+            return "";
+        }
+
+        var url = _serverUrl + "/rest/download.view?";
+        url += "id=" + songId;
+        url += "&u=" + _username;
+        url += "&v=" + _apiVersion;
+        url += "&c=" + _clientName;
+        url += "&format=mp3";
+        url += "&maxBitRate=" + _maxBitRate;
+
+        var auth = generateAuthToken();
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
+        }
+
+        return url;
     }
 
     // Get cover art URL
     function getCoverArtUrl(coverArtId as String, size as Number) as String {
-        var url = appendQueryParameter(buildRequestUrl("getCoverArt"), "id", coverArtId);
-        url = appendQueryParameter(url, "size", size.toString());
+        if (_serverUrl == null || _username == null) {
+            return "";
+        }
+
+        var url = _serverUrl + "/rest/getCoverArt.view?";
+        url += "id=" + coverArtId;
+        url += "&size=" + size.toString();
+        url += "&u=" + _username;
+        url += "&v=" + _apiVersion;
+        url += "&c=" + _clientName;
+
+        var auth = generateAuthToken();
+        var token = auth["t"] as String?;
+        var salt = auth["s"] as String?;
+        if (token != null && salt != null) {
+            url += "&t=" + token;
+            url += "&s=" + salt;
+        }
 
         return url;
     }
 
     // Scrobble a single song with an optional exact UTC timestamp
     function scrobble(songId as String, timestamp as Number?, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("scrobble"), "id", songId);
+        var url = buildBaseUrl("scrobble") + "&id=" + songId;
         
         if (timestamp != null) {
-            url = appendQueryParameter(url, "time", timestamp.toString() + "000");
+            url += "&time=" + timestamp.toString() + "000"; // Subsonic expects milliseconds
         } else {
-            url = appendQueryParameter(url, "time", Toybox.Time.now().value().toString() + "000");
+            url += "&time=" + Toybox.Time.now().value().toString() + "000"; 
         }
         
-        url = appendQueryParameter(url, "submission", "true");
+        url += "&submission=true";
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -536,7 +368,7 @@ class YuMusicSubsonicAPI {
 
     // Star a song/album/artist
     function star(itemId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("star"), "id", itemId);
+        var url = buildBaseUrl("star") + "&id=" + itemId;
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
@@ -548,7 +380,7 @@ class YuMusicSubsonicAPI {
 
     // Unstar a song/album/artist
     function unstar(itemId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
-        var url = appendQueryParameter(buildRequestUrl("unstar"), "id", itemId);
+        var url = buildBaseUrl("unstar") + "&id=" + itemId;
         
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,

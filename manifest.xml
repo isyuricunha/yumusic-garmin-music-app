@@ -70,7 +70,6 @@
         -->
         <iq:permissions>
             <iq:uses-permission id="Communications"/>
-            <iq:uses-permission id="PersistedContent"/>
         </iq:permissions>
         <!--
             Use "Monkey C: Edit Languages" from the Visual Studio Code command

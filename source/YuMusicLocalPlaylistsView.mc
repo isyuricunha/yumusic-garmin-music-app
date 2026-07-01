@@ -14,7 +14,7 @@ class YuMusicLocalPlaylistsView extends WatchUi.Menu2 {
 
     function onShow() as Void {
         clearItems();
-        var playlists = _library.getPlayablePlaylists();
+        var playlists = _library.getPlaylists();
         
         if (playlists == null || playlists.size() == 0) {
             addItem(new WatchUi.MenuItem("No Playlists", "Sync music first", "empty", {}));
@@ -36,7 +36,7 @@ class YuMusicLocalPlaylistsView extends WatchUi.Menu2 {
             if (name != null && id != null) {
                 var subtitle = (songCount != null ? songCount.toString() : "0") + " songs";
                 if (id.equals(currentPlaylistId)) {
-                    subtitle = "Current - " + subtitle;
+                    subtitle = "\u25B6 " + subtitle; // Add a visual indicator for current playlist
                 }
                 addItem(new WatchUi.MenuItem(name, subtitle, id, {}));
                 _itemCount++;
