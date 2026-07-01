@@ -286,6 +286,32 @@ def parse_jsonish(text: str) -> Any:
         return json.loads(raw[start: end + 1])
 
 
+def parse_markdown_files(text: str) -> dict[str, str]:
+    files = {}
+    current_file = None
+    current_content = []
+    
+    for line in text.splitlines():
+        match = re.match(r"^---FILENAME:\s*(.+?)\s*---$", line.strip())
+        if match:
+            if current_file:
+                files[current_file] = "\n".join(current_content).strip()
+            current_file = match.group(1)
+            current_content = []
+        elif current_file is not None:
+            current_content.append(line)
+            
+    if current_file:
+        files[current_file] = "\n".join(current_content).strip()
+        
+    if not files and text.strip():
+        # Fallback if the LLM completely ignored the delimiter instructions
+        return {"Home.md": text.strip()}
+        
+    return files
+
+
+
 def tail_text(path: Path, lines: int = 100) -> str:
     if not path.exists():
         return ""
@@ -1842,18 +1868,19 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             "Include an overview of the project, setup instructions, architecture, and any other relevant details you can infer. "
             f"When providing git clone instructions, strictly use 'https://github.com/{self.repo}.git' as the URL and '{self.repo.split('/')[-1]}' as the directory name. "
             "CRITICAL: Do NOT hallucinate or invent origins for the project name (e.g., YuMusic means Yuri's Music, do not say it means 'You Music'). Stick strictly to facts found in the provided text. "
-            "You MUST return ONLY a valid JSON object where the keys are the filenames (ending in .md) and the values are the raw Markdown content for that file. "
-            "Do NOT wrap the JSON in markdown code fences. Just return the raw JSON object."
+            "You MUST format your response using exactly this syntax for each page:\n\n"
+            "---FILENAME: Home.md---\n# Home\nContent goes here...\n\n"
+            "---FILENAME: Setup.md---\n# Setup\nContent goes here..."
         )
 
         try:
             wiki_content = self.ai_call(context_str, system_prompt, 8192)
-            pages = parse_jsonish(wiki_content)
+            pages = parse_markdown_files(wiki_content)
             
-            if not isinstance(pages, dict):
-                raise ValueError("AI did not return a JSON dictionary.")
+            if not pages:
+                raise ValueError("AI did not return any valid markdown files.")
 
-            self.update_progress("🔄 I have generated the multi-page documentation. Pushing to the wiki repository...")
+            self.update_progress("✅ I have generated the multi-page documentation. Pushing to the wiki repository...")
 
             token = os.environ.get("GH_TOKEN")
             if not token:
