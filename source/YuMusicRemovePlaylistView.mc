@@ -22,8 +22,6 @@ class YuMusicRemovePlaylistView extends WatchUi.Menu2 {
             return;
         }
 
-        var currentPlaylistId = _library.getCurrentPlaylist();
-
         for (var i = 0; i < playlists.size(); i++) {
             var playlist = playlists[i] as Dictionary?;
             if (playlist == null) {
@@ -31,7 +29,6 @@ class YuMusicRemovePlaylistView extends WatchUi.Menu2 {
             }
             var name = playlist["name"] as String?;
             var id = playlist["id"] as String?;
-            var songCount = playlist["songCount"] as Number?;
             
             if (name != null && id != null) {
                 var subtitle = "Tap to remove";
