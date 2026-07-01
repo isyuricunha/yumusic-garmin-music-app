@@ -310,8 +310,11 @@ class Ella:
         self.ai_model = os.environ.get("ELLA_AI_MODEL", "").strip()
         self.ai_api_key = os.environ.get("ELLA_AI_API_KEY", "").strip()
 
-        self.commit_name = os.environ.get("YURI_COMMIT_NAME", "").strip()
-        self.commit_email = os.environ.get("YURI_COMMIT_EMAIL", "").strip()
+        self.commit_name = "Ella Mizuki"
+        self.commit_email = "290269138+ella-mizuki[bot]@users.noreply.github.com"
+        
+        self.yuri_name = os.environ.get("YURI_COMMIT_NAME", "").strip()
+        self.yuri_email = os.environ.get("YURI_COMMIT_EMAIL", "").strip()
 
         self.feedback = ""
         self.extra_context = ""
@@ -322,6 +325,10 @@ class Ella:
         if self.comment_id:
             self.react("eyes")
         self.parse_command()
+
+        if self.mode == "wiki":
+            self.handle_wiki()
+            return
 
         if self.mode == "triage":
             self.validate_ai_config()
@@ -447,6 +454,7 @@ class Ella:
             ("review", "/ella review"),
             ("label", "/ella label"),
             ("solve", "/ella solve"),
+            ("wiki", "/ella wiki"),
             ("plan", "/ella plan"),
             ("fix", "/ella fix"),
             ("ask", "/ella ask"),
@@ -471,6 +479,7 @@ class Ella:
             "fix": "Fix the problem described in the PR or comment. Make the smallest safe change possible.",
             "continue": "Continue trying to fix this PR with the smallest safe change possible.",
             "solve": "Solve this issue with the smallest safe change possible.",
+            "wiki": "Generate structured Markdown documentation for this repository.",
         }
 
         if self.mode in defaults and not self.prompt:
@@ -1609,6 +1618,11 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             subject = str(data.get("subject", "")).strip()
             body = str(data.get("body", "")).strip()
 
+            if self.yuri_name and self.yuri_email:
+                co_author = f"\n\nCo-authored-by: {self.yuri_name} <{self.yuri_email}>"
+            else:
+                co_author = ""
+
             if not subject or "\n" in subject:
                 raise ValueError("Invalid commit subject")
 
@@ -1621,10 +1635,12 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             if not body:
                 body = fallback.split("\n\n", 1)[1].strip() if "\n\n" in fallback else ""
 
-            return subject + "\n\n" + body.strip() + "\n"
+            return subject + "\n\n" + body.strip() + co_author + "\n"
 
         except Exception as exc:
             write_debug("commit-message-fallback.txt", f"Falling back to heuristic commit message.\nReason: {type(exc).__name__}: {exc}\n")
+            if self.yuri_name and self.yuri_email:
+                return fallback + f"\n\nCo-authored-by: {self.yuri_name} <{self.yuri_email}>\n"
             return fallback
 
     def write_commit_message_file(self, changed_files: list[str]) -> Path:
@@ -1634,9 +1650,6 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         return path
 
     def commit_and_push_fix(self) -> str:
-        if not self.commit_name or not self.commit_email:
-            raise RuntimeError(
-                "Missing required commit secrets: YURI_COMMIT_NAME and/or YURI_COMMIT_EMAIL")
         if not self.pr_info:
             raise RuntimeError("PR info missing")
 
@@ -1659,9 +1672,6 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         return git(["rev-parse", "--short", "HEAD"]).strip()
 
     def commit_and_push_solve(self) -> str:
-        if not self.commit_name or not self.commit_email:
-            raise RuntimeError(
-                "Missing required commit secrets: YURI_COMMIT_NAME and/or YURI_COMMIT_EMAIL")
 
         git(["config", "user.name", self.commit_name])
         git(["config", "user.email", self.commit_email])
@@ -1788,6 +1798,77 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         else:
             self.comment(response)
 
+    def handle_wiki(self) -> None:
+        import tempfile
+        import shutil
+
+        self.create_progress_comment("⏳ I am generating the Wiki documentation. Give me a moment to read the repository...")
+
+        self.load_repo_instructions()
+        self.allowed_files = self.get_repo_files()
+
+        files_content = []
+        for path_str in self.allowed_files:
+            path = Path(path_str)
+            if path.exists() and path.is_file():
+                ext = path.suffix.lower()
+                if ext in [".png", ".jpg", ".jpeg", ".gif", ".mp4", ".ico", ".woff", ".woff2", ".ttf"]:
+                    continue
+                text = read_text_limited(path, MAX_CONTEXT_FILE_BYTES)
+                if text:
+                    files_content.append(f"--- File: {path_str} ---\n{text}\n")
+
+        context_str = "\n".join(files_content)[:MAX_CONTEXT_REPO_FILES_BYTES]
+
+        system_prompt = (
+            "You are Ella Mizuki, an AI assistant generating GitHub Wiki documentation. "
+            "Write in English in a clear, professional, and friendly tone. "
+            "Analyze the provided codebase and generate a comprehensive `Home.md` file for the repository's Wiki. "
+            "Include an overview of the project, setup instructions, architecture, and any other relevant details you can infer. "
+            "Return ONLY valid Markdown content. Do not wrap the output in markdown code fences like ```markdown."
+        )
+
+        try:
+            wiki_content = self.ai_call(context_str, system_prompt, 8192)
+            if wiki_content.startswith("```markdown"):
+                wiki_content = wiki_content[11:].strip()
+            if wiki_content.startswith("```"):
+                wiki_content = wiki_content[3:].strip()
+            if wiki_content.endswith("```"):
+                wiki_content = wiki_content[:-3].strip()
+
+            self.update_progress("🔄 I have generated the documentation. Pushing to the wiki repository...")
+
+            token = os.environ.get("GH_TOKEN")
+            if not token:
+                raise RuntimeError("GH_TOKEN is missing")
+
+            wiki_dir = Path(tempfile.mkdtemp())
+            wiki_url = f"https://x-access-token:{token}@github.com/{self.repo}.wiki.git"
+
+            git(["clone", wiki_url, str(wiki_dir)])
+
+            home_md = wiki_dir / "Home.md"
+            home_md.write_text(wiki_content, encoding="utf-8")
+
+            run_cmd(["git", "-C", str(wiki_dir), "config", "user.name", self.commit_name], capture=True)
+            run_cmd(["git", "-C", str(wiki_dir), "config", "user.email", self.commit_email], capture=True)
+            run_cmd(["git", "-C", str(wiki_dir), "add", "Home.md"], capture=True)
+
+            msg = "docs: generate wiki documentation via Ella"
+            if self.yuri_name and self.yuri_email:
+                msg += f"\n\nCo-authored-by: {self.yuri_name} <{self.yuri_email}>"
+
+            run_cmd(["git", "-C", str(wiki_dir), "commit", "-m", msg], capture=True)
+            run_cmd(["git", "-C", str(wiki_dir), "push", "origin", "master"], capture=True)
+
+            shutil.rmtree(wiki_dir, ignore_errors=True)
+
+            self.update_progress("✅ The Wiki documentation has been successfully generated and pushed! Check your repository's Wiki tab.")
+
+        except Exception as e:
+            self.update_progress(f"❌ I encountered an error while generating or pushing the Wiki: {e}\n\nMake sure I have Wiki write permissions!")
+            print(f"Wiki error: {e}")
 
 def main() -> int:
     try:
