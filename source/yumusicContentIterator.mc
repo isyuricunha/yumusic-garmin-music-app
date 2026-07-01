@@ -136,12 +136,23 @@ class YuMusicContentIterator extends Media.ContentIterator {
         // Use Toybox.Media playback control constants. Using unqualified constants
         // can lead to duplicated/incorrect controls in the native player UI.
         profile.playbackControls = [
-            Media.PLAYBACK_CONTROL_NEXT,
             Media.PLAYBACK_CONTROL_PREVIOUS,
-            Media.PLAYBACK_CONTROL_VOLUME,
+            Media.PLAYBACK_CONTROL_PLAYBACK,
+            Media.PLAYBACK_CONTROL_NEXT,
             Media.PLAYBACK_CONTROL_SHUFFLE,
-            Media.PLAYBACK_CONTROL_LIBRARY
+            Media.PLAYBACK_CONTROL_REPEAT
         ];
+
+        var colors = new Media.PlayerColors();
+        colors.backgroundColor = Graphics.COLOR_BLACK;
+        colors.foregroundColor = 0xC7771F;
+        colors.progressBarBackgroundColor = Graphics.COLOR_DK_GRAY;
+        colors.progressBarForegroundColor = 0xC7771F;
+        colors.highlightFillColor = 0xC7771F;
+        colors.highlightBorderColor = Graphics.COLOR_TRANSPARENT;
+        colors.textColor = Graphics.COLOR_WHITE;
+        
+        profile.playerColors = colors;
 
         profile.playbackNotificationThreshold = 30;
         profile.requirePlaybackNotification = false;
