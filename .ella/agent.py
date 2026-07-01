@@ -1809,6 +1809,9 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
 
         files_content = []
         for path_str in self.allowed_files:
+            if path_str.startswith(".ella/") or path_str.startswith(".ella\\"):
+                continue
+                
             path = Path(path_str)
             if path.exists() and path.is_file():
                 ext = path.suffix.lower()
