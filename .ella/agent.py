@@ -1708,7 +1708,7 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             print(f"Failed to assign user: {e}")
 
         try:
-            issues_json = gh(["issue", "list", "--state", "all", "--json", "number,title,body", "--limit", "30", "--repo", self.repo])
+            issues_json = gh(["issue", "list", "--state", "open", "--json", "number,title,body", "--limit", "80", "--repo", self.repo])
             other_issues = json.loads(issues_json)
             other_issues = [i for i in other_issues if i["number"] != self.issue_number]
         except Exception as e:
