@@ -59,3 +59,10 @@ Due to strict OS-level security constraints enforced by Garmin Connect Mobile (A
 ## üìù License
 
 YuMusic is open-source software licensed under the **AGPL-3.0 License**. See the `LICENSE.txt` file for complete details.
+
+---
+
+## ?? Meta Note
+
+If you're digging through the codebase and notice a highly sophisticated AI agent named Ella (or Yue) hanging out in the .ella/ folder ó yes, we accidentally got sidetracked and spent hours fixing her internal prompt engineering and JSON parsers *inside* this Garmin app repo instead of working on the app itself. Don't worry, she just manages our CI/CD documentation and doesn't interfere with your watch app at all! ?????
+
