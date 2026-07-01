@@ -315,13 +315,13 @@ class YuMusicSubsonicAPI {
 
     // Get stream URL for a song
     function getStreamUrl(songId as String) as String {
-        // Use download.view instead of stream.view to ensure Content-Length header is present,
-        // which is required for Media.makeWebRequest / AudioContentProvider downlaods on Garmin.
+        // Use stream.view with estimateContentLength=true to satisfy Garmin's requirement
+        // for Content-Length, while retaining the correct Content-Type (audio/mpeg).
         if (_serverUrl == null || _username == null) {
             return "";
         }
 
-        var url = _serverUrl + "/rest/download.view?";
+        var url = _serverUrl + "/rest/stream.view?";
         url += "id=" + songId;
         url += "&u=" + _username;
         url += "&v=" + _apiVersion;
@@ -342,6 +342,8 @@ class YuMusicSubsonicAPI {
                 url += "&s=" + salt;
             }
         }
+        
+        url += "&estimateContentLength=true";
 
         return url;
     }
