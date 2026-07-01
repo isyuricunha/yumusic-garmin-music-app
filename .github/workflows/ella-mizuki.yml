@@ -1,6 +1,8 @@
 name: Ella Mizuki
 
 on:
+  issues:
+    types: [opened]
   issue_comment:
     types: [created]
 
@@ -13,8 +15,8 @@ permissions:
 jobs:
   ella-mizuki:
     if: >
-      startsWith(github.event.comment.body, '/ella') &&
-      github.event.comment.user.login == 'isyuricunha'
+      (github.event_name == 'issue_comment' && startsWith(github.event.comment.body, '/ella') && github.event.comment.user.login == 'isyuricunha') ||
+      (github.event_name == 'issues' && github.event.action == 'opened')
     runs-on: ubuntu-latest
     timeout-minutes: 60
 

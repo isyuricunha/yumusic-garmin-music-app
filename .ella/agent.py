@@ -113,6 +113,7 @@ MAX_TOKENS = {
     "fix": env_int("ELLA_MAX_TOKENS_FIX", 16384),
     "continue": env_int("ELLA_MAX_TOKENS_FIX", 16384),
     "solve": env_int("ELLA_MAX_TOKENS_SOLVE", 16384),
+    "triage": env_int("ELLA_MAX_TOKENS_TRIAGE", 2048),
 }
 
 
@@ -291,9 +292,9 @@ class Ella:
         self.repo = os.environ["GITHUB_REPOSITORY"]
         self.run_id = os.environ.get("GITHUB_RUN_ID", str(int(time.time())))
         self.issue = self.event["issue"]
-        self.comment_event = self.event["comment"]
+        self.comment_event = self.event.get("comment", {})
         self.issue_number = int(self.issue["number"])
-        self.comment_id = int(self.comment_event["id"])
+        self.comment_id = int(self.comment_event.get("id", 0))
         self.is_pr = "pull_request" in self.issue
         self.default_branch = self.event["repository"]["default_branch"]
 
@@ -318,8 +319,14 @@ class Ella:
 
     def run(self) -> None:
         self.mask_secrets()
-        self.react("eyes")
+        if self.comment_id:
+            self.react("eyes")
         self.parse_command()
+
+        if self.mode == "triage":
+            self.validate_ai_config()
+            self.handle_triage()
+            return
 
         if self.mode == "help":
             self.comment(self.help_text())
@@ -427,6 +434,12 @@ class Ella:
                 print(f"::add-mask::{value}")
 
     def parse_command(self) -> None:
+        event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+        if event_name == "issues" and self.event.get("action") == "opened":
+            self.mode = "triage"
+            self.prompt = ""
+            return
+
         body = str(self.comment_event.get("body", "")).strip()
         commands = [
             ("help", "/ella help"),
@@ -1691,6 +1704,36 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             body,
         ])
         return out.strip()
+
+    def handle_triage(self) -> None:
+        try:
+            gh(["issue", "edit", str(self.issue_number), "--repo", self.repo, "--add-assignee", "isyuricunha"])
+        except Exception as e:
+            print(f"Failed to assign user: {e}")
+
+        try:
+            issues_json = gh(["issue", "list", "--state", "open", "--json", "number,title,body", "--limit", "50", "--repo", self.repo])
+            other_issues = json.loads(issues_json)
+            other_issues = [i for i in other_issues if i["number"] != self.issue_number]
+        except Exception as e:
+            print(f"Failed to fetch issues: {e}")
+            other_issues = []
+
+        system_prompt = (
+            "You are Ella Mizuki, an AI triaging issues for Yuri's repository. Write in English. "
+            "Your task is to warmly greet the user, acknowledge their issue, state that Yuri has been assigned and will look into it soon. "
+            "Also, review the provided list of other open issues. If you find any issues that are highly similar or duplicates of this one, "
+            "mention them by their number (e.g. #123) and suggest the user follow those. "
+            "If none are similar, do not mention other issues. Be polite and concise."
+        )
+
+        issue_title = self.issue.get("title", "")
+        issue_body = self.issue.get("body", "")
+
+        context = f"New Issue:\nTitle: {issue_title}\nBody: {issue_body}\n\nOther Open Issues:\n{json.dumps(other_issues, indent=2)}"
+
+        response = self.ai_call(context, system_prompt, MAX_TOKENS.get("triage", 2048))
+        self.comment(response)
 
 
 def main() -> int:
