@@ -1,5 +1,5 @@
 name: Bug Report
-description: Create a report to help us improve YuMusic
+description: Create a report to help me improve YuMusic
 title: "[Bug]: "
 labels: ["bug"]
 body:
@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Thanks for taking the time to fill out this bug report! 
-        Please provide as much detail as possible to help us reproduce the issue.
+        Please provide as much detail as possible to help me reproduce the issue.
   - type: input
     id: watch_model
     attributes:
