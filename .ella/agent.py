@@ -1714,6 +1714,15 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             print(f"Failed to fetch issues: {e}")
             other_issues = []
 
+        try:
+            labels_config = load_labels()
+            labels_json = json.dumps([{"name": l["name"], "description": l.get("description", "")} for l in labels_config], indent=2)
+            labels_by_name = {x["name"].lower(): x for x in labels_config}
+        except Exception as e:
+            print(f"Failed to load labels: {e}")
+            labels_json = "[]"
+            labels_by_name = {}
+
         system_prompt = (
             "You are Ella Mizuki, the friendly AI assistant for Yuri's repository. Write in English in a warm, helpful, and natural tone, using first-person perspective ('I').\n\n"
             "Review the provided list of other open issues to see if the new issue is a duplicate. Then, craft your response based on these two scenarios:\n\n"
@@ -1723,7 +1732,11 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             "Warmly greet the user and politely explain that their issue is highly similar to an existing one (mention it by number, e.g., #123). "
             "Explain that since the feature or bug is already being tracked there, you will close this current issue so they can follow the original one for updates. "
             "DO NOT say that Yuri will look into it or that you've assigned him, because you are closing the issue. "
-            "CRITICAL INSTRUCTION: You MUST include the exact phrase `DUPLICATE_OF: #123` on a new line at the very end of your response (replace 123 with the actual number)."
+            "CRITICAL INSTRUCTION: You MUST include the exact phrase `DUPLICATE_OF: #123` on a new line at the very end of your response (replace 123 with the actual number).\n\n"
+            "LABELS ASSIGNMENT:\n"
+            "If it is NOT a duplicate, you should also assign the most relevant labels. Here are the available labels:\n"
+            f"{labels_json}\n"
+            "If any labels apply, include the phrase `LABELS: label1, label2` on a new line at the very end of your response."
         )
 
         issue_title = self.issue.get("title", "")
@@ -1734,12 +1747,28 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         response = self.ai_call(context, system_prompt, MAX_TOKENS.get("triage", 8192))
         
         import re
-        match = re.search(r"DUPLICATE_OF:\s*#(\d+)", response)
+        match_duplicate = re.search(r"DUPLICATE_OF:\s*#(\d+)", response)
+        match_labels = re.search(r"LABELS:\s*(.+)", response)
         
-        if match:
-            duplicate_id = match.group(1)
+        if match_labels:
+            response = response.replace(match_labels.group(0), "").strip()
+            labels_str = match_labels.group(1)
+            picked = []
+            for item in labels_str.split(","):
+                name = item.strip().lower()
+                if name in labels_by_name and name not in picked:
+                    picked.append(name)
+            
+            for name in picked:
+                try:
+                    gh(["issue", "edit", str(self.issue_number), "--repo", self.repo, "--add-label", labels_by_name[name]["name"]])
+                except Exception as e:
+                    print(f"Failed to add label {name}: {e}")
+
+        if match_duplicate:
+            duplicate_id = match_duplicate.group(1)
             # Remove the secret keyword so the user doesn't see it looking weird
-            response = response.replace(match.group(0), "").strip()
+            response = response.replace(match_duplicate.group(0), "").strip()
             # Append the standard GitHub duplicate phrase so GitHub's UI detects it
             response += f"\n\nDuplicate of #{duplicate_id}"
             
