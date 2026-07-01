@@ -113,7 +113,7 @@ MAX_TOKENS = {
     "fix": env_int("ELLA_MAX_TOKENS_FIX", 16384),
     "continue": env_int("ELLA_MAX_TOKENS_FIX", 16384),
     "solve": env_int("ELLA_MAX_TOKENS_SOLVE", 16384),
-    "triage": env_int("ELLA_MAX_TOKENS_TRIAGE", 2048),
+    "triage": env_int("ELLA_MAX_TOKENS_TRIAGE", 8192),
 }
 
 
@@ -1730,7 +1730,7 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
 
         context = f"New Issue:\nTitle: {issue_title}\nBody: {issue_body}\n\nOther Open Issues:\n{json.dumps(other_issues, indent=2)}"
 
-        response = self.ai_call(context, system_prompt, MAX_TOKENS.get("triage", 2048))
+        response = self.ai_call(context, system_prompt, MAX_TOKENS.get("triage", 8192))
         
         import re
         match = re.search(r"DUPLICATE_OF:\s*#(\d+)", response)
