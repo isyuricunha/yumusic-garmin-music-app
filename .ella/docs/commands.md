@@ -1,23 +1,23 @@
-# Ella Commands Reference
+# Ella Commands
 
-Ella listens to specific slash commands when you post a comment on an Issue or Pull Request. Remember: For security reasons, Ella only responds to commands executed by **your GitHub account** (`isyuricunha`).
+Slash commands I can use to trigger Ella. For security, she only responds to my GitHub account (`isyuricunha`).
 
-### General Commands
-- `/ella ask <question>`: Ella will answer your question based on the context of the issue or PR using the configured LLM.
-- `/ella help`: Displays a quick list of all available commands.
-- `/ella label`: Reads the context of the issue/PR and automatically applies the most relevant labels defined in `.ella/labels.json`.
+### General
+- `/ella ask <question>`: Answers questions based on issue/PR context.
+- `/ella help`: Lists available commands.
+- `/ella label`: Applies the most relevant labels defined in `.ella/labels.json`.
 
-### Pull Request Commands
-*(These commands only work when used in a comment inside an existing Pull Request)*
-- `/ella pr <request>`: Gives a short, practical PR analysis. Explains what changed, possible risks, and if it's safe to merge.
-- `/ella review <request>`: Performs a strict code review. Looks for bugs, security risks, regressions, type issues, and missing tests.
-- `/ella plan <request>`: Writes an implementation plan for a change without actually modifying any code.
-- `/ella fix <request>`: Ella checks out the PR branch, attempts to fix the problem you described, and commits the code directly to the branch.
-- `/ella continue <request>`: If Ella hit her time/attempt limit while trying to fix something, this tells her to keep trying from where she left off.
+### Pull Requests
+*(Only work in PR comments)*
+- `/ella pr <request>`: Short PR analysis (changes, risks, safe to merge).
+- `/ella review <request>`: Strict code review (bugs, security, missing tests).
+- `/ella plan <request>`: Writes an implementation plan without modifying code.
+- `/ella fix <request>`: Checks out the branch, applies a fix, and commits directly.
+- `/ella continue <request>`: Continues trying to fix if the time/attempt limit was hit.
 
-### Issue Commands
-*(These commands only work when used in a comment inside an existing Issue)*
-- `/ella solve <request>`: Ella will create a new branch, attempt to solve the issue with the smallest safe change possible, run checks, and automatically open a new Pull Request fixing the issue.
+### Issues
+*(Only work in Issue comments)*
+- `/ella solve <request>`: Creates a new branch, attempts a fix, and opens a new PR.
 
-### Automated Behaviors
-- **Triage**: Ella doesn't need a slash command to triage. The moment an issue is opened by anyone, she will assign it to you, search for similar open issues, and leave a polite welcome message.
+### Automated
+- **Triage**: Runs automatically when any issue is opened. Assigns it to me, checks for similar open issues, and leaves a welcome message.
