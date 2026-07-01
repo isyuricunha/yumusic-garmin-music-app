@@ -74,7 +74,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         if (responseCode != 200) {
             popLoadingView();
-            if (responseCode == -402) {
+            if (responseCode == -402 || responseCode == -403) {
                 // Only reachable when the server ignored pagination params and returned
                 // everything at once, still hitting the device memory limit.
                 showError("Too many songs.\nKeep under \n30 or 50.");

@@ -1,6 +1,7 @@
 import Toybox.WatchUi;
 import Toybox.Lang;
 import Toybox.Timer;
+import Toybox.Media;
 
 class YuMusicLocalPlaylistsDelegate extends WatchUi.Menu2InputDelegate {
     private var _library as YuMusicLibrary;
@@ -21,12 +22,15 @@ class YuMusicLocalPlaylistsDelegate extends WatchUi.Menu2InputDelegate {
         var playlistId = id as String;
         _library.setCurrentPlaylist(playlistId);
         
-        // Pop back to the previous menu safely
-        WatchUi.popView(WatchUi.SLIDE_RIGHT);
-        
-        // Schedule the second pop slightly later to avoid Garmin stack clashing
-        _timer = new Timer.Timer();
-        _timer.start(method(:triggerSecondPop), 200, false);
+        try {
+            // Tell the OS to cleanly exit configuration and transition to the music player
+            Media.startPlayback(null);
+        } catch (ex) {
+            // Fallback for older devices/firmwares if startPlayback fails
+            WatchUi.popView(WatchUi.SLIDE_RIGHT);
+            _timer = new Timer.Timer();
+            _timer.start(method(:triggerSecondPop), 200, false);
+        }
     }
 
     function triggerSecondPop() as Void {
