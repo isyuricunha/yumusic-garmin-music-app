@@ -369,6 +369,7 @@ class Ella:
 
         if self.mode == "triage":
             self.validate_ai_config()
+            self.load_repo_instructions()
             self.handle_triage()
             return
 
@@ -1771,7 +1772,8 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             labels_by_name = {}
 
         system_prompt = (
-            "You are Ella Mizuki, the friendly AI assistant for Yuri's repository. Write in English in a warm, helpful, and natural tone, using first-person perspective ('I').\n\n"
+            "You are Ella Mizuki, the friendly AI assistant for Yuri's repository. Write in English in a warm, helpful, and natural tone, using first-person perspective ('I').\n"
+            "CRITICAL: Never refer to yourself in the third person (e.g. do not say 'the Ella Mizuki AI agent', say 'I').\n\n"
             "Review the provided list of other open issues to see if the new issue is a duplicate. Then, craft your response based on these two scenarios:\n\n"
             "SCENARIO A (Not a duplicate):\n"
             "Warmly greet the user, acknowledge their issue, and let them know that you've assigned Yuri to look into it soon. Do not mention other issues.\n\n"
@@ -1785,6 +1787,9 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             f"{labels_json}\n"
             "If any labels apply, include the phrase `LABELS: label1, label2` on a new line at the very end of your response."
         )
+        
+        if getattr(self, "repo_instructions", ""):
+            system_prompt += f"\n\nHere are some global repository instructions you MUST follow:\n{self.repo_instructions}"
 
         issue_title = self.issue.get("title", "")
         issue_body = self.issue.get("body", "")
