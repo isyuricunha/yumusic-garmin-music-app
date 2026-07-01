@@ -155,7 +155,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
 
     // Get audio provider icon information
     function getProviderIconInfo() as Media.ProviderIconInfo? {
-        return new Media.ProviderIconInfo(Rez.Drawables.LauncherIcon, 0xC7771F);
+        return new Media.ProviderIconInfo(Rez.Drawables.ProviderIcon, 0xC7771F);
     }
 
 }
