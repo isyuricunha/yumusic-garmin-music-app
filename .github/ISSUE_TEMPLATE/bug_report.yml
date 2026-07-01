@@ -1,0 +1,80 @@
+name: Bug Report
+description: Create a report to help us improve YuMusic
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report! 
+        Please provide as much detail as possible to help us reproduce the issue.
+  - type: input
+    id: watch_model
+    attributes:
+      label: Garmin Watch Model
+      description: What specific Garmin watch model are you using?
+      placeholder: e.g. Forerunner 265, Fenix 7
+    validations:
+      required: true
+  - type: input
+    id: app_version
+    attributes:
+      label: YuMusic App Version
+      description: What version of YuMusic is installed on your watch?
+      placeholder: e.g. 1.6.0
+    validations:
+      required: true
+  - type: input
+    id: server_info
+    attributes:
+      label: Music Server & Version
+      description: What Subsonic-compatible server are you using? (e.g. Navidrome 0.61.2, Gonic, etc.)
+      placeholder: e.g. Navidrome 0.61.2
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what went wrong...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Open the app
+        2. Go to '...'
+        3. Click on '...'
+        4. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: connection_test
+    attributes:
+      label: Connection Test Results
+      description: If this is a connection/sync issue, please run the "Test Connection" from the app menu and paste the results here.
+      placeholder: "Wi-Fi Check: ..., Public HTTPS: ..., Subsonic ping: ..., Get playlists: ..."
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Troubleshooting Checklist
+      options:
+        - label: I am using HTTPS (HTTP is often blocked by Garmin Connect)
+          required: false
+        - label: I have verified my credentials and server URL are correct
+          required: false
+        - label: My phone is connected to the same network as my server (if using a local IP)
+          required: false
