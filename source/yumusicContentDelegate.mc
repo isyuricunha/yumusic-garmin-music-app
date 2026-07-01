@@ -23,8 +23,9 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         var username = config["username"] as String?;
         var password = config["password"] as String?;
         var maxBitRate = config["maxBitRate"] as String?;
+        var legacyAuth = config["legacyAuth"] as Boolean?;
         if (serverUrl != null && username != null && password != null) {
-            _api.configure(serverUrl, username, password, maxBitRate);
+            _api.configure(serverUrl, username, password, maxBitRate, legacyAuth);
         }
     }
 

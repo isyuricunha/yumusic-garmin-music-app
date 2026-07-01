@@ -11,6 +11,10 @@
         <settingConfig type="alphaNumeric" />
     </setting>
 
+    <setting propertyKey="@Properties.legacyAuth" title="@Strings.legacyAuthTitle">
+        <settingConfig type="boolean" />
+    </setting>
+
     <setting propertyKey="@Properties.maxBitRate" title="@Strings.maxBitRateTitle">
         <settingConfig type="list">
             <listEntry value="320">@Strings.bitRate320</listEntry>

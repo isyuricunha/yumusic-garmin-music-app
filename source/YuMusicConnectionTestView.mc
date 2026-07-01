@@ -114,6 +114,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
         var username = config["username"] as String?;
         var password = config["password"] as String?;
         var maxBitRate = config["maxBitRate"] as String?;
+        var legacyAuth = config["legacyAuth"] as Boolean?;
 
         if (serverUrl == null || username == null || password == null) {
             setResult(2, "skipped", "missing config");
@@ -124,7 +125,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
 
         serverUrl = normalizeServerUrl(serverUrl);
         System.println("connection test: serverUrl=" + serverUrl);
-        _api.configure(serverUrl, username, password, maxBitRate);
+        _api.configure(serverUrl, username, password, maxBitRate, legacyAuth);
         return true;
     }
 
@@ -141,7 +142,12 @@ class YuMusicConnectionTestView extends WatchUi.View {
         System.println("connection test: ping responseCode=" + responseCode.toString());
 
         if (responseCode == 200) {
-            setResult(2, "ok", null);
+            var err = getSubsonicError(data);
+            if (err == null) {
+                setResult(2, "ok", null);
+            } else {
+                setResult(2, "fail", err);
+            }
         } else if (responseCode >= 0) {
             setResult(2, "warn", "(" + responseCode.toString() + ")");
         } else {
@@ -161,7 +167,12 @@ class YuMusicConnectionTestView extends WatchUi.View {
         System.println("connection test: getPlaylists responseCode=" + responseCode.toString());
 
         if (responseCode == 200) {
-            setResult(3, "ok", null);
+            var err = getSubsonicError(data);
+            if (err == null) {
+                setResult(3, "ok", null);
+            } else {
+                setResult(3, "fail", err);
+            }
         } else if (responseCode >= 0) {
             setResult(3, "warn", "(" + responseCode.toString() + ")");
         } else {
@@ -169,6 +180,30 @@ class YuMusicConnectionTestView extends WatchUi.View {
         }
 
         finish();
+    }
+
+    private function getSubsonicError(data as Dictionary or String or PersistedContent.Iterator or Null) as String? {
+        var dict = data as Dictionary?;
+        if (dict != null) {
+            var subsonic = dict["subsonic-response"] as Dictionary?;
+            if (subsonic != null) {
+                var status = subsonic["status"] as String?;
+                if (status != null && status.equals("failed")) {
+                    var errorDict = subsonic["error"] as Dictionary?;
+                    if (errorDict != null) {
+                        var msg = errorDict["message"] as String?;
+                        var code = errorDict["code"] as Number?;
+                        if (msg != null) {
+                            return msg;
+                        } else if (code != null) {
+                            return "Error " + code.toString();
+                        }
+                    }
+                    return "Subsonic error";
+                }
+            }
+        }
+        return null;
     }
 
     private function normalizeServerUrl(url as String) as String {

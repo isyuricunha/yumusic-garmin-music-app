@@ -10,6 +10,8 @@
     <string id="syncComplete">Sync complete!</string>
     <string id="syncFailed">Sync failed</string>
 
+    <string id="legacyAuthTitle">Use Legacy Auth (Nextcloud)</string>
+
     <string id="maxBitRateTitle">Audio Quality (Bitrate)</string>
     <string id="bitRate320">320 kbps (High / Source)</string>
     <string id="bitRate192">192 kbps (Medium)</string>

@@ -34,6 +34,7 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         var passwordRaw = safe_get_property_string("password");
         
         var maxBitRateRaw = safe_get_property_number("maxBitRate");
+        var legacyAuthRaw = safe_get_property_boolean("legacyAuth");
 
         // If the app settings haven't been delivered yet, don't overwrite/clear
         // previously stored configuration.
@@ -55,8 +56,13 @@ class YuMusicApp extends Application.AudioContentProviderApp {
             maxBitRate = maxBitRateRaw.toString();
         }
 
+        var legacyAuth = false;
+        if (legacyAuthRaw != null) {
+            legacyAuth = legacyAuthRaw;
+        }
+
         if (serverUrl != null && username != null && password != null) {
-            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate);
+            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, legacyAuth);
         } else {
             _serverConfig.clearConfig();
         }
@@ -112,6 +118,14 @@ class YuMusicApp extends Application.AudioContentProviderApp {
     private function safe_get_property_number(key as String) as Number? {
         try {
             return Properties.getValue(key) as Number?;
+        } catch (ex) {
+            return null;
+        }
+    }
+
+    private function safe_get_property_boolean(key as String) as Boolean? {
+        try {
+            return Properties.getValue(key) as Boolean?;
         } catch (ex) {
             return null;
         }

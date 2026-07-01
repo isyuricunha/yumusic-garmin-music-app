@@ -13,17 +13,23 @@ class YuMusicSubsonicAPI {
     private var _apiVersion as String = "1.16.1";
     private var _clientName as String = "YuMusicGarmin";
     private var _maxBitRate as String = "320";
+    private var _legacyAuth as Boolean = false;
 
     function initialize() {
     }
 
     // Configure the server connection
-    function configure(serverUrl as String, username as String, password as String, maxBitRate as String) as Void {
+    function configure(serverUrl as String, username as String, password as String, maxBitRate as String, legacyAuth as Boolean?) as Void {
         _serverUrl = serverUrl;
         _username = username;
         _password = password;
         if (maxBitRate != null) {
             _maxBitRate = maxBitRate;
+        }
+        if (legacyAuth != null) {
+            _legacyAuth = legacyAuth;
+        } else {
+            _legacyAuth = false;
         }
     }
 
@@ -134,12 +140,18 @@ class YuMusicSubsonicAPI {
         url += "&c=" + _clientName;
         url += "&f=json";
 
-        var auth = generateAuthToken();
-        var token = auth["t"] as String?;
-        var salt = auth["s"] as String?;
-        if (token != null && salt != null) {
-            url += "&t=" + token;
-            url += "&s=" + salt;
+        if (_legacyAuth) {
+            var pwdBytes = stringToByteArray(_password + "");
+            var hexPwd = bytesToHex(pwdBytes);
+            url += "&p=" + hexPwd + "&enc=hex";
+        } else {
+            var auth = generateAuthToken();
+            var token = auth["t"] as String?;
+            var salt = auth["s"] as String?;
+            if (token != null && salt != null) {
+                url += "&t=" + token;
+                url += "&s=" + salt;
+            }
         }
 
         return url;
@@ -281,12 +293,18 @@ class YuMusicSubsonicAPI {
         url += "&v=" + _apiVersion;
         url += "&c=" + _clientName;
 
-        var auth = generateAuthToken();
-        var token = auth["t"] as String?;
-        var salt = auth["s"] as String?;
-        if (token != null && salt != null) {
-            url += "&t=" + token;
-            url += "&s=" + salt;
+        if (_legacyAuth) {
+            var pwdBytes = stringToByteArray(_password + "");
+            var hexPwd = bytesToHex(pwdBytes);
+            url += "&p=" + hexPwd + "&enc=hex";
+        } else {
+            var auth = generateAuthToken();
+            var token = auth["t"] as String?;
+            var salt = auth["s"] as String?;
+            if (token != null && salt != null) {
+                url += "&t=" + token;
+                url += "&s=" + salt;
+            }
         }
         
         url += "&format=mp3";
@@ -311,12 +329,18 @@ class YuMusicSubsonicAPI {
         url += "&format=mp3";
         url += "&maxBitRate=" + _maxBitRate;
 
-        var auth = generateAuthToken();
-        var token = auth["t"] as String?;
-        var salt = auth["s"] as String?;
-        if (token != null && salt != null) {
-            url += "&t=" + token;
-            url += "&s=" + salt;
+        if (_legacyAuth) {
+            var pwdBytes = stringToByteArray(_password + "");
+            var hexPwd = bytesToHex(pwdBytes);
+            url += "&p=" + hexPwd + "&enc=hex";
+        } else {
+            var auth = generateAuthToken();
+            var token = auth["t"] as String?;
+            var salt = auth["s"] as String?;
+            if (token != null && salt != null) {
+                url += "&t=" + token;
+                url += "&s=" + salt;
+            }
         }
 
         return url;
@@ -335,12 +359,18 @@ class YuMusicSubsonicAPI {
         url += "&v=" + _apiVersion;
         url += "&c=" + _clientName;
 
-        var auth = generateAuthToken();
-        var token = auth["t"] as String?;
-        var salt = auth["s"] as String?;
-        if (token != null && salt != null) {
-            url += "&t=" + token;
-            url += "&s=" + salt;
+        if (_legacyAuth) {
+            var pwdBytes = stringToByteArray(_password + "");
+            var hexPwd = bytesToHex(pwdBytes);
+            url += "&p=" + hexPwd + "&enc=hex";
+        } else {
+            var auth = generateAuthToken();
+            var token = auth["t"] as String?;
+            var salt = auth["s"] as String?;
+            if (token != null && salt != null) {
+                url += "&t=" + token;
+                url += "&s=" + salt;
+            }
         }
 
         return url;
