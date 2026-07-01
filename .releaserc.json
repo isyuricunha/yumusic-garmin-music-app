@@ -4,16 +4,10 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "bash scripts/build-production.sh ${nextRelease.version}"
-      }
-    ],
-    [
       "@semantic-release/github",
       {
         "assets": [
-          { "path": "bin/YuMusic-Production.iq", "label": "YuMusic-v${nextRelease.version}.iq" }
+          { "path": "yumusic-garmin-music-app.iq", "label": "YuMusic Garmin App" }
         ]
       }
     ]
