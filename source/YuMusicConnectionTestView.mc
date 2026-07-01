@@ -214,10 +214,34 @@ class YuMusicConnectionTestView extends WatchUi.View {
     }
 
     private function formatError(code as Number) as String {
+        var url = "";
+        if (_serverConfig != null && _serverConfig.isConfigured()) {
+            var config = _serverConfig.getConfig();
+            var rawUrl = config["serverUrl"] as String?;
+            if (rawUrl != null) {
+                url = rawUrl;
+            }
+        }
+
+        var isHttp = url.find("http://") == 0;
+        var isLocal = url.find("192.168.") != null || url.find("10.") != null || url.find("172.") != null;
+
         if (code == -1001) {
-            return "(-1001 https required)";
+            return "(-1001 https req)";
+        }
+        if (code == -400) {
+            if (isHttp) {
+                return "(-400 http block?)";
+            }
+            return "(-400 bad req)";
         }
         if (code == -300) {
+            if (isLocal) {
+                return "(-300 local ip?)";
+            }
+            if (isHttp) {
+                return "(-300 http block?)";
+            }
             return "(-300 timeout)";
         }
         if (code == -200) {
