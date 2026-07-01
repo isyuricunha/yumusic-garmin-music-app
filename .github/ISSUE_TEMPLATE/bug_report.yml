@@ -72,6 +72,8 @@ body:
     attributes:
       label: Troubleshooting Checklist
       options:
+        - label: I have searched the existing issues and found no similar bug reports.
+          required: true
         - label: I am using HTTPS (HTTP is often blocked by Garmin Connect)
           required: false
         - label: I have verified my credentials and server URL are correct

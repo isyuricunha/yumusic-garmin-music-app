@@ -8,6 +8,13 @@ body:
       value: |
         Thanks for taking the time to suggest a new feature!
         Please note that YuMusic is primarily designed to integrate with Subsonic API servers.
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Search Existing Issues
+      options:
+        - label: I have searched the existing issues and found no similar feature requests.
+          required: true
   - type: textarea
     id: problem
     attributes:
