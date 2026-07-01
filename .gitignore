@@ -8,5 +8,8 @@ mir/
 
 *.prg
 *.prg.debug.xml
+*.iq
 developer_key.der
 developer_key.pem
+.developer_key_path
+node_modules/
