@@ -162,7 +162,18 @@ def run_cmd(
 
     if check and result.returncode != 0:
         output = result.stdout if capture else ""
-        raise CommandError(f"Command failed: {' '.join(args)}\n{output}")
+        error_msg = f"Command failed: {' '.join(args)}\n{output}"
+        
+        # Security patch: Redact known secrets from exception message to avoid leaking tokens to GitHub comments
+        for key in ["GH_TOKEN", "GITHUB_TOKEN", "NIM_API_KEY", "ELLA_AI_API_KEY"]:
+            secret = os.environ.get(key)
+            if secret and len(secret) > 3:
+                error_msg = error_msg.replace(secret, "***REDACTED***")
+                
+        # Also redact any generic GitHub token pattern
+        error_msg = re.sub(r'gh[ps]_[a-zA-Z0-9]{36}', '***REDACTED***', error_msg)
+
+        raise CommandError(error_msg)
     return result
 
 
