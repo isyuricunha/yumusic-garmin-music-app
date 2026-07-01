@@ -192,13 +192,9 @@ class YuMusicSubsonicAPI {
     }
 
     // Get playlist details with songs.
-    // Supports pagination via optional offset and count (Subsonic API v1.9.0+).
-    // Pass count=-1 to request the full playlist without pagination params.
-    function getPlaylist(playlistId as String, offset as Number, count as Number, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
+    // Subsonic API getPlaylist does not support pagination.
+    function getPlaylist(playlistId as String, callback as Method(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void) as Void {
         var url = buildBaseUrl("getPlaylist") + "&id=" + playlistId;
-        if (count >= 0) {
-            url += "&offset=" + offset.toString() + "&count=" + count.toString();
-        }
         System.println("getPlaylist url: " + url);
         
         var options = {

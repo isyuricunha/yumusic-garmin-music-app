@@ -4,10 +4,6 @@ import Toybox.Communications;
 import Toybox.PersistedContent;
 import Toybox.System;
 
-// Songs fetched per paginated API request. Kept small so each HTTP response body
-// fits within the Garmin JSON response memory limit on all devices.
-const PLAYLIST_PAGE_SIZE = 8;
-
 // Delegate for playlist selection menu
 class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
     private var _api as YuMusicSubsonicAPI;
@@ -15,10 +11,8 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
     private var _serverConfig as YuMusicServerConfig;
     private var _loadingPushed as Boolean = false;
 
-    // Paginated-fetch state
+    // Fetch state
     private var _pendingPlaylistId as String?;
-    private var _fetchOffset as Number = 0;
-    private var _accumulatedSongs as Array = [];
 
     function initialize() {
         Menu2InputDelegate.initialize();
@@ -51,26 +45,24 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         var loadingView = new YuMusicLoadingView("Loading playlist...");
         WatchUi.pushView(loadingView, new WatchUi.BehaviorDelegate(), WatchUi.SLIDE_LEFT);
 
-        // Initialise paginated fetch state
+        // Initialise fetch state
         _pendingPlaylistId = playlistId.toString();
-        _fetchOffset = 0;
-        _accumulatedSongs = [];
 
         fetchNextPage();
     }
 
-    // Request the next page of songs from the server.
+    // Request the playlist from the server.
     private function fetchNextPage() as Void {
         if (_pendingPlaylistId == null) {
             return;
         }
-        System.println("fetchNextPage offset=" + _fetchOffset.toString());
-        _api.getPlaylist(_pendingPlaylistId, _fetchOffset, PLAYLIST_PAGE_SIZE, method(:onPageReceived));
+        System.println("fetchPlaylist id=" + _pendingPlaylistId);
+        _api.getPlaylist(_pendingPlaylistId, method(:onPageReceived));
     }
 
-    // Callback for each page received.
+    // Callback for playlist received.
     function onPageReceived(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
-        System.println("onPageReceived responseCode=" + responseCode.toString() + " offset=" + _fetchOffset.toString());
+        System.println("onPlaylistReceived responseCode=" + responseCode.toString());
 
         if (responseCode != 200) {
             popLoadingView();
@@ -101,6 +93,8 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         var pageSongs = _api.ensureArray(playlist["entry"]);
 
+        var finalSongs = [] as Array;
+
         // Extract and accumulate only the essential fields per song.
         for (var i = 0; i < pageSongs.size(); i++) {
             var song = pageSongs[i] as Dictionary?;
@@ -129,7 +123,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             if (album == null) { album = "Unknown"; }
 
             var streamUrl = _api.getStreamUrl(songId);
-            _accumulatedSongs.add({
+            finalSongs.add({
                 "id"        => songId,
                 "title"     => title,
                 "artist"    => artist,
@@ -140,28 +134,13 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             });
         }
 
-        var pageCount = pageSongs.size();
-        System.println("page had " + pageCount.toString() + " songs, total=" + _accumulatedSongs.size().toString());
-
-        // If the server honoured the page size and returned a full page, there may be more.
-        // If it returned fewer songs (or zero), we have reached the end.
-        // If it returned MORE than PLAYLIST_PAGE_SIZE the server ignored pagination and
-        // returned everything in one shot — treat this page as the final page.
-        if (pageCount == PLAYLIST_PAGE_SIZE) {
-            _fetchOffset += PLAYLIST_PAGE_SIZE;
-            fetchNextPage();
-            return;
-        }
-
-        // All pages received — finalise.
-        finaliseFetch(playlist);
+        // Finalise.
+        finaliseFetch(playlist, finalSongs);
     }
 
-    // Called once all pages have been collected.
-    private function finaliseFetch(playlistMeta as Dictionary) as Void {
+    // Called once playlist has been parsed.
+    private function finaliseFetch(playlistMeta as Dictionary, songs as Array) as Void {
         popLoadingView();
-
-        var songs = _accumulatedSongs;
         if (songs.size() == 0) {
             showError("Playlist is empty");
             return;
