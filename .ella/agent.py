@@ -824,14 +824,10 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
 
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")
-            write_debug("response.stream", detail)
             raise CommandError(
                 f"AI endpoint failed with HTTP status {exc.code}.")
         except urllib.error.URLError as exc:
             raise CommandError(f"AI endpoint request failed: {exc.reason}")
-
-        raw_text = "".join(raw_lines)
-        write_debug("response.stream", raw_text)
 
         content = "".join(content_parts).strip()
         if content:
@@ -1712,7 +1708,7 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             print(f"Failed to assign user: {e}")
 
         try:
-            issues_json = gh(["issue", "list", "--state", "open", "--json", "number,title,body", "--limit", "50", "--repo", self.repo])
+            issues_json = gh(["issue", "list", "--state", "all", "--json", "number,title,body", "--limit", "30", "--repo", self.repo])
             other_issues = json.loads(issues_json)
             other_issues = [i for i in other_issues if i["number"] != self.issue_number]
         except Exception as e:
