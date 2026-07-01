@@ -1724,7 +1724,9 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
             "Your task is to warmly greet the user, acknowledge their issue, state that Yuri has been assigned and will look into it soon. "
             "Also, review the provided list of other open issues. If you find any issues that are highly similar or duplicates of this one, "
             "mention them by their number (e.g. #123) and suggest the user follow those. "
-            "If none are similar, do not mention other issues. Be polite and concise."
+            "CRITICAL INSTRUCTION: If you determine this issue is a duplicate, you MUST include the exact phrase `DUPLICATE_OF: #123` "
+            "on a new line at the very end of your response (replace 123 with the actual number). "
+            "If none are similar, do not mention other issues and do not include the duplicate phrase. Be polite and concise."
         )
 
         issue_title = self.issue.get("title", "")
@@ -1733,7 +1735,26 @@ On an issue, I create a branch, try to solve it, run checks, and open a PR."""
         context = f"New Issue:\nTitle: {issue_title}\nBody: {issue_body}\n\nOther Open Issues:\n{json.dumps(other_issues, indent=2)}"
 
         response = self.ai_call(context, system_prompt, MAX_TOKENS.get("triage", 2048))
-        self.comment(response)
+        
+        import re
+        match = re.search(r"DUPLICATE_OF:\s*#(\d+)", response)
+        
+        if match:
+            duplicate_id = match.group(1)
+            # Remove the secret keyword so the user doesn't see it looking weird
+            response = response.replace(match.group(0), "").strip()
+            # Append the standard GitHub duplicate phrase so GitHub's UI detects it
+            response += f"\n\nDuplicate of #{duplicate_id}"
+            
+            self.comment(response)
+            
+            try:
+                # Close the issue as not planned (GitHub will mark it as duplicate due to the comment)
+                gh(["issue", "close", str(self.issue_number), "--reason", "not planned", "--repo", self.repo])
+            except Exception as e:
+                print(f"Failed to close issue as duplicate: {e}")
+        else:
+            self.comment(response)
 
 
 def main() -> int:
