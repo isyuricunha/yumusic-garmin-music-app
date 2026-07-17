@@ -13,6 +13,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     // Fetch state
     private var _pendingPlaylistId as String?;
+    private var _pendingPlaylistName as String?;
 
     function initialize() {
         Menu2InputDelegate.initialize();
@@ -34,8 +35,11 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
         var loadingView = new YuMusicLoadingView("Loading playlist...");
         WatchUi.pushView(loadingView, new WatchUi.BehaviorDelegate(), WatchUi.SLIDE_LEFT);
 
-        // Initialise fetch state
+        // Initialise fetch state. Keep the label (the real playlist name shown in
+        // the list) so the saved playlist keeps its name even when the backend's
+        // per-playlist items endpoint does not return it (Jellyfin).
         _pendingPlaylistId = playlistId.toString();
+        _pendingPlaylistName = item.getLabel() as String?;
 
         fetchNextPage();
     }
@@ -92,9 +96,11 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
         var playlistId = _pendingPlaylistId;
         if (playlistId != null) {
+            var apiName = playlistMeta.hasKey("name") ? playlistMeta["name"] as String? : null;
+            var name = (_pendingPlaylistName != null) ? _pendingPlaylistName : (apiName != null ? apiName : "Unnamed");
             var savedPlaylist = {
                 "id"        => playlistId,
-                "name"      => playlistMeta.hasKey("name") ? playlistMeta["name"] : "Unnamed",
+                "name"      => name,
                 "songCount" => songs.size()
             };
             _library.saveDownloadedPlaylist(savedPlaylist);
