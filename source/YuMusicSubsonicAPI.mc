@@ -417,4 +417,54 @@ class YuMusicSubsonicAPI {
 
         Communications.makeWebRequest(url, {}, options, callback);
     }
+
+    // ---- Neutral-shape wrappers (parity with YuMusicJellyfinAPI) ----
+
+    private var _nplCb as Method?;
+    // Neutral: cb(code, [{id,name}])
+    function getPlaylistsNeutral(callback as Method) as Void {
+        _nplCb = callback;
+        getPlaylists(method(:onPlaylistsNeutral));
+    }
+    function onPlaylistsNeutral(code as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        var cb = _nplCb; _nplCb = null;
+        if (cb == null) { return; }
+        if (code != 200) { cb.invoke(code, []); return; }
+        cb.invoke(200, YuMusicNormalize.subsonicPlaylists(data as Dictionary?));
+    }
+
+    private var _npl1Cb as Method?;
+    // Neutral: cb(code, {name, songs:[...]})
+    function getPlaylistNeutral(playlistId as String, callback as Method) as Void {
+        _npl1Cb = callback;
+        getPlaylist(playlistId, method(:onPlaylistNeutral));
+    }
+    function onPlaylistNeutral(code as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        var cb = _npl1Cb; _npl1Cb = null;
+        if (cb == null) { return; }
+        if (code != 200) { cb.invoke(code, null); return; }
+        var dict = data as Dictionary?;
+        var resp = dict != null ? dict["subsonic-response"] as Dictionary? : null;
+        var playlist = resp != null ? resp["playlist"] as Dictionary? : null;
+        if (playlist == null) { cb.invoke(200, null); return; }
+        var name = playlist.hasKey("name") ? playlist["name"] as String? : "Unnamed";
+        var songs = YuMusicNormalize.subsonicSongs(ensureArray(playlist["entry"]), self);
+        cb.invoke(200, { "name" => name != null ? name : "Unnamed", "songs" => songs });
+    }
+
+    private var _npingCb as Method?;
+    // Neutral ping: cb(code, errorText?)
+    function pingNeutral(callback as Method) as Void {
+        _npingCb = callback;
+        ping(method(:onPingNeutral));
+    }
+    function onPingNeutral(code as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+        var cb = _npingCb; _npingCb = null;
+        if (cb == null) { return; }
+        if (code != 200) { cb.invoke(code, "ping " + code.toString()); return; }
+        var dict = data as Dictionary?;
+        var subsonic = dict != null ? dict["subsonic-response"] as Dictionary? : null;
+        var status = subsonic != null ? subsonic["status"] as String? : null;
+        cb.invoke(200, (status != null && status.equals("failed")) ? "subsonic error" : null);
+    }
 }
