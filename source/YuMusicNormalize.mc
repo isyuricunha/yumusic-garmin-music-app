@@ -21,7 +21,8 @@ module YuMusicNormalize {
             if (it == null) { continue; }
             var id = it["Id"] as String?;
             var name = it["Name"] as String?;
-            if (id != null) { out.add({ "id" => id, "name" => name != null ? name : "Unnamed" }); }
+            var cc = it.hasKey("ChildCount") ? it["ChildCount"] as Number? : null;
+            if (id != null) { out.add({ "id" => id, "name" => name != null ? name : "Unnamed", "songCount" => cc != null ? cc : 0 }); }
         }
         return out;
     }
@@ -103,7 +104,8 @@ module YuMusicNormalize {
             if (p == null) { continue; }
             var id = p["id"] as String?;
             var name = p["name"] as String?;
-            if (id != null) { out.add({ "id" => id, "name" => name != null ? name : "Unnamed" }); }
+            var sc = p.hasKey("songCount") ? p["songCount"] as Number? : null;
+            if (id != null) { out.add({ "id" => id, "name" => name != null ? name : "Unnamed", "songCount" => sc != null ? sc : 0 }); }
         }
         return out;
     }

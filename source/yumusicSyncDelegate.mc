@@ -6,7 +6,7 @@ import Toybox.System;
 
 class YuMusicSyncDelegate extends Communications.SyncDelegate {
     private var _library as YuMusicLibrary;
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend?;
     private var _serverConfig as YuMusicServerConfig;
     private var _songsToDownload as Array = [];
     private var _currentDownloadIndex as Number = 0;
@@ -17,7 +17,6 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
     function initialize() {
         SyncDelegate.initialize();
         _library = new YuMusicLibrary();
-        _api = new YuMusicSubsonicAPI();
         _serverConfig = new YuMusicServerConfig();
     }
 
@@ -39,24 +38,19 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             return;
         }
 
-        // Configure API
-        var config = _serverConfig.getConfig();
-        var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        var legacyAuth = config["legacyAuth"] as Boolean?;
-        if (serverUrl != null && username != null && password != null) {
-            _api.configure(serverUrl, username, password, maxBitRate, legacyAuth);
-        } else {
-            // Server not configured
+        // Downloads use the per-song URLs stored at selection time; the backend
+        // object is only needed for Subsonic scrobble flushing.
+        if (!_serverConfig.isConfigured()) {
             Communications.notifySyncComplete("Server not configured");
             return;
         }
 
-        // Flush offline scrobbles before downloading songs
-        // Flush offline scrobbles sequentially before downloading songs
-        flushNextScrobble();
+        if (_serverConfig.getServerType().equals("subsonic")) {
+            _api = YuMusicApiFactory.create(_serverConfig.getConfig());
+            flushNextScrobble();
+        } else {
+            downloadNextSong();
+        }
     }
 
     // Sequentially flush the next offline scrobble
@@ -68,7 +62,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
             var id = item["id"] as String?;
             var time = item["time"] as Number?;
             if (id != null) {
-                _api.scrobble(id, time, method(:onScrobbleFlushed));
+                (_api as YuMusicSubsonicAPI).scrobble(id, time, method(:onScrobbleFlushed));
             } else {
                 // Invalid data, just remove it and continue
                 _library.removeFirstScrobble();

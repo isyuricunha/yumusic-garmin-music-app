@@ -6,7 +6,7 @@ import Toybox.StringUtil;
 import Toybox.System;
 
 // SubSonic API client for Navidrome/Gonic/AirSonic/SubSonic servers
-class YuMusicSubsonicAPI {
+class YuMusicSubsonicAPI extends YuMusicBackend {
     private var _serverUrl as String?;
     private var _username as String?;
     private var _password as String?;
@@ -16,6 +16,7 @@ class YuMusicSubsonicAPI {
     private var _legacyAuth as Boolean = false;
 
     function initialize() {
+        YuMusicBackend.initialize();
     }
 
     // Configure the server connection

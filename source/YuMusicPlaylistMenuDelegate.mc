@@ -6,7 +6,7 @@ import Toybox.System;
 
 // Delegate for playlist selection menu
 class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
-    private var _api as YuMusicSubsonicAPI;
+    private var _api as YuMusicBackend?;
     private var _library as YuMusicLibrary;
     private var _serverConfig as YuMusicServerConfig;
     private var _loadingPushed as Boolean = false;
@@ -16,20 +16,9 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function initialize() {
         Menu2InputDelegate.initialize();
-        _api = new YuMusicSubsonicAPI();
         _library = new YuMusicLibrary();
         _serverConfig = new YuMusicServerConfig();
-        
-        // Configure API
-        var config = _serverConfig.getConfig();
-        var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        var legacyAuth = config["legacyAuth"] as Boolean?;
-        if (serverUrl != null && username != null && password != null) {
-            _api.configure(serverUrl, username, password, maxBitRate, legacyAuth);
-        }
+        _api = YuMusicApiFactory.create(_serverConfig.getConfig());
     }
 
     // Handle menu item selection
@@ -57,7 +46,7 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             return;
         }
         System.println("fetchPlaylist id=" + _pendingPlaylistId);
-        _api.getPlaylist(_pendingPlaylistId, method(:onPageReceived));
+        _api.getPlaylistNeutral(_pendingPlaylistId, method(:onPageReceived));
     }
 
     // Callback for playlist received.
@@ -76,66 +65,21 @@ class YuMusicPlaylistMenuDelegate extends WatchUi.Menu2InputDelegate {
             return;
         }
 
-        var dict = data as Dictionary?;
-        if (dict == null) {
+        var result = data as Dictionary?;
+        if (result == null) {
             popLoadingView();
             showError("Empty response");
             return;
         }
 
-        var response = dict["subsonic-response"] as Dictionary?;
-        var playlist = response != null ? response["playlist"] as Dictionary? : null;
-        if (playlist == null) {
+        var songs = result["songs"] as Array?;
+        if (songs == null || songs.size() == 0) {
             popLoadingView();
-            showError("Invalid playlist data");
+            showError("Playlist is empty");
             return;
         }
 
-        var pageSongs = _api.ensureArray(playlist["entry"]);
-
-        var finalSongs = [] as Array;
-
-        // Extract and accumulate only the essential fields per song.
-        for (var i = 0; i < pageSongs.size(); i++) {
-            var song = pageSongs[i] as Dictionary?;
-            if (song == null) { continue; }
-
-            var songId = song["id"] as String?;
-            var title = song["title"] as String?;
-            if (songId == null || title == null) { continue; }
-
-            var duration = null;
-            if (song.hasKey("duration")) {
-                var raw = song["duration"];
-                if (raw != null) {
-                    duration = raw as Number?;
-                    if (duration == null) {
-                        var s = raw as String?;
-                        if (s != null) { duration = s.toNumber(); }
-                    }
-                }
-            }
-
-            var artist = song.hasKey("artist") ? song["artist"] as String? : null;
-            if (artist == null) { artist = "Unknown"; }
-
-            var album = song.hasKey("album") ? song["album"] as String? : null;
-            if (album == null) { album = "Unknown"; }
-
-            var streamUrl = _api.getStreamUrl(songId);
-            finalSongs.add({
-                "id"        => songId,
-                "title"     => title,
-                "artist"    => artist,
-                "album"     => album,
-                "duration"  => duration != null ? duration : 0,
-                "url"       => streamUrl,
-                "streamUrl" => streamUrl
-            });
-        }
-
-        // Finalise.
-        finaliseFetch(playlist, finalSongs);
+        finaliseFetch(result, songs);
     }
 
     // Called once playlist has been parsed.

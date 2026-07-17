@@ -7,7 +7,7 @@ import Toybox.System;
 // which also makes the media download URL self-authenticating for the ACP sync.
 // Exposes the same *Neutral method surface as YuMusicSubsonicAPI (duck-typed;
 // no formal interface in Monkey C) so YuMusicApiFactory can return either one.
-class YuMusicJellyfinAPI {
+class YuMusicJellyfinAPI extends YuMusicBackend {
     private var _serverUrl as String?;
     private var _apiKey as String?;
     private var _maxBitRate as String = "320";
@@ -16,7 +16,7 @@ class YuMusicJellyfinAPI {
     private var _plCb as Method?;
     private var _pl1Cb as Method?;
 
-    function initialize() {}
+    function initialize() { YuMusicBackend.initialize(); }
 
     // Mirrors the factory's expectation for the Jellyfin backend.
     // username/password/legacyAuth do not exist for Jellyfin; apiKey carries auth.
