@@ -43,8 +43,9 @@ run: build ## Build then launch it in the simulator
 sim: ## Launch the Connect IQ simulator (background)
 	$(SIM) &
 
-test: ## Build unit tests and run them in the simulator
+test: ## Build unit tests, (re)launch the sim, run them
 	$(MONKEYC) -f $(JUNGLE) -d $(DEVICE) -o $(TEST_OUT) -y $(KEY) --unit-test
+	@$(SIM) >/dev/null 2>&1 & sleep 6
 	$(MONKEYDO) $(TEST_OUT) $(DEVICE) -t
 
 package: ## Build an exportable .iq store package (all products in the manifest)
