@@ -17,4 +17,9 @@
     <string id="bitRate192">192 kbps (Medium)</string>
     <string id="bitRate128">128 kbps (Standard)</string>
     <string id="bitRate96">96 kbps (Low)</string>
+
+    <string id="serverTypeTitle">Server Type</string>
+    <string id="serverTypeSubsonic">Subsonic / Navidrome</string>
+    <string id="serverTypeJellyfin">Jellyfin</string>
+    <string id="apiKeyTitle">Jellyfin API Key</string>
 </strings>

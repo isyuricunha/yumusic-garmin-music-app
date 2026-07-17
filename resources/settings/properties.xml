@@ -4,4 +4,6 @@
     <property id="password" type="string"></property>
     <property id="legacyAuth" type="boolean">false</property>
     <property id="maxBitRate" type="number">320</property>
+    <property id="serverType" type="number">0</property>
+    <property id="apiKey" type="string"></property>
 </properties>

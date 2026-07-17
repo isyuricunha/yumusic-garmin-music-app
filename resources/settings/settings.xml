@@ -23,4 +23,15 @@
             <listEntry value="96">@Strings.bitRate96</listEntry>
         </settingConfig>
     </setting>
+
+    <setting propertyKey="@Properties.serverType" title="@Strings.serverTypeTitle">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.serverTypeSubsonic</listEntry>
+            <listEntry value="1">@Strings.serverTypeJellyfin</listEntry>
+        </settingConfig>
+    </setting>
+
+    <setting propertyKey="@Properties.apiKey" title="@Strings.apiKeyTitle">
+        <settingConfig type="alphaNumeric" />
+    </setting>
 </settings>
