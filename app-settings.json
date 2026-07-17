@@ -86,6 +86,42 @@
     "configMin" : null,
     "configMax" : null,
     "configMaxLength" : null
+  }, {
+    "key" : "serverType",
+    "valueType" : "number",
+    "defaultValue" : 0,
+    "configTitle" : "serverTypeTitle",
+    "configPrompt" : null,
+    "configType" : "list",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : [ {
+      "display" : "serverTypeSubsonic",
+      "value" : 0
+    }, {
+      "display" : "serverTypeJellyfin",
+      "value" : 1
+    } ],
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
+  }, {
+    "key" : "apiKey",
+    "valueType" : "string",
+    "defaultValue" : "",
+    "configTitle" : "apiKeyTitle",
+    "configPrompt" : null,
+    "configType" : "alphaNumeric",
+    "configError" : null,
+    "configHelpUrl" : null,
+    "configReadonly" : false,
+    "configRequired" : false,
+    "configOptions" : null,
+    "configMin" : null,
+    "configMax" : null,
+    "configMaxLength" : null
   } ],
   "supportsLiveValidation" : false,
   "languages" : {
@@ -103,6 +139,10 @@
       "bitRate96" : "96 kbps (Low)",
       "$literal0$" : "Server URL",
       "maxBitRateTitle" : "Audio Quality (Bitrate)",
+      "serverTypeTitle" : "Server Type",
+      "serverTypeSubsonic" : "Subsonic / Navidrome",
+      "serverTypeJellyfin" : "Jellyfin",
+      "apiKeyTitle" : "Jellyfin API Key",
       "$literal2$" : "Password",
       "serverNotConfigured" : "Server not configured",
       "configureSyncMessage" : "Select Music to Sync",

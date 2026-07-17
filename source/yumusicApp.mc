@@ -35,10 +35,12 @@ class YuMusicApp extends Application.AudioContentProviderApp {
         
         var maxBitRateRaw = safe_get_property_number("maxBitRate");
         var legacyAuthRaw = safe_get_property_boolean("legacyAuth");
+        var serverTypeRaw = safe_get_property_number("serverType"); // 0 subsonic, 1 jellyfin
+        var apiKeyRaw = normalize_setting_string(safe_get_property_string("apiKey"));
 
         // If the app settings haven't been delivered yet, don't overwrite/clear
         // previously stored configuration.
-        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null) {
+        if (serverUrlRaw == null && usernameRaw == null && passwordRaw == null && apiKeyRaw == null) {
             return;
         }
 
@@ -61,10 +63,21 @@ class YuMusicApp extends Application.AudioContentProviderApp {
             legacyAuth = legacyAuthRaw;
         }
 
-        if (serverUrl != null && username != null && password != null) {
-            _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, legacyAuth);
+        var serverType = (serverTypeRaw != null && serverTypeRaw == 1) ? "jellyfin" : "subsonic";
+        var apiKey = (apiKeyRaw != null) ? apiKeyRaw : "";
+
+        if (serverType.equals("jellyfin")) {
+            if (serverUrl != null && apiKey.length() > 0) {
+                _serverConfig.saveConfig(serverUrl, username != null ? username : "", password != null ? password : "", maxBitRate, legacyAuth, serverType, apiKey);
+            } else {
+                _serverConfig.clearConfig();
+            }
         } else {
-            _serverConfig.clearConfig();
+            if (serverUrl != null && username != null && password != null) {
+                _serverConfig.saveConfig(serverUrl, username, password, maxBitRate, legacyAuth, serverType, "");
+            } else {
+                _serverConfig.clearConfig();
+            }
         }
     }
 

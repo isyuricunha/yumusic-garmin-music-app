@@ -9,17 +9,21 @@ class YuMusicServerConfig {
     private const MAX_BITRATE_KEY = "maxBitRate";
     private const LEGACY_AUTH_KEY = "legacyAuth";
     private const CONFIGURED_KEY = "configured";
+    private const SERVER_TYPE_KEY = "serverType"; // "subsonic" | "jellyfin"
+    private const API_KEY_KEY = "apiKey";
 
     function initialize() {
     }
 
     // Save server configuration
-    function saveConfig(serverUrl as String, username as String, password as String, maxBitRate as String, legacyAuth as Boolean) as Void {
+    function saveConfig(serverUrl as String, username as String, password as String, maxBitRate as String, legacyAuth as Boolean, serverType as String, apiKey as String) as Void {
         Storage.setValue(SERVER_URL_KEY, serverUrl);
         Storage.setValue(USERNAME_KEY, username);
         Storage.setValue(PASSWORD_KEY, password);
         Storage.setValue(MAX_BITRATE_KEY, maxBitRate);
         Storage.setValue(LEGACY_AUTH_KEY, legacyAuth);
+        Storage.setValue(SERVER_TYPE_KEY, serverType);
+        Storage.setValue(API_KEY_KEY, apiKey);
         Storage.setValue(CONFIGURED_KEY, true);
     }
 
@@ -50,6 +54,17 @@ class YuMusicServerConfig {
         return legacyAuth != null && legacyAuth;
     }
 
+    // Get server type ("subsonic" default, or "jellyfin")
+    function getServerType() as String {
+        var t = Storage.getValue(SERVER_TYPE_KEY) as String?;
+        return (t != null && t.equals("jellyfin")) ? "jellyfin" : "subsonic";
+    }
+
+    // Get Jellyfin API key
+    function getApiKey() as String? {
+        return Storage.getValue(API_KEY_KEY) as String?;
+    }
+
     // Check if server is configured
     function isConfigured() as Boolean {
         var configured = Storage.getValue(CONFIGURED_KEY) as Boolean?;
@@ -63,6 +78,8 @@ class YuMusicServerConfig {
         Storage.deleteValue(PASSWORD_KEY);
         Storage.deleteValue(MAX_BITRATE_KEY);
         Storage.deleteValue(LEGACY_AUTH_KEY);
+        Storage.deleteValue(SERVER_TYPE_KEY);
+        Storage.deleteValue(API_KEY_KEY);
         Storage.deleteValue(CONFIGURED_KEY);
     }
 
@@ -74,6 +91,8 @@ class YuMusicServerConfig {
             "password" => getPassword(),
             "maxBitRate" => getMaxBitRate(),
             "legacyAuth" => getLegacyAuth(),
+            "serverType" => getServerType(),
+            "apiKey" => getApiKey(),
             "configured" => isConfigured()
         };
     }
