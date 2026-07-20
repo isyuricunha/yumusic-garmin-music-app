@@ -6,4 +6,5 @@
     <property id="maxBitRate" type="number">320</property>
     <property id="serverType" type="number">0</property>
     <property id="apiKey" type="string"></property>
+    <property id="jellyfinUserId" type="string"></property>
 </properties>
