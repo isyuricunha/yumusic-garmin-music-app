@@ -10,3 +10,13 @@ mir/
 *.prg.debug.xml
 developer_key.der
 developer_key.pem
+
+# Local server configs (hold credentials/tokens) + build backup.
+# Matches test-config.sh, prod-config.sh, etc. The *.example.sh template is kept.
+*-config.sh
+resources/settings/properties.xml.bak
+
+# Personal / local-only — never pushed to the public fork.
+.claude/
+docs/superpowers/
+.idea/

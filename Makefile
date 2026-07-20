@@ -8,6 +8,8 @@ DEVICE ?= fr165m
 KEY    ?= $(abspath ../developer_key)
 NAME   ?= yumusic
 JUNGLE ?= monkey.jungle
+# Server profile baked by `make build-test` (see *-config.sh; override e.g. CONFIG=prod-config.sh).
+CONFIG ?= test-config.sh
 
 MONKEYC  = "$(SDK)/bin/monkeyc"
 MONKEYDO = "$(SDK)/bin/monkeydo"
@@ -21,7 +23,7 @@ IQ_OUT   = $(NAME).iq
 DEST ?= /Volumes/GARMIN/GARMIN/APPS
 
 .DEFAULT_GOAL := help
-.PHONY: help check build run sim test package install clean
+.PHONY: help check build run build-test run-test sim test package install clean
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -38,6 +40,12 @@ build: ## Compile a signed .prg for DEVICE -> $(OUT)
 	$(MONKEYC) -f $(JUNGLE) -d $(DEVICE) -o $(OUT) -y $(KEY)
 
 run: build ## Build then launch it in the simulator
+	$(MONKEYDO) $(OUT) $(DEVICE)
+
+build-test: ## Build with a *-config.sh baked in (creds never committed; properties.xml restored). Override with CONFIG=prod-config.sh
+	CONFIG=$(CONFIG) tools/build-configured.sh $(DEVICE) $(OUT)
+
+run-test: build-test ## Build (server config baked) then load into the running simulator
 	$(MONKEYDO) $(OUT) $(DEVICE)
 
 sim: ## Launch the Connect IQ simulator (background)
