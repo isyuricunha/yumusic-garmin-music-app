@@ -5,7 +5,8 @@
 # Latest installed Connect IQ SDK (override with SDK=/path/to/sdk).
 SDK    ?= $(shell ls -d "$(HOME)/Library/Application Support/Garmin/ConnectIQ/Sdks/"*/ 2>/dev/null | sort | tail -1)
 DEVICE ?= fr165m
-KEY    ?= $(abspath ../developer_key)
+# developer_key always lives at the repo root.
+KEY    ?= $(abspath developer_key)
 NAME   ?= yumusic
 JUNGLE ?= monkey.jungle
 # Server profile baked by `make build-test` (see *-config.sh; override e.g. CONFIG=prod-config.sh).

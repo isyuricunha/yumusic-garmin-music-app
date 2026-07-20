@@ -31,7 +31,7 @@ source "$CONFIG"
 DEVICE="${1:-fr165m}"
 OUT="${2:-/tmp/yumusic.prg}"
 PROPS="resources/settings/properties.xml"
-KEY="$(pwd)/../developer_key"
+KEY="$(pwd)/developer_key"
 SDK="${SDK:-$(ls -d "$HOME/Library/Application Support/Garmin/ConnectIQ/Sdks/"*/ 2>/dev/null | sort | tail -1)}"
 MONKEYC="$SDK/bin/monkeyc"
 
