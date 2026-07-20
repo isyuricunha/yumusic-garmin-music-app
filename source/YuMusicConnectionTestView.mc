@@ -7,17 +7,22 @@ import Toybox.System;
 
 class YuMusicConnectionTestView extends WatchUi.View {
     private var _serverConfig as YuMusicServerConfig;
-    private var _api as YuMusicSubsonicAPI;
+    // Backend-agnostic: resolved from config via the factory so the test works
+    // for both Subsonic and Jellyfin. Null until ensureConfiguredAndConfigureApi.
+    private var _api as YuMusicBackend?;
 
     private var _results as Array;
     private var _running as Boolean;
+    // Backend + host summary drawn under the title (e.g. "jellyfin  demo.host/stable").
+    private var _subtitle as String;
 
     function initialize() {
         View.initialize();
         _serverConfig = new YuMusicServerConfig();
-        _api = new YuMusicSubsonicAPI();
+        _api = null;
         _results = [];
         _running = false;
+        _subtitle = "";
     }
 
     function onShow() as Void {
@@ -34,7 +39,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
 
         addResult("Wi-Fi Check", "skipped", "auto via webReq");
         addResult("Public HTTPS", "pending", null);
-        addResult("Subsonic ping", "pending", null);
+        addResult("Server ping", "pending", null);
         addResult("Get playlists", "pending", null);
 
         WatchUi.requestUpdate();
@@ -103,6 +108,7 @@ class YuMusicConnectionTestView extends WatchUi.View {
 
     private function ensureConfiguredAndConfigureApi() as Boolean {
         if (!_serverConfig.isConfigured()) {
+            _subtitle = "not configured";
             setResult(2, "skipped", "not configured");
             setResult(3, "skipped", "not configured");
             finish();
@@ -111,22 +117,29 @@ class YuMusicConnectionTestView extends WatchUi.View {
 
         var config = _serverConfig.getConfig();
         var serverUrl = config["serverUrl"] as String?;
-        var username = config["username"] as String?;
-        var password = config["password"] as String?;
-        var maxBitRate = config["maxBitRate"] as String?;
-        var legacyAuth = config["legacyAuth"] as Boolean?;
+        var serverType = config["serverType"] as String?;
 
-        if (serverUrl == null || username == null || password == null) {
-            setResult(2, "skipped", "missing config");
-            setResult(3, "skipped", "missing config");
+        // Jellyfin authenticates by apiKey (no username/password), so only the
+        // serverUrl is universally required here. The factory builds and
+        // configures the backend that matches config["serverType"].
+        if (serverUrl == null) {
+            _subtitle = (serverType != null ? serverType : "?") + "  (no url)";
+            setResult(2, "skipped", "missing url");
+            setResult(3, "skipped", "missing url");
             finish();
             return false;
         }
 
-        serverUrl = normalizeServerUrl(serverUrl);
-        System.println("connection test: serverUrl=" + serverUrl);
-        _api.configure(serverUrl, username, password, maxBitRate, legacyAuth);
+        // Show which backend + host the test is actually hitting.
+        _subtitle = (serverType != null ? serverType : "?") + "  " + shortHost(serverUrl);
+        System.println("connection test: serverType=" + serverType + " serverUrl=" + serverUrl);
+        _api = YuMusicApiFactory.create(config);
         return true;
+    }
+
+    private function shortHost(url as String) as String {
+        var i = url.find("://");
+        return (i != null) ? url.substring(i + 3, url.length()) : url;
     }
 
     private function testPing() as Void {
@@ -135,19 +148,15 @@ class YuMusicConnectionTestView extends WatchUi.View {
         }
 
         System.println("connection test: ping");
-        _api.ping(method(:onPingResponse));
+        _api.pingNeutral(method(:onPingResponse));
     }
 
-    function onPingResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    // pingNeutral invokes cb(responseCode, errorText?) — errorText is null on success.
+    function onPingResponse(responseCode as Number, err as Object) as Void {
         System.println("connection test: ping responseCode=" + responseCode.toString());
 
         if (responseCode == 200) {
-            var err = getSubsonicError(data);
-            if (err == null) {
-                setResult(2, "ok", null);
-            } else {
-                setResult(2, "fail", err);
-            }
+            setResult(2, "ok", "(200)");
         } else if (responseCode >= 0) {
             setResult(2, "warn", "(" + responseCode.toString() + ")");
         } else {
@@ -160,19 +169,16 @@ class YuMusicConnectionTestView extends WatchUi.View {
 
     private function testGetPlaylists() as Void {
         System.println("connection test: getPlaylists");
-        _api.getPlaylists(method(:onGetPlaylistsResponse));
+        _api.getPlaylistsNeutral(method(:onGetPlaylistsResponse));
     }
 
-    function onGetPlaylistsResponse(responseCode as Number, data as Dictionary or String or PersistedContent.Iterator or Null) as Void {
+    // getPlaylistsNeutral invokes cb(responseCode, [{id,name}]).
+    function onGetPlaylistsResponse(responseCode as Number, data as Object) as Void {
         System.println("connection test: getPlaylists responseCode=" + responseCode.toString());
 
         if (responseCode == 200) {
-            var err = getSubsonicError(data);
-            if (err == null) {
-                setResult(3, "ok", null);
-            } else {
-                setResult(3, "fail", err);
-            }
+            var count = (data instanceof Lang.Array) ? (data as Lang.Array).size() : 0;
+            setResult(3, "ok", "(200 n=" + count.toString() + ")");
         } else if (responseCode >= 0) {
             setResult(3, "warn", "(" + responseCode.toString() + ")");
         } else {
@@ -180,37 +186,6 @@ class YuMusicConnectionTestView extends WatchUi.View {
         }
 
         finish();
-    }
-
-    private function getSubsonicError(data as Dictionary or String or PersistedContent.Iterator or Null) as String? {
-        var dict = data as Dictionary?;
-        if (dict != null) {
-            var subsonic = dict["subsonic-response"] as Dictionary?;
-            if (subsonic != null) {
-                var status = subsonic["status"] as String?;
-                if (status != null && status.equals("failed")) {
-                    var errorDict = subsonic["error"] as Dictionary?;
-                    if (errorDict != null) {
-                        var msg = errorDict["message"] as String?;
-                        var code = errorDict["code"] as Number?;
-                        if (msg != null) {
-                            return msg;
-                        } else if (code != null) {
-                            return "Error " + code.toString();
-                        }
-                    }
-                    return "Subsonic error";
-                }
-            }
-        }
-        return null;
-    }
-
-    private function normalizeServerUrl(url as String) as String {
-        if (url.length() > 0 && url.substring(url.length() - 1, url.length()) == "/") {
-            return url.substring(0, url.length() - 1);
-        }
-        return url;
     }
 
     private function formatError(code as Number) as String {
@@ -233,7 +208,10 @@ class YuMusicConnectionTestView extends WatchUi.View {
             if (isHttp) {
                 return "(-400 http block?)";
             }
-            return "(-400 bad req)";
+            // On a physical device -400 for a JSON request is almost always the
+            // server sending "application/json; charset=utf-8" (Jellyfin does),
+            // which Garmin rejects. Needs a proxy returning bare "application/json".
+            return "(-400 content-type/charset)";
         }
         if (code == -300) {
             if (isLocal) {
@@ -265,7 +243,17 @@ class YuMusicConnectionTestView extends WatchUi.View {
         var y = 30;
 
         dc.drawText(centerX, y, Graphics.FONT_MEDIUM, "Connection Test", Graphics.TEXT_JUSTIFY_CENTER);
-        y += 40;
+        y += 28;
+
+        // Backend + host summary so the details are visible at a glance.
+        if (_subtitle.length() > 0) {
+            dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(centerX, y, Graphics.FONT_XTINY, _subtitle, Graphics.TEXT_JUSTIFY_CENTER);
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
+            y += 24;
+        } else {
+            y += 12;
+        }
 
         for (var i = 0; i < _results.size(); i++) {
             var row = _results[i] as Dictionary;
