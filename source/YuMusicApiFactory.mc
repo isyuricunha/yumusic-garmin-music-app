@@ -9,7 +9,7 @@ module YuMusicApiFactory {
         var maxBitRate = config["maxBitRate"] as String?;
         if (type != null && type.equals("jellyfin")) {
             var api = new YuMusicJellyfinAPI();
-            api.configureJellyfin(config["serverUrl"] as String, config["apiKey"] as String, maxBitRate);
+            api.configureJellyfin(config["serverUrl"] as String, config["apiKey"] as String, config["username"] as String?, maxBitRate);
             return api;
         }
         var s = new YuMusicSubsonicAPI();
