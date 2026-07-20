@@ -51,13 +51,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         if (contentRefId != null) {
             var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
+            // Only star when the numeric contentRefId resolves to a real server
+            // song id; the contentRefId itself is a Number and must not be cast
+            // to String (throws Unexpected Type Error at runtime).
             if (songId != null) {
                 _api.star(songId, method(:onStarResponse));
-            } else {
-                var contentRefString = contentRefId as String?;
-                if (contentRefString != null) {
-                    _api.star(contentRefString, method(:onStarResponse));
-                }
             }
         }
     }
@@ -68,13 +66,11 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         if (contentRefId != null) {
             var song = _library.getSongByContentRefId(contentRefId);
             var songId = song != null ? song["id"] as String? : null;
+            // Only unstar when the numeric contentRefId resolves to a real server
+            // song id; the contentRefId itself is a Number and must not be cast
+            // to String (throws Unexpected Type Error at runtime).
             if (songId != null) {
                 _api.unstar(songId, method(:onUnstarResponse));
-            } else {
-                var contentRefString = contentRefId as String?;
-                if (contentRefString != null) {
-                    _api.unstar(contentRefString, method(:onUnstarResponse));
-                }
             }
         }
     }
@@ -94,13 +90,15 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         if (contentRefId != null) {
             _library.setLastPlayedContentRefId(contentRefId);
             var song = _library.getSongByContentRefId(contentRefId);
+            // contentRefId is a numeric local id; only the resolved song carries the
+            // server-side string id required for scrobbling. Casting the numeric
+            // contentRefId to String throws an Unexpected Type Error at runtime.
             var songId = song != null ? song["id"] as String? : null;
-            var targetId = songId != null ? songId : (contentRefId as String?);
 
-            if (targetId != null) {
+            if (songId != null) {
                 // Queue scrobble locally to support offline playback
                 if (songEvent == Media.SONG_EVENT_COMPLETE) {
-                    _library.queueScrobble(targetId, Toybox.Time.now().value());
+                    _library.queueScrobble(songId, Toybox.Time.now().value());
                     flushNextScrobble();
                 }
             }
