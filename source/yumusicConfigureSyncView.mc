@@ -118,7 +118,8 @@ class YuMusicConfigureSyncView extends WatchUi.Menu2 {
             }
             addSingleItem("Connection error", "Go back & try again", "error");
         } else {
-            addSingleItem("Error", "Failed to load (" + responseCode.toString() + ")", "error");
+            var dcfg = _serverConfig.getConfig();
+            addSingleItem("Error", "code=" + responseCode.toString() + " type=" + dcfg["serverType"], "error");
         }
         
         WatchUi.requestUpdate();
