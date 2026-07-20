@@ -90,10 +90,13 @@ class YuMusicContentDelegate extends Media.ContentDelegate {
         if (contentRefId != null) {
             _library.setLastPlayedContentRefId(contentRefId);
             var song = _library.getSongByContentRefId(contentRefId);
-            // contentRefId is a numeric local id; only the resolved song carries the
-            // server-side string id required for scrobbling. Casting the numeric
-            // contentRefId to String throws an Unexpected Type Error at runtime.
-            var songId = song != null ? song["id"] as String? : null;
+            // Only the resolved song carries the server-side string id used for
+            // scrobbling. Guard the cast: a non-String id would otherwise throw an
+            // Unexpected Type Error and crash the media callback.
+            var songId = null;
+            if (song != null) {
+                try { songId = song["id"] as String?; } catch (ex) { songId = null; }
+            }
 
             if (songId != null) {
                 // Queue scrobble locally to support offline playback

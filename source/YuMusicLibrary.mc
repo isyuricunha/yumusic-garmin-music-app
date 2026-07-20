@@ -378,6 +378,11 @@ class YuMusicLibrary {
         }
         var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
         var content = Media.getCachedContentObj(contentRef);
+        // getCachedContentObj returns null when the content is not actually cached
+        // on the device; calling getMetadata() on null crashes (Failed invoking).
+        if (content == null) {
+            return null;
+        }
 
         var metadata = content.getMetadata();
         if (metadata != null) {
