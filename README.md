@@ -44,7 +44,23 @@ YuMusic officially supports **Subsonic API** compatible endpoints.
 - ✅ **Gonic**
 - ✅ **Airsonic**
 - ✅ **Nextcloud Music** (Requires Legacy Auth enabled)
-- ❌ **Jellyfin** (Not natively supported. Workaround: run Navidrome pointed at your Jellyfin music folder).
+- 🧪 **Jellyfin** (native backend — experimental; Server Type = Jellyfin + API key. See below.)
+  - Fallback that always works: run **Navidrome** pointed at your Jellyfin music folder and use the Subsonic backend.
+
+### 🧪 Jellyfin (native backend — experimental)
+
+YuMusic has a native Jellyfin backend, selected with **Server Type = Jellyfin** and authenticated with a **Jellyfin API key** (Dashboard → Advanced → API Keys). No username/password.
+
+**Working today:**
+- Connection test, browse playlists, load a playlist's tracks
+- Download / stream (mp3 transcode) and offline playback
+
+**Not yet implemented** (these silently no-op on a Jellyfin server):
+- Scrobble (play tracking) and favorites (thumbs up / down)
+- Cover art
+- Routing the play-event handler through the backend factory (currently Subsonic-only)
+
+**Device prerequisite — reverse proxy required.** Stock Jellyfin returns `Content-Type: application/json; charset=utf-8`, which Garmin's Wi-Fi/networking stack rejects on a physical watch (error `-400`). It works in the simulator but not on the device. Put Jellyfin behind a reverse proxy that returns bare `application/json` (strip the charset) on the JSON API paths, and serve it over trusted HTTPS. Setup and the exact Nginx Proxy Manager config are in the [Development Guide](docs/development.md) → *Jellyfin Backend — Device Constraints*.
 
 ### ⚠️ Important: HTTPS Requirement
 Due to strict OS-level security constraints enforced by Garmin Connect Mobile (Android/iOS) and the watch's internal Wi-Fi downloader, **you must expose your server via a valid HTTPS URL**. Plain-text `http://` or local IPs (`192.168.x.x`) without trusted certificates will fail to sync audio. Read more in the [Networking Docs](docs/network-requirements.md).
