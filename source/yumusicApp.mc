@@ -17,6 +17,9 @@ class YuMusicApp extends Application.AudioContentProviderApp {
     // onStart() is called on application start up
     function onStart(state as Dictionary?) as Void {
         apply_settings();
+        // Runs the dev backend health probe in debug builds; a no-op in release
+        // (see the devProbeStart twins below).
+        devProbeStart(_serverConfig.getConfig());
     }
 
     // onStop() is called when your application is exiting
@@ -175,4 +178,17 @@ class YuMusicApp extends Application.AudioContentProviderApp {
 
 function getApp() as YuMusicApp {
     return Application.getApp() as YuMusicApp;
+}
+
+// Dev backend health probe entry point. The (:debug) build runs the probe; the
+// (:release) build compiles a no-op, so nothing ships in the store package.
+// The instance is held module-level so it survives the async callbacks.
+(:debug) var _devProbe as YuMusicDevProbe?;
+(:debug)
+function devProbeStart(config as Dictionary) as Void {
+    _devProbe = new YuMusicDevProbe();
+    _devProbe.run(config);
+}
+(:release)
+function devProbeStart(config as Dictionary) as Void {
 }
