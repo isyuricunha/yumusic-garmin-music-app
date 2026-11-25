@@ -87,6 +87,44 @@ class YuMusicLibrary {
         return null;
     }
 
+    // Garmin hands out persisted media ids as Numbers on real devices, and
+    // Media.ContentRef lookups only match when the id is passed back in that
+    // same native form. 1.10.1 stored ids as strings ("12345"), which made
+    // every Media.getCachedContentObj lookup miss and broke playback. Numeric
+    // strings are converted back to Numbers here; any other id is kept as-is.
+    function nativeContentRefId(value as Object?) as Object? {
+        if (value == null) {
+            return null;
+        }
+
+        var numberValue = safe_number(value);
+        if (numberValue != null) {
+            return numberValue;
+        }
+
+        if (value instanceof String) {
+            var stringValue = value as String;
+            if (stringValue.length() == 0) {
+                return null;
+            }
+            var parsed = stringValue.toNumber();
+            if (parsed != null && parsed.toString().equals(stringValue)) {
+                return parsed;
+            }
+            return stringValue;
+        }
+
+        return null;
+    }
+
+    function makeContentRef(value as Object?) as Media.ContentRef? {
+        var id = nativeContentRefId(value);
+        if (id == null) {
+            return null;
+        }
+        return new Media.ContentRef(id, Media.CONTENT_TYPE_AUDIO);
+    }
+
     private function songStorageKey(songId as String) as String {
         return SONG_KEY_PREFIX + songId;
     }
@@ -228,7 +266,7 @@ class YuMusicLibrary {
 
         var downloaded = song.hasKey("downloaded") && song["downloaded"] == true;
         if (downloaded && song.hasKey("contentRefId")) {
-            var contentRefId = contentRefIdToString(song["contentRefId"]);
+            var contentRefId = nativeContentRefId(song["contentRefId"]);
             if (contentRefId != null) {
                 compactSong["downloaded"] = true;
                 compactSong["contentRefId"] = contentRefId;
@@ -261,7 +299,12 @@ class YuMusicLibrary {
 
         if (song.hasKey("contentRefId")) {
             var rawContentRefId = song["contentRefId"];
-            if (rawContentRefId == null || contentRefIdToString(rawContentRefId) == null || !(rawContentRefId instanceof String)) {
+            if (rawContentRefId == null || contentRefIdToString(rawContentRefId) == null) {
+                return true;
+            }
+            // Repair libraries written by 1.10.1/1.11.0, which stored numeric
+            // media ids as strings and broke playback.
+            if (rawContentRefId instanceof String && nativeContentRefId(rawContentRefId) instanceof Number) {
                 return true;
             }
         }
@@ -322,8 +365,10 @@ class YuMusicLibrary {
         }
         var content = null;
         try {
-            var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
-            content = Media.getCachedContentObj(contentRef);
+            var contentRef = makeContentRef(song["contentRefId"]);
+            if (contentRef != null) {
+                content = Media.getCachedContentObj(contentRef);
+            }
         } catch (ex) {
             content = null;
         }
@@ -357,7 +402,10 @@ class YuMusicLibrary {
             }
         }
         try {
-            Media.deleteCachedItem(new Media.ContentRef(refId, Media.CONTENT_TYPE_AUDIO));
+            var deleteRef = makeContentRef(song["contentRefId"]);
+            if (deleteRef != null) {
+                Media.deleteCachedItem(deleteRef);
+            }
             System.println("deleted cached item refId=" + refId);
         } catch (ex) {
             // already gone or not persisted; nothing to free
@@ -789,7 +837,10 @@ class YuMusicLibrary {
 
         var content = null;
         try {
-            var contentRef = new Media.ContentRef(contentRefId, Media.CONTENT_TYPE_AUDIO);
+            var contentRef = makeContentRef(contentRefId);
+            if (contentRef == null) {
+                return null;
+            }
             content = Media.getCachedContentObj(contentRef);
         } catch (ex) {
             System.println("cached content lookup failed refId=" + contentRefId + ": " + ex.toString());
