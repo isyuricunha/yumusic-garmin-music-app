@@ -131,35 +131,40 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
         downloadNextSong();
     }
 
-    private function extractPersistedContentId(data as Object?) as String? {
-        var mediaContentRef = data as Media.ContentRef?;
-        if (mediaContentRef != null) {
-            return _library.contentRefIdToString(mediaContentRef.getId());
+    // Returns the persisted media id in its native form (a Number on real
+    // devices). It must not be stringified: Media.ContentRef lookups only
+    // match the id type the system handed out.
+    private function extractPersistedContentId(data as Object?) as Object? {
+        if (data == null) {
+            return null;
         }
 
-        var mediaContent = data as Media.Content?;
-        if (mediaContent != null) {
-            var contentRef = mediaContent.getContentRef();
+        if (data instanceof Media.ContentRef) {
+            return _library.nativeContentRefId((data as Media.ContentRef).getId());
+        }
+
+        if (data instanceof Media.Content) {
+            var contentRef = (data as Media.Content).getContentRef();
             if (contentRef != null) {
-                return _library.contentRefIdToString(contentRef.getId());
+                return _library.nativeContentRefId(contentRef.getId());
             }
+            return null;
         }
 
-        var directContent = data as PersistedContent.Content?;
-        if (directContent != null) {
-            return _library.contentRefIdToString(directContent.getId());
-        }
-
-        var iterator = data as PersistedContent.Iterator?;
-        if (iterator != null) {
+        if (data instanceof PersistedContent.Iterator) {
             try {
-                var content = iterator.next() as PersistedContent.Content?;
+                var content = (data as PersistedContent.Iterator).next();
                 if (content != null) {
-                    return _library.contentRefIdToString(content.getId());
+                    return _library.nativeContentRefId(content.getId());
                 }
             } catch (ex) {
                 System.println("sync persisted iterator read failed: " + ex.toString());
             }
+            return null;
+        }
+
+        if (data has :getId) {
+            return _library.nativeContentRefId((data as PersistedContent.Content).getId());
         }
 
         return null;
@@ -248,7 +253,7 @@ class YuMusicSyncDelegate extends Communications.SyncDelegate {
 
                 song["downloaded"] = true;
                 song["contentRefId"] = persistedId;
-                System.println("sync downloaded persisted id: " + persistedId);
+                System.println("sync downloaded persisted id: " + persistedId.toString());
 
                 try {
                     _library.saveSong(song);

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Fixed playback broken since 1.10.1: persisted media ids were stored as strings, so `Media.ContentRef` lookups missed every downloaded track. Ids are now kept in their native (numeric) form.
+- Existing libraries with stringified numeric ids are repaired automatically on first load, so already-downloaded tracks play again without a re-sync.
+- Fixed incremental sync re-downloading every track and cached-media cleanup silently failing for the same reason.
+- Sync callback now checks the response type at runtime instead of relying on compile-time casts.
+
 ## 1.11.0 - 2026-08-30
 
 - Added a Shuffle All playback option for the full downloaded local library.

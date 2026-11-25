@@ -251,7 +251,7 @@ function saveSongPersistsDownloadState(logger as Logger) as Boolean {
 }
 
 (:test)
-function numericContentRefIdsMigrateToStrings(logger as Logger) as Boolean {
+function numericContentRefIdsStayNumeric(logger as Logger) as Boolean {
     Storage.clearValues();
 
     var library = new YuMusicLibrary();
@@ -266,12 +266,53 @@ function numericContentRefIdsMigrateToStrings(logger as Logger) as Boolean {
         return false;
     }
 
-    var contentRefId = saved["contentRefId"] as String?;
+    var raw = saved["contentRefId"];
 
-    return contentRefId != null
-        && contentRefId.equals("12345")
+    return (raw instanceof Number)
+        && (raw as Number) == 12345
         && library.getSongByContentRefId(12345) != null
         && library.getSongByContentRefId("12345") != null;
+}
+
+(:test)
+function stringifiedContentRefIdsAreRepaired(logger as Logger) as Boolean {
+    Storage.clearValues();
+
+    // Simulate a library written by 1.10.1/1.11.0: numeric id stored as a string.
+    Storage.setValue("songIds", ["broken"] as Array<Application.PropertyValueType>);
+    Storage.setValue("song:broken", {
+        "id" => "broken",
+        "title" => "Broken",
+        "artist" => "A",
+        "album" => "B",
+        "duration" => 1,
+        "playlists" => ["P1"],
+        "playlistId" => "P1",
+        "downloaded" => true,
+        "contentRefId" => "777"
+    } as Application.PropertyValueType);
+
+    var library = new YuMusicLibrary();
+    library.getSongs();
+
+    var stored = Storage.getValue("song:broken") as Dictionary?;
+    if (stored == null) {
+        return false;
+    }
+    var raw = stored["contentRefId"];
+    return (raw instanceof Number) && (raw as Number) == 777;
+}
+
+(:test)
+function nonNumericContentRefIdsAreKept(logger as Logger) as Boolean {
+    var library = new YuMusicLibrary();
+    var opaque = library.nativeContentRefId("persisted-12345");
+    var padded = library.nativeContentRefId("0123");
+    return (opaque instanceof String)
+        && (opaque as String).equals("persisted-12345")
+        && (padded instanceof String)
+        && library.nativeContentRefId(null) == null
+        && library.nativeContentRefId("") == null;
 }
 
 (:test)
